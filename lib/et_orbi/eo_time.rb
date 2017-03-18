@@ -426,7 +426,7 @@ module EtOrbi
             EoTime.new(t.to_f, t.zone)
           when String
             #Rufus::Scheduler.parse_in(o, :no_error => true) || self.parse(o)
-            0
+            self.parse(o)
           else
             o
         end

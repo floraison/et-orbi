@@ -322,14 +322,14 @@ describe EtOrbi::EoTime do
       )
     end
 
-    it 'accepts a duration String' do
-
-      expect(
-        EtOrbi::EoTime.make('1h')
-      ).to be_between(
-        Time.now + 3600 - 1, Time.now + 3600 + 1
-      )
-    end
+    it 'accepts a duration String' #do
+#
+#      expect(
+#        EtOrbi::EoTime.make('1h')
+#      ).to be_between(
+#        Time.now + 3600 - 1, Time.now + 3600 + 1
+#      )
+#    end
 
     it 'accepts a Numeric' do
 
