@@ -29,3 +29,32 @@ ensure
   ENV['TZ'] = prev_tz
 end
 
+def local(*args)
+
+  Time.local(*args)
+end
+alias lo local
+
+def ltz(tz, *args)
+
+  in_zone(tz) { Time.local(*args) }
+end
+
+class Time
+
+  def to_debug_s
+
+    uo = self.utc_offset
+    uos = uo < 0 ? '-' : '+'
+    uo = uo.abs
+    uoh, uom = [ uo / 3600, uo % 3600 ]
+
+    [
+      't',
+      self.strftime('%Y-%m-%d %H:%M:%S'),
+      "%s%02d:%02d" % [ uos, uoh, uom ],
+      "dst:#{self.isdst}"
+    ].join(' ')
+  end
+end
+
