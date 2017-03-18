@@ -1,0 +1,16 @@
+
+.vimrc
+.viminfo
+
+pkg/
+
+.ruby-version
+#.rspec
+
+.errors
+.rspec.out
+
+.todo.md
+
+Gemfile.lock
+
