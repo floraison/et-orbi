@@ -47,14 +47,6 @@ module EtOrbi
 #      @seconds
 #    end
 #
-#    def utc_offset
-#
-#      #@zone.period_for_utc(utc).utc_offset
-#      #@zone.period_for_utc(utc).utc_total_offset
-#      #@zone.period_for_utc(utc).std_offset
-#      @zone.period_for_utc(utc).utc_offset
-#    end
-#
 #    def add(t); @time = nil; @seconds += t.to_f; end
 #    def subtract(t); @time = nil; @seconds -= t.to_f; end
 #
@@ -326,7 +318,7 @@ module EtOrbi
 #      tzs.first
 #    end
 #
-#    protected
+#protected protected protected protected protected
 #
 #    def inc(t, dir)
 #
@@ -375,8 +367,11 @@ module EtOrbi
       local = Time.parse(str)
 
       izone = get_tzone(extract_iso8601_zone(str))
-      ozone = list_olson_zones(str).find { |z| get_tzone(z) }
-      zone = izone || ozone || get_tzone(nil)
+
+      ozone = nil
+      list_olson_zones(str).each { |s| ozone = get_tzone(s); break if ozone }
+
+      zone = izone || ozone || get_tzone(:local)
 #p [ izone, ozone, zone ]
 
       secs =
@@ -391,7 +386,9 @@ module EtOrbi
 
     def self.get_tzone(o)
 
-      return local_tzone if o.nil?
+#p [ :gtz, o ]
+      return nil if o == nil
+      return local_tzone if o == :local
 
       return o if o.is_a?(::TZInfo::Timezone)
 
@@ -458,7 +455,14 @@ module EtOrbi
 
     def self.determine_local_tzone
 
-      determine_local_tzones.first
+      etz = ENV['TZ']
+      tz = nil
+
+      tzs = determine_local_tzones
+
+      tz = tzs.find { |z| z.name == etz } if etz
+
+      tz || tzs.first
     end
 
     def self.determine_local_tzones
@@ -614,6 +618,14 @@ fail ArgumentError.new unless @zone
         "%s%02d:%02d" % [ uos, uoh, uom ],
         "dst:#{self.isdst}"
       ].join(' ')
+    end
+
+    def utc_offset
+
+      #@zone.period_for_utc(utc).utc_offset
+      #@zone.period_for_utc(utc).utc_total_offset
+      #@zone.period_for_utc(utc).std_offset
+      @zone.period_for_utc(utc).utc_offset
     end
 
     #

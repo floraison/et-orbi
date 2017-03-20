@@ -270,6 +270,21 @@ describe EtOrbi::EoTime do
     end
   end
 
+  describe '.determine_local_tzone' do
+
+    it 'favours the local timezone' do
+
+      in_zone('Europe/Berlin') do
+
+        expect(
+          EtOrbi::EoTime.determine_local_tzone.name
+        ).to eq(
+          'Europe/Berlin'
+        )
+      end
+    end
+  end
+
 #  describe '.new' do
 #
 #    it 'accepts an integer' do
