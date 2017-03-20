@@ -35,6 +35,38 @@ describe EtOrbi::EoTime do
     end
   end
 
+  describe '.list_olson_zones' do
+
+    def loz(s); EtOrbi::EoTime.list_olson_zones(s); end
+
+    it 'returns the zone strings' do
+
+      expect(
+        loz '11/09/2002 America/New_York'
+      ).to eq(%w[
+        America/New_York
+      ])
+      expect(
+        loz '11/09/2002 America/New_York Asia/Shanghai'
+      ).to eq(%w[
+        America/New_York Asia/Shanghai
+      ])
+      expect(
+        loz 'America/New_York Asia/Shanghai'
+      ).to eq(%w[
+        America/New_York Asia/Shanghai
+      ])
+    end
+
+    it 'returns [] when it cannot find a zone' do
+
+      expect(
+        loz '11/09/2002 2utopiaNada?3Nada'
+      ).to eq(%w[
+      ])
+    end
+  end
+
 #  describe '.get_tzone' do
 #
 #    def gtz(s); z = EtOrbi::EoTime.get_tzone(s); z ? z.name : z; end

@@ -547,6 +547,16 @@ module EtOrbi
       zs.join(':')
     end
 
+    def self.list_olson_zones(s)
+
+      s.scan(
+        %r{
+          (?<=\s|\A)
+          (?:[A-Za-z][A-Za-z0-9+_-]+)
+          (?:\/(?:[A-Za-z][A-Za-z0-9+_-]+)){0,2}
+        }x)
+    end
+
     #
     # instance methods
 
