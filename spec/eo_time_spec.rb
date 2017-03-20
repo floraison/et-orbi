@@ -12,26 +12,26 @@ require 'spec_helper'
 
 describe EtOrbi::EoTime do
 
-  describe '.extract_iso8601_zone' do
+  describe '.list_iso8601_zones' do
 
-    def eiz(s); EtOrbi::EoTime.extract_iso8601_zone(s); end
+    def liz(s); EtOrbi::EoTime.list_iso8601_zones(s); end
 
     it 'returns the zone string' do
 
-      expect(eiz '2016-11-01 12:30:09-01').to eq('-01:00')
-      expect(eiz '2016-11-01 12:30:09-01:00').to eq('-01:00')
-      expect(eiz '2016-11-01 12:30:09 -01').to eq('-01:00')
-      expect(eiz '2016-11-01 12:30:09 -01:00').to eq('-01:00')
+      expect(liz '2016-11-01 12:30:09-01').to eq(%w[ -01 ])
+      expect(liz '2016-11-01 12:30:09-01:00').to eq(%w[ -01:00 ])
+      expect(liz '2016-11-01 12:30:09 -01').to eq(%w[ -01 ])
+      expect(liz '2016-11-01 12:30:09 -01:00').to eq(%w[ -01:00 ])
 
-      expect(eiz '2016-11-01 12:30:09-01:30').to eq('-01:30')
-      expect(eiz '2016-11-01 12:30:09 -01:30').to eq('-01:30')
+      expect(liz '2016-11-01 12:30:09-01:30').to eq(%w[ -01:30 ])
+      expect(liz '2016-11-01 12:30:09 -01:30').to eq(%w[ -01:30 ])
     end
 
     it 'returns nil when it cannot find a zone' do
 
-      expect(eiz '2016-11-01 12:30:09').to eq(nil)
-      expect(eiz '2016-11-01 12:30:09-25').to eq(nil)
-      expect(eiz '2016-11-01 12:30:09-25:00').to eq(nil)
+      expect(liz '2016-11-01 12:30:09').to eq([])
+      expect(liz '2016-11-01 12:30:09-25').to eq([])
+      expect(liz '2016-11-01 12:30:09-25:00').to eq([])
     end
   end
 

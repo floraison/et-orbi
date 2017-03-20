@@ -366,13 +366,12 @@ module EtOrbi
 #p str
       local = Time.parse(str)
 
-      izone = get_tzone(extract_iso8601_zone(str))
+      izone = get_tzone(list_iso8601_zones(str).last)
 
-      ozone = nil
-      list_olson_zones(str).each { |s| ozone = get_tzone(s); break if ozone }
+      zone = izone
+      list_olson_zones(str).each { |s| break if zone; zone = get_tzone(s) }
 
-      zone = izone || ozone || get_tzone(:local)
-#p [ izone, ozone, zone ]
+      zone ||= get_tzone(:local)
 
       secs =
         if izone
@@ -493,21 +492,17 @@ module EtOrbi
     # https://en.wikipedia.org/wiki/ISO_8601
     # Postel's law applies
     #
-    def self.extract_iso8601_zone(s)
+    def self.list_iso8601_zones(s)
 
-      m = s.match(
-        /[0-2]\d(?::?[0-6]\d(?::?[0-6]\d))?\s*([+-]\d\d(?::?\d\d)?)\s*\z/)
-      return nil unless m
-
-      zs = m[1].split(':')
-      zs << '00' if zs.length < 2
-
-      zh = zs[0].to_i.abs
-
-      return nil if zh > 24
-      return nil if zh == 24 && zs[1].to_i != 0
-
-      zs.join(':')
+      s.scan(
+        %r{
+          (?<=:\d\d)
+          \s*
+          [-+]
+          (?:[0-1][0-9]|2[0-4])
+          (?:(?::)?(?:[0-5][0-9]|60))?
+          (?![-+])
+        }x).collect(&:strip)
     end
 
     def self.list_olson_zones(s)
