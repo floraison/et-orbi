@@ -4,7 +4,7 @@ require 'tzinfo'
 
 module EtOrbi
 
-  VERSION = '0.9.5'
+  VERSION = '1.0.0'
 
   class EoTime
 
