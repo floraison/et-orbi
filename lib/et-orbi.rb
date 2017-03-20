@@ -20,66 +20,6 @@ module EtOrbi
 #      @zone = self.class.get_tzone(zone || :current)
 #    end
 #
-#    %w[
-#      year month day wday hour min sec usec asctime
-#    ].each do |m|
-#      define_method(m) { to_time.send(m) }
-#    end
-#    def iso8601(fraction_digits=0); to_time.iso8601(fraction_digits); end
-#
-#    def ==(o)
-#
-#      o.is_a?(EoTime) && o.seconds == @seconds && o.zone == @zone
-#    end
-#    #alias eq? == # FIXME see Object#== (ri)
-#
-#    def >(o); @seconds > _to_f(o); end
-#    def >=(o); @seconds >= _to_f(o); end
-#    def <(o); @seconds < _to_f(o); end
-#    def <=(o); @seconds <= _to_f(o); end
-#    def <=>(o); @seconds <=> _to_f(o); end
-#
-#    alias getutc utc
-#    alias getgm utc
-#
-#    def to_f
-#
-#      @seconds
-#    end
-#
-#    def add(t); @time = nil; @seconds += t.to_f; end
-#    def subtract(t); @time = nil; @seconds -= t.to_f; end
-#
-#    def +(t); inc(t, 1); end
-#    def -(t); inc(t, -1); end
-#
-#    WEEK_S = 7 * 24 * 3600
-#
-#    def monthdays
-#
-#      date = to_time
-#
-#      pos = 1
-#      d = self.dup
-#
-#      loop do
-#        d.add(-WEEK_S)
-#        break if d.month != date.month
-#        pos = pos + 1
-#      end
-#
-#      neg = -1
-#      d = self.dup
-#
-#      loop do
-#        d.add(WEEK_S)
-#        break if d.month != date.month
-#        neg = neg - 1
-#      end
-#
-#      [ "#{date.wday}##{pos}", "#{date.wday}##{neg}" ]
-#    end
-#
 #    def to_s
 #
 #      strftime('%Y-%m-%d %H:%M:%S %z')
@@ -199,31 +139,6 @@ module EtOrbi
 #      if tz = tzname && tzs.find { |z| z.name == tzname }; return tz; end
 #
 #      tzs.first
-#    end
-#
-#protected protected protected protected protected
-#
-#    def inc(t, dir)
-#
-#      if t.is_a?(Numeric)
-#        nt = self.dup
-#        nt.seconds += dir * t.to_f
-#        nt
-#      elsif t.respond_to?(:to_f)
-#        @seconds + dir * t.to_f
-#      else
-#        fail ArgumentError.new(
-#          "cannot call EoTime #- or #+ with arg of class #{t.class}")
-#      end
-#    end
-#
-#    def _to_f(o)
-#
-#      fail ArgumentError(
-#        "comparison of EoTime with #{o.inspect} failed"
-#      ) unless o.is_a?(EoTime) || o.is_a?(Time)
-#
-#      o.to_f
 #    end
 
     #
@@ -412,7 +327,7 @@ module EtOrbi
     def initialize(s, zone)
 
       @seconds = s.to_f
-      @zone = self.class.get_tzone(zone)
+      @zone = self.class.get_tzone(zone || :local)
 
       #fail ArgumentError.new(
       #  "cannot determine timezone from #{zone.inspect}" +
@@ -432,6 +347,14 @@ fail unless @zone
     def utc
 
       Time.utc(1970, 1, 1) + @seconds
+    end
+
+    alias getutc utc
+    alias getgm utc
+
+    def to_f
+
+      @seconds
     end
 
     def to_i
@@ -484,6 +407,58 @@ fail unless @zone
       @zone.period_for_utc(utc).utc_offset
     end
 
+    %w[
+      year month day wday hour min sec usec asctime
+    ].each do |m|
+      define_method(m) { to_time.send(m) }
+    end
+    def iso8601(fraction_digits=0); to_time.iso8601(fraction_digits); end
+
+    def ==(o)
+
+      o.is_a?(EoTime) && o.seconds == @seconds && o.zone == @zone
+    end
+    #alias eq? == # FIXME see Object#== (ri)
+
+    def >(o); @seconds > _to_f(o); end
+    def >=(o); @seconds >= _to_f(o); end
+    def <(o); @seconds < _to_f(o); end
+    def <=(o); @seconds <= _to_f(o); end
+    def <=>(o); @seconds <=> _to_f(o); end
+
+    def add(t); @time = nil; @seconds += t.to_f; end
+    def subtract(t); @time = nil; @seconds -= t.to_f; end
+
+    def +(t); inc(t, 1); end
+    def -(t); inc(t, -1); end
+
+    WEEK_S = 7 * 24 * 3600
+
+    def monthdays
+
+      date = to_time
+
+      pos = 1
+      d = self.dup
+
+      loop do
+        d.add(-WEEK_S)
+        break if d.month != date.month
+        pos = pos + 1
+      end
+
+      neg = -1
+      d = self.dup
+
+      loop do
+        d.add(WEEK_S)
+        break if d.month != date.month
+        neg = neg - 1
+      end
+
+      [ "#{date.wday}##{pos}", "#{date.wday}##{neg}" ]
+    end
+
     #
     # protected
 
@@ -512,6 +487,29 @@ fail unless @zone
         end
 
       fmt % [ sn, hr, mn, sc ]
+    end
+
+    def inc(t, dir)
+
+      if t.is_a?(Numeric)
+        nt = self.dup
+        nt.seconds += dir * t.to_f
+        nt
+      elsif t.respond_to?(:to_f)
+        @seconds + dir * t.to_f
+      else
+        fail ArgumentError.new(
+          "cannot call EoTime #- or #+ with arg of class #{t.class}")
+      end
+    end
+
+    def _to_f(o)
+
+      fail ArgumentError(
+        "comparison of EoTime with #{o.inspect} failed"
+      ) unless o.is_a?(EoTime) || o.is_a?(Time)
+
+      o.to_f
     end
   end
 end
