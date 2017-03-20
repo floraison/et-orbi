@@ -109,118 +109,6 @@ module EtOrbi
 #      EoTime.new(Time.now.to_f, zone)
 #    end
 #
-#    def self.get_tzone(str)
-#
-#      return str if str.is_a?(::TZInfo::Timezone)
-#
-#      # discard quickly when it's certainly not a timezone
-#
-#      return nil if str == nil
-#      return nil if str == '*'
-#
-#      ostr = str
-#      str = :current if str == :local
-#
-#      # use Rails' zone by default if Rails is present
-#
-#      return Time.zone.tzinfo if (
-#        ENV['TZ'].nil? && str == :current &&
-#        Time.respond_to?(:zone) && Time.zone.respond_to?(:tzinfo)
-#      )
-#
-#      # ok, it's a timezone then
-#
-#      str = ENV['TZ'] || Time.now.zone if str == :current
-#
-#      # utc_offset
-#
-#      if str.is_a?(Numeric)
-#        i = str.to_i
-#        sn = i < 0 ? '-' : '+'; i = i.abs
-#        hr = i / 3600; mn = i % 3600; sc = i % 60
-#        str = (sc > 0 ? "%s%02d:%02d:%02d" : "%s%02d:%02d") % [ sn, hr, mn, sc ]
-#      end
-#
-#      return nil if str.index('#')
-#        # counters "sun#2", etc... On OSX would go all the way to true
-#
-#      # vanilla time zones
-#
-#      z = (::TZInfo::Timezone.get(str) rescue nil)
-#      return z if z
-#
-#      # time zone abbreviations
-#
-#      if str.match(/\A[A-Z0-9-]{3,6}\z/)
-#
-#        toff = Time.now.utc_offset
-#        toff = nil if str != Time.now.zone
-#
-#        twin = Time.utc(Time.now.year, 1, 1) # winter
-#        tsum = Time.utc(Time.now.year, 7, 1) # summer
-#
-#        z =
-#          ::TZInfo::Timezone.all.find do |tz|
-#
-#            pwin = tz.period_for_utc(twin)
-#            psum = tz.period_for_utc(tsum)
-#
-#            if toff
-#              (pwin.abbreviation.to_s == str && pwin.utc_offset == toff) ||
-#              (psum.abbreviation.to_s == str && psum.utc_offset == toff)
-#            else
-#              # returns the first tz with the given abbreviation, almost useless
-#              # favour fully named zones...
-#              pwin.abbreviation.to_s == str ||
-#              psum.abbreviation.to_s == str
-#            end
-#          end
-#        return z if z
-#      end
-#
-#      # some time zone aliases
-#
-#      return ::TZInfo::Timezone.get('Zulu') if %w[ Z ].include?(str)
-#
-#      # custom timezones, no DST, just an offset, like "+08:00" or "-01:30"
-#
-#      tz = (@custom_tz_cache ||= {})[str]
-#      return tz if tz
-#
-#      if m = str.match(/\A([+-][0-1][0-9]):?([0-5][0-9])\z/)
-#
-#        hr = m[1].to_i
-#        mn = m[2].to_i
-#
-#        hr = nil if hr.abs > 11
-#        hr = nil if mn > 59
-#        mn = -mn if hr && hr < 0
-#
-#        return (
-#          @custom_tz_cache[str] =
-#            begin
-#              tzi = TZInfo::TransitionDataTimezoneInfo.new(str)
-#              tzi.offset(str, hr * 3600 + mn * 60, 0, str)
-#              tzi.create_timezone
-#            end
-#        ) if hr
-#      end
-#
-#      # try with ENV['TZ']
-#
-#      z = ostr == :current && (::TZInfo::Timezone.get(ENV['TZ']) rescue nil)
-#      return z if z
-#
-#      # ask the system
-#
-#      z = ostr == :current && (::TZInfo::Timezone.get(find_tz) rescue nil)
-#      return z if z
-#
-#      # so it's not a timezone.
-#
-#      nil
-#    end
-#
 #    def self.debian_tz
 #
 #      path = '/etc/timezone'
@@ -258,11 +146,6 @@ module EtOrbi
 #    def self.gather_tzs
 #
 #      { :debian => debian_tz, :centos => centos_tz, :osx => osx_tz }
-#    end
-#
-#    def self.local_tzone
-#
-#      get_tzone(:local)
 #    end
 #
 #    def self.make(o)
@@ -444,9 +327,12 @@ module EtOrbi
 
       @local_tzone = nil \
         if @local_tzone_loaded_at && (Time.now > @local_tzone_loaded_at + 1800)
+      @local_tzone = nil \
+        if @local_tzone_tz != ENV['TZ']
 
       @local_tzone ||=
         begin
+          @local_tzone_tz = ENV['TZ']
           @local_tzone_loaded_at = Time.now
           determine_local_tzone
         end
@@ -455,7 +341,9 @@ module EtOrbi
     def self.determine_local_tzone
 
       etz = ENV['TZ']
-      tz = nil
+
+      tz = ::TZInfo::Timezone.get(etz) rescue nil
+      return tz if tz
 
       tzs = determine_local_tzones
 
@@ -536,7 +424,7 @@ module EtOrbi
       #  "(see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)" +
       #  (defined?(TZInfo::Data) ? '' : " and adding 'tzinfo-data' to your gems")
       #) unless @zone
-fail ArgumentError.new unless @zone
+fail unless @zone
 
       @time = nil # cache for #to_time result
     end
@@ -556,33 +444,6 @@ fail ArgumentError.new unless @zone
       format = format.gsub(/%(\/?Z|:{0,2}z)/) { |f| strfz(f) }
 
       to_time.strftime(format)
-    end
-
-    def strfz(code)
-
-      return @zone.name if code == '%/Z'
-
-      per = @zone.period_for_utc(utc)
-
-      return per.abbreviation.to_s if code == '%Z'
-
-      off = per.utc_total_offset
-        #
-      sn = off < 0 ? '-' : '+'; off = off.abs
-      hr = off / 3600
-      mn = (off % 3600) / 60
-      sc = 0
-
-      fmt =
-        if code == '%z'
-          "%s%02d%02d"
-        elsif code == '%:z'
-          "%s%02d:%02d"
-        else
-          "%s%02d:%02d:%02d"
-        end
-
-      fmt % [ sn, hr, mn, sc ]
     end
 
     # Returns a Ruby Time instance.
@@ -625,6 +486,33 @@ fail ArgumentError.new unless @zone
 
     #
     # protected
+
+    def strfz(code)
+
+      return @zone.name if code == '%/Z'
+
+      per = @zone.period_for_utc(utc)
+
+      return per.abbreviation.to_s if code == '%Z'
+
+      off = per.utc_total_offset
+        #
+      sn = off < 0 ? '-' : '+'; off = off.abs
+      hr = off / 3600
+      mn = (off % 3600) / 60
+      sc = 0
+
+      fmt =
+        if code == '%z'
+          "%s%02d%02d"
+        elsif code == '%:z'
+          "%s%02d:%02d"
+        else
+          "%s%02d:%02d:%02d"
+        end
+
+      fmt % [ sn, hr, mn, sc ]
+    end
   end
 end
 

@@ -204,7 +204,7 @@ describe EtOrbi::EoTime do
 
       begin
 
-        current = EtOrbi::EoTime.get_tzone(:current)
+        current = EtOrbi::EoTime.get_tzone(:local)
 
         class ::Time
           alias _original_zone zone
@@ -227,7 +227,7 @@ describe EtOrbi::EoTime do
         in_zone 'Asia/Shanghai' do
 
           expect(
-            EtOrbi::EoTime.get_tzone(:current)
+            EtOrbi::EoTime.get_tzone(:local)
           ).to eq(
             EtOrbi::EoTime.get_tzone('Asia/Shanghai')
           )
@@ -241,7 +241,7 @@ describe EtOrbi::EoTime do
       end
 
       expect(
-        EtOrbi::EoTime.get_tzone(:current)
+        EtOrbi::EoTime.get_tzone(:local)
       ).to eq(
         current
       )
@@ -261,7 +261,7 @@ describe EtOrbi::EoTime do
         in_zone(zone) do
 
           expect(
-            EtOrbi::EoTime.get_tzone(:current)
+            EtOrbi::EoTime.get_tzone(:local)
           ).to eq(
             EtOrbi::EoTime.get_tzone(target)
           )
