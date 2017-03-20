@@ -8,28 +8,6 @@ module EtOrbi
 
   class EoTime
 
-#    attr_reader :seconds
-#    attr_reader :zone
-#
-#    def initialize(s, zone)
-#
-#      @seconds = s.to_f
-#      @zone = self.class.get_tzone(zone || :current)
-#
-#      fail ArgumentError.new(
-#        "cannot determine timezone from #{zone.inspect}" +
-#        " (etz:#{ENV['TZ'].inspect},tnz:#{Time.now.zone.inspect}," +
-#        "tzid:#{defined?(TZInfo::Data).inspect}," +
-#        "rv:#{RUBY_VERSION.inspect},rp:#{RUBY_PLATFORM.inspect}," +
-#        "stz:(#{self.class.gather_tzs.map { |k, v| "#{k}:#{v.inspect}"}.join(',')})) \n" +
-#        "Try setting `ENV['TZ'] = 'Continent/City'` in your script " +
-#        "(see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)" +
-#        (defined?(TZInfo::Data) ? '' : " and adding 'tzinfo-data' to your gems")
-#      ) unless @zone
-#
-#      @time = nil # cache for #to_time result
-#    end
-#
 #    def seconds=(f)
 #
 #      @time = nil
@@ -40,20 +18,6 @@ module EtOrbi
 #
 #      @time = nil
 #      @zone = self.class.get_tzone(zone || :current)
-#    end
-#
-#    def utc
-#
-#      Time.utc(1970, 1, 1) + @seconds
-#    end
-#
-#    # Returns a Ruby Time instance.
-#    #
-#    # Warning: the timezone of that Time instance will be UTC.
-#    #
-#    def to_time
-#
-#      @time ||= begin; u = utc; @zone.period_for_utc(u).to_local(u); end
 #    end
 #
 #    %w[
@@ -78,21 +42,10 @@ module EtOrbi
 #    alias getutc utc
 #    alias getgm utc
 #
-#    def to_i
-#
-#      @seconds.to_i
-#    end
-#
 #    def to_f
 #
 #      @seconds
 #    end
-#
-#    def is_dst?
-#
-#      @zone.period_for_utc(utc).std_offset != 0
-#    end
-#    alias isdst is_dst?
 #
 #    def utc_offset
 #
@@ -100,13 +53,6 @@ module EtOrbi
 #      #@zone.period_for_utc(utc).utc_total_offset
 #      #@zone.period_for_utc(utc).std_offset
 #      @zone.period_for_utc(utc).utc_offset
-#    end
-#
-#    def strftime(format)
-#
-#      format = format.gsub(/%(\/?Z|:{0,2}z)/) { |f| strfz(f) }
-#
-#      to_time.strftime(format)
 #    end
 #
 #    def add(t); @time = nil; @seconds += t.to_f; end
@@ -147,21 +93,6 @@ module EtOrbi
 #      strftime('%Y-%m-%d %H:%M:%S %z')
 #    end
 #
-#    def to_debug_s
-#
-#      uo = self.utc_offset
-#      uos = uo < 0 ? '-' : '+'
-#      uo = uo.abs
-#      uoh, uom = [ uo / 3600, uo % 3600 ]
-#
-#      [
-#        'zt',
-#        self.strftime('%Y-%m-%d %H:%M:%S'),
-#        "%s%02d:%02d" % [ uos, uoh, uom ],
-#        "dst:#{self.isdst}"
-#      ].join(' ')
-#    end
-#
 #    # Debug current time by showing local time / delta / utc time
 #    # for example: "0120-7(0820)"
 #    #
@@ -184,61 +115,6 @@ module EtOrbi
 #    def self.now(zone=nil)
 #
 #      EoTime.new(Time.now.to_f, zone)
-#    end
-#
-#    def self.parse(str, opts={})
-#
-#      if defined?(::Chronic) && t = ::Chronic.parse(str, opts)
-#        return EoTime.new(t, nil)
-#      end
-#
-#      #rold = RUBY_VERSION < '1.9.0'
-#      #rold = RUBY_VERSION < '2.0.0'
-#
-#      begin
-#        DateTime.parse(str)
-#      rescue
-#        fail ArgumentError, "no time information in #{str.inspect}"
-#      end #if rold
-#        #
-#        # is necessary since Time.parse('xxx') in Ruby < 1.9 yields `now`
-#
-#      zone = nil
-#
-#      s =
-#        str.gsub(/\S+/) do |w|
-#          if z = get_tzone(w)
-#            zone ||= z
-#            ''
-#          else
-#            w
-#          end
-#        end
-#
-#      local = Time.parse(s)
-#      izone = extract_iso8601_zone(s)
-#
-#      zone ||=
-#        if s.match(/\dZ\b/)
-#          get_tzone('Zulu')
-#        #elsif rold && izone
-#        elsif izone
-#          get_tzone(izone)
-#        elsif local.zone.nil? && izone
-#          get_tzone(local.strftime('%:z'))
-#        else
-#          get_tzone(:local)
-#        end
-#
-#      secs =
-#        #if rold && izone
-#        if izone
-#          local.to_f
-#        else
-#          zone.period_for_local(local).to_utc(local).to_f
-#        end
-#
-#      EoTime.new(secs, zone)
 #    end
 #
 #    def self.get_tzone(str)
@@ -439,28 +315,6 @@ module EtOrbi
 #      #
 #      # kept around as a (thread-unsafe) relic
 #
-#    def self.list_tzones(time)
-#
-#      tabbs = (-6..5)
-#        .collect { |i| (Time.now + i * 30 * 24 * 3600).zone }
-#        .uniq
-#        .sort
-#
-#      tu = time.dup.utc # ! dup because #utc changes the tz of the Time instance
-#
-#      twin = Time.utc(time.year, 1, 1) # winter
-#      tsum = Time.utc(time.year, 7, 1) # summer
-#
-#      ::TZInfo::Timezone.all.select do |tz|
-#
-#        pabbs = [
-#          tz.period_for_utc(twin).abbreviation.to_s,
-#          tz.period_for_utc(tsum).abbreviation.to_s
-#        ].uniq.sort
-#
-#        pabbs == tabbs
-#      end
-#    end
 #
 #    def self.determine_tzone(time)
 #
@@ -496,36 +350,141 @@ module EtOrbi
 #
 #      o.to_f
 #    end
-#
-#    def strfz(code)
-#
-#      return @zone.name if code == '%/Z'
-#
-#      per = @zone.period_for_utc(utc)
-#
-#      return per.abbreviation.to_s if code == '%Z'
-#
-#      off = per.utc_total_offset
-#        #
-#      sn = off < 0 ? '-' : '+'; off = off.abs
-#      hr = off / 3600
-#      mn = (off % 3600) / 60
-#      sc = 0
-#
-#      fmt =
-#        if code == '%z'
-#          "%s%02d%02d"
-#        elsif code == '%:z'
-#          "%s%02d:%02d"
-#        else
-#          "%s%02d:%02d:%02d"
-#        end
-#
-#      fmt % [ sn, hr, mn, sc ]
-#    end
 
     #
     # class methods
+
+    def self.parse(str, opts={})
+
+      if defined?(::Chronic) && t = ::Chronic.parse(str, opts)
+        return EoTime.new(t, nil)
+      end
+
+      #rold = RUBY_VERSION < '1.9.0'
+      #rold = RUBY_VERSION < '2.0.0'
+
+      begin
+        DateTime.parse(str)
+      rescue
+        fail ArgumentError, "no time information in #{str.inspect}"
+      end #if rold
+        #
+        # is necessary since Time.parse('xxx') in Ruby < 1.9 yields `now`
+
+#p str
+      local = Time.parse(str)
+
+      izone = get_tzone(extract_iso8601_zone(str))
+      ozone = list_olson_zones(str).find { |z| get_tzone(z) }
+      zone = izone || ozone || get_tzone(nil)
+#p [ izone, ozone, zone ]
+
+      secs =
+        if izone
+          local.to_f
+        else
+          zone.period_for_local(local).to_utc(local).to_f
+        end
+
+      EoTime.new(secs, zone)
+    end
+
+    def self.get_tzone(o)
+
+      return local_tzone if o.nil?
+
+      return o if o.is_a?(::TZInfo::Timezone)
+
+      if o.is_a?(Numeric)
+        i = o.to_i
+        sn = i < 0 ? '-' : '+'; i = i.abs
+        hr = i / 3600; mn = i % 3600; sc = i % 60
+        o = (sc > 0 ? "%s%02d:%02d:%02d" : "%s%02d:%02d") % [ sn, hr, mn, sc ]
+      end
+
+      return nil unless o.is_a?(String)
+
+      return ::TZInfo::Timezone.get('Zulu') if o == 'Z'
+
+      z = (@custom_tz_cache ||= {})[o]
+      return z if z
+
+      z = (::TZInfo::Timezone.get(o) rescue nil)
+      return z if z
+
+      z = get_offset_tzone(o)
+      return z if z
+
+      nil
+    end
+
+    def self.get_offset_tzone(str)
+
+      # custom timezones, no DST, just an offset, like "+08:00" or "-01:30"
+
+      if m = str.match(/\A([+-][0-1][0-9]):?([0-5][0-9])\z/)
+
+        hr = m[1].to_i
+        mn = m[2].to_i
+
+        hr = nil if hr.abs > 11
+        hr = nil if mn > 59
+        mn = -mn if hr && hr < 0
+
+        return (
+          @custom_tz_cache[str] =
+            begin
+              tzi = TZInfo::TransitionDataTimezoneInfo.new(str)
+              tzi.offset(str, hr * 3600 + mn * 60, 0, str)
+              tzi.create_timezone
+            end
+        ) if hr
+      end
+
+      nil
+    end
+
+    def self.local_tzone
+
+      @local_tzone = nil \
+        if @local_tzone_loaded_at && (Time.now > @local_tzone_loaded_at + 1800)
+
+      @local_tzone ||=
+        begin
+          @local_tzone_loaded_at = Time.now
+          determine_local_tzone
+        end
+    end
+
+    def self.determine_local_tzone
+
+      determine_local_tzones.first
+    end
+
+    def self.determine_local_tzones
+
+      tabbs = (-6..5)
+        .collect { |i| (Time.now + i * 30 * 24 * 3600).zone }
+        .uniq
+        .sort
+
+      t = Time.now
+      tu = t.dup.utc # /!\ dup is necessary, #utc modifies its target
+
+      twin = Time.utc(t.year, 1, 1) # winter
+      tsum = Time.utc(t.year, 7, 1) # summer
+
+      ::TZInfo::Timezone.all.select do |tz|
+
+        pabbs =
+          [
+            tz.period_for_utc(twin).abbreviation.to_s,
+            tz.period_for_utc(tsum).abbreviation.to_s
+          ].uniq.sort
+
+        pabbs == tabbs
+      end
+    end
 
     # https://en.wikipedia.org/wiki/ISO_8601
     # Postel's law applies
@@ -560,6 +519,104 @@ module EtOrbi
     #
     # instance methods
 
+    attr_reader :seconds
+    attr_reader :zone
+
+    def initialize(s, zone)
+
+      @seconds = s.to_f
+      @zone = self.class.get_tzone(zone)
+
+      #fail ArgumentError.new(
+      #  "cannot determine timezone from #{zone.inspect}" +
+      #  " (etz:#{ENV['TZ'].inspect},tnz:#{Time.now.zone.inspect}," +
+      #  "tzid:#{defined?(TZInfo::Data).inspect}," +
+      #  "rv:#{RUBY_VERSION.inspect},rp:#{RUBY_PLATFORM.inspect}," +
+      #  "stz:(#{self.class.gather_tzs.map { |k, v| "#{k}:#{v.inspect}"}.join(',')})) \n" +
+      #  "Try setting `ENV['TZ'] = 'Continent/City'` in your script " +
+      #  "(see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)" +
+      #  (defined?(TZInfo::Data) ? '' : " and adding 'tzinfo-data' to your gems")
+      #) unless @zone
+fail ArgumentError.new unless @zone
+
+      @time = nil # cache for #to_time result
+    end
+
+    def utc
+
+      Time.utc(1970, 1, 1) + @seconds
+    end
+
+    def to_i
+
+      @seconds.to_i
+    end
+
+    def strftime(format)
+
+      format = format.gsub(/%(\/?Z|:{0,2}z)/) { |f| strfz(f) }
+
+      to_time.strftime(format)
+    end
+
+    def strfz(code)
+
+      return @zone.name if code == '%/Z'
+
+      per = @zone.period_for_utc(utc)
+
+      return per.abbreviation.to_s if code == '%Z'
+
+      off = per.utc_total_offset
+        #
+      sn = off < 0 ? '-' : '+'; off = off.abs
+      hr = off / 3600
+      mn = (off % 3600) / 60
+      sc = 0
+
+      fmt =
+        if code == '%z'
+          "%s%02d%02d"
+        elsif code == '%:z'
+          "%s%02d:%02d"
+        else
+          "%s%02d:%02d:%02d"
+        end
+
+      fmt % [ sn, hr, mn, sc ]
+    end
+
+    # Returns a Ruby Time instance.
+    #
+    # Warning: the timezone of that Time instance will be UTC.
+    #
+    def to_time
+
+      @time ||= begin; u = utc; @zone.period_for_utc(u).to_local(u); end
+    end
+
+    def is_dst?
+
+      @zone.period_for_utc(utc).std_offset != 0
+    end
+    alias isdst is_dst?
+
+    def to_debug_s
+
+      uo = self.utc_offset
+      uos = uo < 0 ? '-' : '+'
+      uo = uo.abs
+      uoh, uom = [ uo / 3600, uo % 3600 ]
+
+      [
+        'zt',
+        self.strftime('%Y-%m-%d %H:%M:%S'),
+        "%s%02d:%02d" % [ uos, uoh, uom ],
+        "dst:#{self.isdst}"
+      ].join(' ')
+    end
+
+    #
     # protected
   end
 end

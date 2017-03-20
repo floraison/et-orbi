@@ -67,135 +67,209 @@ describe EtOrbi::EoTime do
     end
   end
 
-#  describe '.get_tzone' do
-#
-#    def gtz(s); z = EtOrbi::EoTime.get_tzone(s); z ? z.name : z; end
-#
-#    it 'returns a tzone for all the know zone strings' do
-#
-#      expect(gtz('GB')).to eq('GB')
-#      expect(gtz('UTC')).to eq('UTC')
-#      expect(gtz('GMT')).to eq('GMT')
-#      expect(gtz('Zulu')).to eq('Zulu')
-#      expect(gtz('Japan')).to eq('Japan')
-#      expect(gtz('Turkey')).to eq('Turkey')
-#      expect(gtz('Asia/Tokyo')).to eq('Asia/Tokyo')
-#      expect(gtz('Europe/Paris')).to eq('Europe/Paris')
-#      expect(gtz('Europe/Zurich')).to eq('Europe/Zurich')
-#      expect(gtz('W-SU')).to eq('W-SU')
-#
+  describe '.parse' do
+
+    it 'parses a time string without a timezone' do
+
+      zt =
+        in_zone('Europe/Moscow') {
+          EtOrbi::EoTime.parse('2015/03/08 01:59:59')
+        }
+
+      t = zt
+      u = zt.utc
+
+      expect(t.to_i).to eq(1425769199)
+      expect(u.to_i).to eq(1425769199)
+
+      expect(t.strftime('%Y/%m/%d %H:%M:%S %Z %z') + " #{t.isdst}"
+        ).to eq('2015/03/08 01:59:59 MSK +0300 false')
+
+      expect(u.to_debug_s).to eq('t 2015-03-07 22:59:59 +00:00 dst:false')
+    end
+
+    it 'parses a time string with a full name timezone' do
+
+      zt =
+        EtOrbi::EoTime.parse(
+          '2015/03/08 01:59:59 America/Los_Angeles')
+
+      t = zt
+      u = zt.utc
+
+      expect(t.to_i).to eq(1425808799)
+      expect(u.to_i).to eq(1425808799)
+
+      expect(t.to_debug_s).to eq('zt 2015-03-08 01:59:59 -08:00 dst:false')
+      expect(u.to_debug_s).to eq('t 2015-03-08 09:59:59 +00:00 dst:false')
+    end
+
+    it 'parses a time string with a delta timezone' do
+
+      zt =
+        in_zone('Europe/Berlin') {
+          EtOrbi::EoTime.parse('2015-12-13 12:30 -0200')
+        }
+
+      t = zt
+      u = zt.utc
+
+      expect(t.to_i).to eq(1450017000)
+      expect(u.to_i).to eq(1450017000)
+
+      expect(t.to_debug_s).to eq('zt 2015-12-13 12:30:00 -02:00 dst:false')
+      expect(u.to_debug_s).to eq('t 2015-12-13 14:30:00 +00:00 dst:false')
+    end
+
+    it 'parses a time string with a delta (:) timezone' do
+
+      zt =
+        in_zone('Europe/Berlin') {
+          EtOrbi::EoTime.parse('2015-12-13 12:30 -02:00')
+        }
+
+      t = zt
+      u = zt.utc
+
+      expect(t.to_i).to eq(1450017000)
+      expect(u.to_i).to eq(1450017000)
+
+      expect(t.to_debug_s).to eq('zt 2015-12-13 12:30:00 -02:00 dst:false')
+      expect(u.to_debug_s).to eq('t 2015-12-13 14:30:00 +00:00 dst:false')
+    end
+
+    it 'takes the local TZ when it does not know the timezone' do
+
+      in_zone 'Europe/Moscow' do
+
+        zt = EtOrbi::EoTime.parse('2015/03/08 01:59:59 Nada/Nada')
+
+        expect(zt.zone.name).to eq('Europe/Moscow')
+      end
+    end
+
+    it 'fails on invalid strings' do
+
+      expect {
+        EtOrbi::EoTime.parse('xxx')
+      }.to raise_error(
+        ArgumentError, 'no time information in "xxx"'
+      )
+    end
+  end
+
+  describe '.get_tzone' do
+
+    def gtz(s); z = EtOrbi::EoTime.get_tzone(s); z ? z.name : z; end
+
+    it 'returns a tzone for all the know zone strings' do
+
+      expect(gtz('GB')).to eq('GB')
+      expect(gtz('UTC')).to eq('UTC')
+      expect(gtz('GMT')).to eq('GMT')
+      expect(gtz('Zulu')).to eq('Zulu')
+      expect(gtz('Japan')).to eq('Japan')
+      expect(gtz('Turkey')).to eq('Turkey')
+      expect(gtz('Asia/Tokyo')).to eq('Asia/Tokyo')
+      expect(gtz('Europe/Paris')).to eq('Europe/Paris')
+      expect(gtz('Europe/Zurich')).to eq('Europe/Zurich')
+      expect(gtz('W-SU')).to eq('W-SU')
+
 #      expect(gtz('PST')).to eq('America/Dawson')
 #      expect(gtz('CEST')).to eq('Africa/Ceuta')
+
+      expect(gtz('Z')).to eq('Zulu')
+
+      expect(gtz('+09:00')).to eq('+09:00')
+      expect(gtz('-01:30')).to eq('-01:30')
+
+      expect(gtz('+08:00')).to eq('+08:00')
+      expect(gtz('+0800')).to eq('+0800') # no normalization to "+08:00"
+
+      expect(gtz(3600)).to eq('+01:00')
+    end
+
+    it 'returns nil for unknown zone names' do
+
+      expect(gtz('Asia/Paris')).to eq(nil)
+      expect(gtz('Nada/Nada')).to eq(nil)
+      expect(gtz('7')).to eq(nil)
+      expect(gtz('06')).to eq(nil)
+      expect(gtz('sun#3')).to eq(nil)
+      expect(gtz('Mazda Zoom Zoom Stadium')).to eq(nil)
+    end
+
+    # gh-222
+    it "falls back to ENV['TZ'] if it doesn't know Time.now.zone" do
+
+      begin
+
+        current = EtOrbi::EoTime.get_tzone(:current)
+
+        class ::Time
+          alias _original_zone zone
+          def zone; "中国标准时间"; end
+        end
+
+#        expect(
+#          EtOrbi::EoTime.get_tzone(:current)
+#        ).to eq(nil)
 #
-#      expect(gtz('Z')).to eq('Zulu')
-#
-#      expect(gtz('+09:00')).to eq('+09:00')
-#      expect(gtz('-01:30')).to eq('-01:30')
-#
-#      expect(gtz('+08:00')).to eq('+08:00')
-#      expect(gtz('+0800')).to eq('+0800') # no normalization to "+08:00"
-#
-#      expect(gtz(3600)).to eq('+01:00')
-#    end
-#
-#    it 'returns nil for unknown zone names' do
-#
-#      expect(gtz('Asia/Paris')).to eq(nil)
-#      expect(gtz('Nada/Nada')).to eq(nil)
-#      expect(gtz('7')).to eq(nil)
-#      expect(gtz('06')).to eq(nil)
-#      expect(gtz('sun#3')).to eq(nil)
-#      expect(gtz('Mazda Zoom Zoom Stadium')).to eq(nil)
-#    end
-#
-#    # gh-222
-#    it "falls back to ENV['TZ'] if it doesn't know Time.now.zone" do
-#
-#      begin
-#
-#        current = EtOrbi::EoTime.get_tzone(:current)
-#
-#        class ::Time
-#          alias _original_zone zone
-#          def zone; "中国标准时间"; end
-#        end
-#
-##        expect(
-##          EtOrbi::EoTime.get_tzone(:current)
-##        ).to eq(nil)
-##
-##        expect(
-##          EtOrbi::EoTime.get_tzone(:current)
-##        ).to eq(
-##          EtOrbi::EoTime.get_tzone(Time.now.zone)
-##        )
-#  #
-#  # gh-240 introduces a way of finding the timezone by asking directly
-#  # to the system, so those do return a timezone...
-#
-#        in_zone 'Asia/Shanghai' do
-#
-#          expect(
-#            EtOrbi::EoTime.get_tzone(:current)
-#          ).to eq(
-#            EtOrbi::EoTime.get_tzone('Asia/Shanghai')
-#          )
-#        end
-#
-#      ensure
-#
-#        class ::Time
-#          def zone; _original_zone; end
-#        end
-#      end
-#
-#      expect(
-#        EtOrbi::EoTime.get_tzone(:current)
-#      ).to eq(
-#        current
-#      )
-#    end
-#
-#    [ # for gh-228
-#
-#      [ 'Asia/Tokyo', 'Asia/Tokyo' ],
-#      [ 'Asia/Shanghai', 'Asia/Shanghai' ],
-#      [ 'Europe/Zurich', 'Europe/Zurich' ],
-#      [ 'Europe/London', 'Europe/London' ]
-#
-#    ].each do |zone, target|
-#
-#      it "returns the current timezone for :current in #{zone}" do
-#
-#        in_zone(zone) do
-#
-#          expect(
-#            EtOrbi::EoTime.get_tzone(:current)
-#          ).to eq(
-#            EtOrbi::EoTime.get_tzone(target)
-#          )
-#        end
-#      end
-#    end
-#
-##    it 'flips burgers' do
-##      p Rufus::Scheduler::CronLine.new('* * * * *').to_a
-##      p EtOrbi::EoTime.get_tzone(:current)
-##      in_zone 'Asia/Shanghai' do
-##        p ENV['TZ']
-##        p Rufus::Scheduler::CronLine.new('* * * * *').to_a
-##        p EtOrbi::EoTime.get_tzone(:current)
-##      end
-##      ENV['TZ'] = 'Asia/Shanghai'
-##      p Rufus::Scheduler::CronLine.new('* * * * *').to_a
-##      #p EtOrbi::EoTime.get_tzone('Asia/Shanghai')
-##      #p EtOrbi::EoTime.get_tzone('America/Bahia_Banderas')
-##      #p EtOrbi::EoTime.get_tzone('Asia/Shanghai').now
-##      #p EtOrbi::EoTime.get_tzone('America/Bahia_Banderas').now
-##      p EtOrbi::EoTime.get_tzone(:current)
-##    end
-#  end
-#
+#        expect(
+#          EtOrbi::EoTime.get_tzone(:current)
+#        ).to eq(
+#          EtOrbi::EoTime.get_tzone(Time.now.zone)
+#        )
+  #
+  # gh-240 introduces a way of finding the timezone by asking directly
+  # to the system, so those do return a timezone...
+
+        in_zone 'Asia/Shanghai' do
+
+          expect(
+            EtOrbi::EoTime.get_tzone(:current)
+          ).to eq(
+            EtOrbi::EoTime.get_tzone('Asia/Shanghai')
+          )
+        end
+
+      ensure
+
+        class ::Time
+          def zone; _original_zone; end
+        end
+      end
+
+      expect(
+        EtOrbi::EoTime.get_tzone(:current)
+      ).to eq(
+        current
+      )
+    end
+
+    [ # for gh-228
+
+      [ 'Asia/Tokyo', 'Asia/Tokyo' ],
+      [ 'Asia/Shanghai', 'Asia/Shanghai' ],
+      [ 'Europe/Zurich', 'Europe/Zurich' ],
+      [ 'Europe/London', 'Europe/London' ]
+
+    ].each do |zone, target|
+
+      it "returns the current timezone for :current in #{zone}" do
+
+        in_zone(zone) do
+
+          expect(
+            EtOrbi::EoTime.get_tzone(:current)
+          ).to eq(
+            EtOrbi::EoTime.get_tzone(target)
+          )
+        end
+      end
+    end
+  end
+
 #  describe '.new' do
 #
 #    it 'accepts an integer' do
@@ -220,97 +294,6 @@ describe EtOrbi::EoTime do
 #          'America/Los_Angeles')
 #
 #      expect(zt.seconds.to_i).to eq(1193930700)
-#    end
-#  end
-#
-#  describe '.parse' do
-#
-#    it 'parses a time string without a timezone' do
-#
-#      zt =
-#        in_zone('Europe/Moscow') {
-#          EtOrbi::EoTime.parse('2015/03/08 01:59:59')
-#        }
-#
-#      t = zt
-#      u = zt.utc
-#
-#      expect(t.to_i).to eq(1425769199)
-#      expect(u.to_i).to eq(1425769199)
-#
-#      expect(t.strftime('%Y/%m/%d %H:%M:%S %Z %z') + " #{t.isdst}"
-#        ).to eq('2015/03/08 01:59:59 MSK +0300 false')
-#
-#      expect(u.to_debug_s).to eq('t 2015-03-07 22:59:59 +00:00 dst:false')
-#    end
-#
-#    it 'parses a time string with a full name timezone' do
-#
-#      zt =
-#        EtOrbi::EoTime.parse(
-#          '2015/03/08 01:59:59 America/Los_Angeles')
-#
-#      t = zt
-#      u = zt.utc
-#
-#      expect(t.to_i).to eq(1425808799)
-#      expect(u.to_i).to eq(1425808799)
-#
-#      expect(t.to_debug_s).to eq('zt 2015-03-08 01:59:59 -08:00 dst:false')
-#      expect(u.to_debug_s).to eq('t 2015-03-08 09:59:59 +00:00 dst:false')
-#    end
-#
-#    it 'parses a time string with a delta timezone' do
-#
-#      zt =
-#        in_zone('Europe/Berlin') {
-#          EtOrbi::EoTime.parse('2015-12-13 12:30 -0200')
-#        }
-#
-#      t = zt
-#      u = zt.utc
-#
-#      expect(t.to_i).to eq(1450017000)
-#      expect(u.to_i).to eq(1450017000)
-#
-#      expect(t.to_debug_s).to eq('zt 2015-12-13 12:30:00 -02:00 dst:false')
-#      expect(u.to_debug_s).to eq('t 2015-12-13 14:30:00 +00:00 dst:false')
-#    end
-#
-#    it 'parses a time string with a delta (:) timezone' do
-#
-#      zt =
-#        in_zone('Europe/Berlin') {
-#          EtOrbi::EoTime.parse('2015-12-13 12:30 -02:00')
-#        }
-#
-#      t = zt
-#      u = zt.utc
-#
-#      expect(t.to_i).to eq(1450017000)
-#      expect(u.to_i).to eq(1450017000)
-#
-#      expect(t.to_debug_s).to eq('zt 2015-12-13 12:30:00 -02:00 dst:false')
-#      expect(u.to_debug_s).to eq('t 2015-12-13 14:30:00 +00:00 dst:false')
-#    end
-#
-#    it 'takes the local TZ when it does not know the timezone' do
-#
-#      in_zone 'Europe/Moscow' do
-#
-#        zt = EtOrbi::EoTime.parse('2015/03/08 01:59:59 Nada/Nada')
-#
-#        expect(zt.zone.name).to eq('Europe/Moscow')
-#      end
-#    end
-#
-#    it 'fails on invalid strings' do
-#
-#      expect {
-#        EtOrbi::EoTime.parse('xxx')
-#      }.to raise_error(
-#        ArgumentError, 'no time information in "xxx"'
-#      )
 #    end
 #  end
 #
