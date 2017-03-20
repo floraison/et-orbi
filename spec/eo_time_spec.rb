@@ -549,10 +549,11 @@ describe EtOrbi::EoTime do
         tznames = EtOrbi::EoTime.list_tzones(t).collect(&:name)
 #pp tznames
 
-        expect(tznames).to include('America/Atikokan')
         expect(tznames).to include('America/New_York')
-        expect(tznames).to include('EST')
-        expect(tznames).to include('America/Jamaica')
+        expect(tznames).to include('EST5EDT')
+        expect(tznames).not_to include('America/Atikokan')
+        expect(tznames).not_to include('EST')
+        expect(tznames).not_to include('America/Jamaica')
 
         #America/Atikokan America/Cancun America/Cayman America/Coral_Harbour
         #America/Detroit America/Fort_Wayne America/Indiana/Indianapolis
@@ -577,9 +578,9 @@ describe EtOrbi::EoTime do
         tznames = EtOrbi::EoTime.list_tzones(t).collect(&:name)
 #pp tznames
 
-        expect(tznames).not_to include('America/Atikokan')
         expect(tznames).to include('America/New_York')
         expect(tznames).to include('EST5EDT')
+        expect(tznames).not_to include('America/Atikokan')
         expect(tznames).not_to include('America/Jamaica')
 
         #America/Detroit America/Fort_Wayne America/Indiana/Indianapolis

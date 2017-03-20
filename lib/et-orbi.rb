@@ -461,25 +461,24 @@ module EtOrbi
 
     def self.list_tzones(time)
 
+      tabbs = (-6..5)
+        .collect { |i| (Time.now + i * 30 * 24 * 3600).zone }
+        .uniq
+        .sort
+
       tu = time.dup.utc # ! dup because #utc changes the tz of the Time instance
-      tzo = time.zone
 
       twin = Time.utc(time.year, 1, 1) # winter
       tsum = Time.utc(time.year, 7, 1) # summer
 
       ::TZInfo::Timezone.all.select do |tz|
 
-        pwin = tz.period_for_utc(twin)
-        psum = tz.period_for_utc(tsum)
-        awin = pwin.abbreviation.to_s
-        asum = psum.abbreviation.to_s
+        pabbs = [
+          tz.period_for_utc(twin).abbreviation.to_s,
+          tz.period_for_utc(tsum).abbreviation.to_s
+        ].uniq.sort
 
-        next false \
-          unless awin == tzo || asum == tzo
-
-        time1 = tz.period_for_utc(tu).to_local(tu)
-
-        time.strftime('%M%H%d%m%Y') == time1.strftime('%M%H%d%m%Y')
+        pabbs == tabbs
       end
     end
 
