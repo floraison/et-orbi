@@ -216,24 +216,24 @@ module EtOrbi
 
       # custom timezones, no DST, just an offset, like "+08:00" or "-01:30"
 
-      if m = str.match(/\A([+-][0-1][0-9]):?([0-5][0-9])\z/)
+      m = str.match(/\A([+-][0-1][0-9]):?([0-5][0-9])\z/)
+      return nil unless m
 
-        hr = m[1].to_i
-        mn = m[2].to_i
+      hr = m[1].to_i
+      mn = m[2].to_i
 
-        hr = nil if hr.abs > 11
-        hr = nil if mn > 59
-        mn = -mn if hr && hr < 0
+      hr = nil if hr.abs > 11
+      hr = nil if mn > 59
+      mn = -mn if hr && hr < 0
 
-        return (
-          @custom_tz_cache[str] =
-            begin
-              tzi = TZInfo::TransitionDataTimezoneInfo.new(str)
-              tzi.offset(str, hr * 3600 + mn * 60, 0, str)
-              tzi.create_timezone
-            end
-        ) if hr
-      end
+      return (
+        @custom_tz_cache[str] =
+          begin
+            tzi = TZInfo::TransitionDataTimezoneInfo.new(str)
+            tzi.offset(str, hr * 3600 + mn * 60, 0, str)
+            tzi.create_timezone
+          end
+      ) if hr
 
       nil
     end
