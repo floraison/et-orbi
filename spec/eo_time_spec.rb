@@ -285,6 +285,19 @@ describe EtOrbi::EoTime do
     end
   end
 
+  describe '.local_tzone' do
+
+    it 'caches and returns the local timezone' do
+
+      in_zone('Europe/Berlin') do
+        expect(EtOrbi::EoTime.local_tzone.name).to eq('Europe/Berlin')
+      end
+      in_zone('America/Jamaica') do
+        expect(EtOrbi::EoTime.local_tzone.name).to eq('America/Jamaica')
+      end
+    end
+  end
+
   describe '.now' do
 
     it 'returns a current, local EoTime instance' do
