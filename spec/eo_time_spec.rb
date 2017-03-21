@@ -71,13 +71,13 @@ describe EtOrbi::EoTime do
 
     it 'parses a time string without a timezone' do
 
-      zt =
+      ot =
         in_zone('Europe/Moscow') {
           EtOrbi::EoTime.parse('2015/03/08 01:59:59')
         }
 
-      t = zt
-      u = zt.utc
+      t = ot
+      u = ot.utc
 
       expect(t.to_i).to eq(1425769199)
       expect(u.to_i).to eq(1425769199)
@@ -90,51 +90,51 @@ describe EtOrbi::EoTime do
 
     it 'parses a time string with a full name timezone' do
 
-      zt =
+      ot =
         EtOrbi::EoTime.parse(
           '2015/03/08 01:59:59 America/Los_Angeles')
 
-      t = zt
-      u = zt.utc
+      t = ot
+      u = ot.utc
 
       expect(t.to_i).to eq(1425808799)
       expect(u.to_i).to eq(1425808799)
 
-      expect(t.to_debug_s).to eq('zt 2015-03-08 01:59:59 -08:00 dst:false')
+      expect(t.to_debug_s).to eq('ot 2015-03-08 01:59:59 -08:00 dst:false')
       expect(u.to_debug_s).to eq('t 2015-03-08 09:59:59 +00:00 dst:false')
     end
 
     it 'parses a time string with a delta timezone' do
 
-      zt =
+      ot =
         in_zone('Europe/Berlin') {
           EtOrbi::EoTime.parse('2015-12-13 12:30 -0200')
         }
 
-      t = zt
-      u = zt.utc
+      t = ot
+      u = ot.utc
 
       expect(t.to_i).to eq(1450017000)
       expect(u.to_i).to eq(1450017000)
 
-      expect(t.to_debug_s).to eq('zt 2015-12-13 12:30:00 -02:00 dst:false')
+      expect(t.to_debug_s).to eq('ot 2015-12-13 12:30:00 -02:00 dst:false')
       expect(u.to_debug_s).to eq('t 2015-12-13 14:30:00 +00:00 dst:false')
     end
 
     it 'parses a time string with a delta (:) timezone' do
 
-      zt =
+      ot =
         in_zone('Europe/Berlin') {
           EtOrbi::EoTime.parse('2015-12-13 12:30 -02:00')
         }
 
-      t = zt
-      u = zt.utc
+      t = ot
+      u = ot.utc
 
       expect(t.to_i).to eq(1450017000)
       expect(u.to_i).to eq(1450017000)
 
-      expect(t.to_debug_s).to eq('zt 2015-12-13 12:30:00 -02:00 dst:false')
+      expect(t.to_debug_s).to eq('ot 2015-12-13 12:30:00 -02:00 dst:false')
       expect(u.to_debug_s).to eq('t 2015-12-13 14:30:00 +00:00 dst:false')
     end
 
@@ -142,9 +142,9 @@ describe EtOrbi::EoTime do
 
       in_zone 'Europe/Moscow' do
 
-        zt = EtOrbi::EoTime.parse('2015/03/08 01:59:59 Nada/Nada')
+        ot = EtOrbi::EoTime.parse('2015/03/08 01:59:59 Nada/Nada')
 
-        expect(zt.zone.name).to eq('Europe/Moscow')
+        expect(ot.zone.name).to eq('Europe/Moscow')
       end
     end
 
@@ -175,9 +175,6 @@ describe EtOrbi::EoTime do
       expect(gtz('Europe/Zurich')).to eq('Europe/Zurich')
       expect(gtz('W-SU')).to eq('W-SU')
 
-#      expect(gtz('PST')).to eq('America/Dawson')
-#      expect(gtz('CEST')).to eq('Africa/Ceuta')
-
       expect(gtz('Z')).to eq('Zulu')
 
       expect(gtz('+09:00')).to eq('+09:00')
@@ -187,6 +184,10 @@ describe EtOrbi::EoTime do
       expect(gtz('+0800')).to eq('+0800') # no normalization to "+08:00"
 
       expect(gtz(3600)).to eq('+01:00')
+
+#      expect(gtz('JST')).to eq('Japan')
+#      expect(gtz('PST')).to eq('America/Dawson')
+#      expect(gtz('CEST')).to eq('Africa/Ceuta')
     end
 
     it 'returns nil for unknown zone names' do
@@ -344,26 +345,26 @@ describe EtOrbi::EoTime do
 
     it 'accepts an integer' do
 
-      zt = EtOrbi::EoTime.new(1234567890, 'America/Los_Angeles')
+      ot = EtOrbi::EoTime.new(1234567890, 'America/Los_Angeles')
 
-      expect(zt.seconds.to_i).to eq(1234567890)
+      expect(ot.seconds.to_i).to eq(1234567890)
     end
 
     it 'accepts a float' do
 
-      zt = EtOrbi::EoTime.new(1234567890.1234, 'America/Los_Angeles')
+      ot = EtOrbi::EoTime.new(1234567890.1234, 'America/Los_Angeles')
 
-      expect(zt.seconds.to_i).to eq(1234567890)
+      expect(ot.seconds.to_i).to eq(1234567890)
     end
 
     it 'accepts a Time instance' do
 
-      zt =
+      ot =
         EtOrbi::EoTime.new(
           Time.utc(2007, 11, 1, 15, 25, 0),
           'America/Los_Angeles')
 
-      expect(zt.seconds.to_i).to eq(1193930700)
+      expect(ot.seconds.to_i).to eq(1193930700)
     end
   end
 
@@ -371,10 +372,10 @@ describe EtOrbi::EoTime do
 
     it 'returns a local Time instance, although with a UTC zone' do
 
-      zt = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
-      t = zt.to_time
+      ot = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
+      t = ot.to_time
 
-      expect(zt.to_debug_s).to eq('zt 2007-10-31 23:25:00 -08:00 dst:true')
+      expect(ot.to_debug_s).to eq('ot 2007-10-31 23:25:00 -08:00 dst:true')
 
       expect(t.to_i).to eq(1193898300 - 7 * 3600) # /!\
 
@@ -387,12 +388,12 @@ describe EtOrbi::EoTime do
 
     it 'returns an UTC Time instance' do
 
-      zt = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
-      ut = zt.utc
+      ot = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
+      ut = ot.utc
 
       expect(ut.to_i).to eq(1193898300)
 
-      expect(zt.to_debug_s).to eq('zt 2007-10-31 23:25:00 -08:00 dst:true')
+      expect(ot.to_debug_s).to eq('ot 2007-10-31 23:25:00 -08:00 dst:true')
       expect(ut.to_debug_s).to eq('t 2007-11-01 06:25:00 +00:00 dst:false')
     end
   end
@@ -401,22 +402,22 @@ describe EtOrbi::EoTime do
 
     it 'adds seconds' do
 
-      zt = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
-      zt.add(111)
+      ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
+      ot.add(111)
 
-      expect(zt.seconds).to eq(1193898300 + 111)
+      expect(ot.seconds).to eq(1193898300 + 111)
     end
 
     it 'goes into DST' do
 
-      zt =
+      ot =
         EtOrbi::EoTime.new(
           Time.gm(2015, 3, 8, 9, 59, 59),
           'America/Los_Angeles')
 
-      t0 = zt.dup
-      zt.add(1)
-      t1 = zt
+      t0 = ot.dup
+      ot.add(1)
+      t1 = ot
 
       st0 = t0.strftime('%Y/%m/%d %H:%M:%S %Z') + " #{t0.isdst}"
       st1 = t1.strftime('%Y/%m/%d %H:%M:%S %Z') + " #{t1.isdst}"
@@ -429,18 +430,18 @@ describe EtOrbi::EoTime do
 
     it 'goes out of DST' do
 
-      zt =
+      ot =
         EtOrbi::EoTime.new(
           ltz('Europe/Berlin', 2014, 10, 26, 01, 59, 59),
           'Europe/Berlin')
 
-      t0 = zt.dup
-      zt.add(1)
-      t1 = zt.dup
-      zt.add(3600)
-      t2 = zt.dup
-      zt.add(1)
-      t3 = zt
+      t0 = ot.dup
+      ot.add(1)
+      t1 = ot.dup
+      ot.add(3600)
+      t2 = ot.dup
+      ot.add(1)
+      t3 = ot
 
       st0 = t0.strftime('%Y/%m/%d %H:%M:%S %Z') + " #{t0.isdst}"
       st1 = t1.strftime('%Y/%m/%d %H:%M:%S %Z') + " #{t1.isdst}"
@@ -467,9 +468,9 @@ describe EtOrbi::EoTime do
 
     it 'returns the @seconds' do
 
-      zt = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
+      ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
 
-      expect(zt.to_f).to eq(1193898300)
+      expect(ot.to_f).to eq(1193898300)
     end
   end
 
@@ -510,99 +511,99 @@ describe EtOrbi::EoTime do
     end
   end
 
-#  describe '.make' do
-#
-#    it 'accepts a Time' do
-#
-#      expect(
-#        EtOrbi::EoTime.make(
-#          Time.utc(2016, 11, 01, 12, 30, 9)).to_debug_s
-#      ).to eq(
-#        'zt 2016-11-01 12:30:09 +00:00 dst:false'
-#      )
-#    end
-#
-#    it 'accepts a Date' do
-#
-#      expect(
-#        EtOrbi::EoTime.make(
-#          Date.new(2016, 11, 01))
-#      ).to eq(
-#        EtOrbi::EoTime.new(
-#          Time.local(2016, 11, 01).to_f, nil)
-#      )
-#    end
-#
-#    it 'accepts a String' do
-#
-#      expect(
-#        EtOrbi::EoTime.make(
-#          '2016-11-01 12:30:09')
-#      ).to eq(
-#        EtOrbi::EoTime.new(
-#          Time.local(2016, 11, 01, 12, 30, 9).to_f, nil)
-#      )
-#    end
-#
-#    it 'accepts a String (Zulu)' do
-#
-#      expect(
-#        EtOrbi::EoTime.make(
-#          '2016-11-01 12:30:09Z')
-#      ).to eq(
-#        EtOrbi::EoTime.new(
-#          Time.utc(2016, 11, 01, 12, 30, 9).to_f, 'Zulu')
-#      )
-#    end
-#
-#    it 'accepts a String (ss+01:00)' do
-#
-#      expect(
-#        EtOrbi::EoTime.make('2016-11-01 12:30:09+01:00').to_debug_s
-#      ).to eq(
-#        'zt 2016-11-01 12:30:09 +01:00 dst:false'
-#      )
-#    end
-#
-#    it 'accepts a String (ss-01)' do
-#
-#      expect(
-#        EtOrbi::EoTime.make('2016-11-01 12:30:09-01').to_debug_s
-#      ).to eq(
-#        'zt 2016-11-01 12:30:09 -01:00 dst:false'
-#      )
-#    end
-#
-#    it 'accepts a duration String' #do
-##
-##      expect(
-##        EtOrbi::EoTime.make('1h')
-##      ).to be_between(
-##        Time.now + 3600 - 1, Time.now + 3600 + 1
-##      )
-##    end
-#
-#    it 'accepts a Numeric' do
+  describe '.make' do
+
+    it 'accepts a Time' do
+
+      expect(
+        EtOrbi::EoTime.make(
+          Time.utc(2016, 11, 01, 12, 30, 9)).to_debug_s
+      ).to eq(
+        'ot 2016-11-01 12:30:09 +00:00 dst:false'
+      )
+    end
+
+    it 'accepts a Date' do
+
+      expect(
+        EtOrbi::EoTime.make(
+          Date.new(2016, 11, 01))
+      ).to eq(
+        EtOrbi::EoTime.new(
+          Time.local(2016, 11, 01).to_f, nil)
+      )
+    end
+
+    it 'accepts a String' do
+
+      expect(
+        EtOrbi::EoTime.make(
+          '2016-11-01 12:30:09')
+      ).to eq(
+        EtOrbi::EoTime.new(
+          Time.local(2016, 11, 01, 12, 30, 9).to_f, nil)
+      )
+    end
+
+    it 'accepts a String (Zulu)' do
+
+      expect(
+        EtOrbi::EoTime.make(
+          '2016-11-01 12:30:09Z')
+      ).to eq(
+        EtOrbi::EoTime.new(
+          Time.utc(2016, 11, 01, 12, 30, 9).to_f, 'Zulu')
+      )
+    end
+
+    it 'accepts a String (ss+01:00)' do
+
+      expect(
+        EtOrbi::EoTime.make('2016-11-01 12:30:09+01:00').to_debug_s
+      ).to eq(
+        'ot 2016-11-01 12:30:09 +01:00 dst:false'
+      )
+    end
+
+    it 'accepts a String (ss-01)' do
+
+      expect(
+        EtOrbi::EoTime.make('2016-11-01 12:30:09-01').to_debug_s
+      ).to eq(
+        'ot 2016-11-01 12:30:09 -01:00 dst:false'
+      )
+    end
+
+    it 'accepts a duration String' #do
 #
 #      expect(
-#        EtOrbi::EoTime.make(3600)
+#        EtOrbi::EoTime.make('1h')
 #      ).to be_between(
 #        Time.now + 3600 - 1, Time.now + 3600 + 1
 #      )
 #    end
-#
-#    it 'rejects unparseable input' do
-#
-#      expect {
-#        EtOrbi::EoTime.make('xxx')
-#      #}.to raise_error(ArgumentError, 'couldn\'t parse "xxx"')
-#      }.to raise_error(ArgumentError, 'no time information in "xxx"')
-#        # straight out of Time.parse()
-#
-#      expect {
-#        EtOrbi::EoTime.make(Object.new)
-#      }.to raise_error(ArgumentError, /\Acannot turn /)
-#    end
-#  end
+
+    it 'accepts a Numeric' do
+
+      expect(
+        EtOrbi::EoTime.make(3600)
+      ).to be_between(
+        Time.now + 3600 - 1, Time.now + 3600 + 1
+      )
+    end
+
+    it 'rejects unparseable input' do
+
+      expect {
+        EtOrbi::EoTime.make('xxx')
+      #}.to raise_error(ArgumentError, 'couldn\'t parse "xxx"')
+      }.to raise_error(ArgumentError, 'no time information in "xxx"')
+        # straight out of Time.parse()
+
+      expect {
+        EtOrbi::EoTime.make(Object.new)
+      }.to raise_error(ArgumentError, /\Acannot turn /)
+    end
+  end
 end
 

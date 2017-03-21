@@ -46,37 +46,14 @@ module EtOrbi
 #
 #      { :debian => debian_tz, :centos => centos_tz, :osx => osx_tz }
 #    end
-#
-#    def self.make(o)
-#
-#      zt =
-#        case o
-#          when Time
-#            EoTime.new(o.to_f, o.zone)
-#          when Date
-#            t =
-#              o.respond_to?(:to_time) ?
-#              o.to_time :
-#              Time.parse(o.strftime('%Y-%m-%d %H:%M:%S'))
-#            EoTime.new(t.to_f, t.zone)
-#          when String
-#            #Rufus::Scheduler.parse_in(o, :no_error => true) || self.parse(o)
-#            self.parse(o)
-#          else
-#            o
-#        end
-#
-#      zt = EoTime.new(Time.now.to_f + zt, nil) if zt.is_a?(Numeric)
-#
-#      fail ArgumentError.new(
-#        "cannot turn #{o.inspect} to a EoTime instance"
-#      ) unless zt.is_a?(EoTime)
-#
-#      zt
-#    end
 
     #
     # class methods
+
+    def self.now(zone=nil)
+
+      EoTime.new(Time.now.to_f, zone)
+    end
 
     def self.parse(str, opts={})
 
@@ -115,9 +92,36 @@ module EtOrbi
       EoTime.new(secs, zone)
     end
 
-    def self.now(zone=nil)
+    def self.make(o)
 
-      EoTime.new(Time.now.to_f, zone)
+      ot =
+        case o
+          when Time
+p [ Time, o.zone ]
+            EoTime.new(o.to_f, o.zone)
+          when Date
+            t =
+              o.respond_to?(:to_time) ?
+              o.to_time :
+              Time.parse(o.strftime('%Y-%m-%d %H:%M:%S'))
+p [ Date, t.zone ]
+            EoTime.new(t.to_f, t.zone)
+          when String
+p [ String, o ]
+            #Rufus::Scheduler.parse_in(o, :no_error => true) || self.parse(o)
+            self.parse(o)
+          else
+p [ :else, o ]
+            o
+        end
+
+      ot = EoTime.new(Time.now.to_f + ot, nil) if ot.is_a?(Numeric)
+
+      fail ArgumentError.new(
+        "cannot turn #{o.inspect} to a EoTime instance"
+      ) unless ot.is_a?(EoTime)
+
+      ot
     end
 
     def self.to_offset(n)
@@ -353,7 +357,7 @@ fail unless @zone
       uoh, uom = [ uo / 3600, uo % 3600 ]
 
       [
-        'zt',
+        'ot',
         self.strftime('%Y-%m-%d %H:%M:%S'),
         "%s%02d:%02d" % [ uos, uoh, uom ],
         "dst:#{self.isdst}"
