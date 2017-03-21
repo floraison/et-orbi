@@ -181,35 +181,29 @@ module EtOrbi
       EoTime.new(Time.now.to_f, zone)
     end
 
+    def self.to_offset(n)
+
+      i = n.to_i
+      sn = i < 0 ? '-' : '+'; i = i.abs
+      hr = i / 3600; mn = i % 3600; sc = i % 60
+      (sc > 0 ? "%s%02d:%02d:%02d" : "%s%02d:%02d") % [ sn, hr, mn, sc ]
+    end
+
     def self.get_tzone(o)
 
 #p [ :gtz, o ]
       return nil if o == nil
       return local_tzone if o == :local
-
       return o if o.is_a?(::TZInfo::Timezone)
+      return ::TZInfo::Timezone.get('Zulu') if o == 'Z'
 
-      if o.is_a?(Numeric)
-        i = o.to_i
-        sn = i < 0 ? '-' : '+'; i = i.abs
-        hr = i / 3600; mn = i % 3600; sc = i % 60
-        o = (sc > 0 ? "%s%02d:%02d:%02d" : "%s%02d:%02d") % [ sn, hr, mn, sc ]
-      end
+      o = to_offset(o) if o.is_a?(Numeric)
 
       return nil unless o.is_a?(String)
 
-      return ::TZInfo::Timezone.get('Zulu') if o == 'Z'
-
-      z = (@custom_tz_cache ||= {})[o]
-      return z if z
-
-      z = (::TZInfo::Timezone.get(o) rescue nil)
-      return z if z
-
-      z = get_offset_tzone(o)
-      return z if z
-
-      nil
+      (@custom_tz_cache ||= {})[o] ||
+      get_offset_tzone(o) ||
+      (::TZInfo::Timezone.get(o) rescue nil)
     end
 
     def self.get_offset_tzone(str)
