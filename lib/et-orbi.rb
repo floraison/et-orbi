@@ -76,7 +76,6 @@ module EtOrbi
       local = Time.parse(str)
 
       izone = get_tzone(list_iso8601_zones(str).last)
-p izone
 
       zone = izone
       list_olson_zones(str).each { |s| break if zone; zone = get_tzone(s) }
@@ -98,21 +97,17 @@ p izone
       ot =
         case o
           when Time
-p [ Time, o.zone ]
             EoTime.new(o.to_f, o.zone)
           when Date
             t =
               o.respond_to?(:to_time) ?
               o.to_time :
               Time.parse(o.strftime('%Y-%m-%d %H:%M:%S'))
-p [ Date, t.zone ]
             EoTime.new(t.to_f, t.zone)
           when String
-p [ String, o ]
             #Rufus::Scheduler.parse_in(o, :no_error => true) || self.parse(o)
             self.parse(o)
           else
-p [ :else, o ]
             o
         end
 
@@ -154,7 +149,7 @@ p [ :else, o ]
 
       # custom timezones, no DST, just an offset, like "+08:00" or "-01:30"
 
-      m = str.match(/\A([+-][0-1][0-9]):?([0-5][0-9])\z/)
+      m = str.match(/\A([+-][0-1][0-9]):?([0-5][0-9])?\z/)
       return nil unless m
 
       hr = m[1].to_i
@@ -249,7 +244,8 @@ p [ :else, o ]
             |
             Z
           )
-        }x).collect(&:strip)
+        }x
+        ).collect(&:strip)
     end
 
     def self.list_olson_zones(s)

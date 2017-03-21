@@ -162,7 +162,7 @@ describe EtOrbi::EoTime do
 
     def gtz(s); z = EtOrbi::EoTime.get_tzone(s); z ? z.name : z; end
 
-    it 'returns a tzone for all the know zone strings' do
+    it 'returns a tzone for known zone strings' do
 
       expect(gtz('GB')).to eq('GB')
       expect(gtz('UTC')).to eq('UTC')
@@ -182,6 +182,8 @@ describe EtOrbi::EoTime do
 
       expect(gtz('+08:00')).to eq('+08:00')
       expect(gtz('+0800')).to eq('+0800') # no normalization to "+08:00"
+
+      expect(gtz('-01')).to eq('-01')
 
       expect(gtz(3600)).to eq('+01:00')
     end
