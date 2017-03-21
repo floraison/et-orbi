@@ -8,45 +8,6 @@ module EtOrbi
 
   class EoTime
 
-#    def self.debian_tz
-#
-#      path = '/etc/timezone'
-#
-#      File.exist?(path) ? File.read(path).strip : nil
-#    rescue; nil; end
-#
-#    def self.centos_tz
-#
-#      path = '/etc/sysconfig/clock'
-#
-#      File.open(path, 'rb') do |f|
-#        until f.eof?
-#          if m = f.readline.match(/ZONE="([^"]+)"/); return m[1]; end
-#        end
-#      end if File.exist?(path)
-#
-#      nil
-#    rescue; nil; end
-#
-#    def self.osx_tz
-#
-#      path = '/etc/localtime'
-#
-#      File.symlink?(path) ?
-#        File.readlink(path).split('/')[4..-1].join('/') :
-#        nil
-#    rescue; nil; end
-#
-#    def self.find_tz
-#
-#      debian_tz || centos_tz || osx_tz
-#    end
-#
-#    def self.gather_tzs
-#
-#      { :debian => debian_tz, :centos => centos_tz, :osx => osx_tz }
-#    end
-
     #
     # class methods
 
@@ -260,13 +221,19 @@ module EtOrbi
 
     def self.platform_info
 
-      '(' + {
-        'etz' => ENV['TZ'],
-        'tnz' => Time.now.zone,
-        'tzid' => defined?(TZInfo::Data),
-        'rv' => RUBY_VERSION,
-        'rp' => RUBY_PLATFORM
-      }.collect { |k, v| "#{k}:#{v.inspect}" }.join(',') + ')'
+      etos = lambda { |k, v| "#{k}:#{v.inspect}" }
+
+      '(' +
+        {
+          'etz' => ENV['TZ'],
+          'tnz' => Time.now.zone,
+          'tzid' => defined?(TZInfo::Data),
+          'rv' => RUBY_VERSION,
+          'rp' => RUBY_PLATFORM,
+          'eov' => EtOrbi::VERSION,
+        }.collect(&etos).join(',') + ',' +
+        gather_tzs.collect(&etos).join(',') +
+      ')'
     end
 
     #def in_zone(&block)
@@ -306,10 +273,10 @@ module EtOrbi
       #) unless @zone
       fail ArgumentError.new(
         "cannot determine timezone from #{zone.inspect}" +
-        " #{self.class.platform_info}" +
+        "\n#{self.class.platform_info}" +
         "\nTry setting `ENV['TZ'] = 'Continent/City'` in your script " +
         "(see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)" +
-        (defined?(TZInfo::Data) ? '' : "\nand adding 'tzinfo-data' to your gems")
+        (defined?(TZInfo::Data) ? '' : "\nand adding gem 'tzinfo-data'")
       ) unless @zone
 
       @time = nil # cache for #to_time result
@@ -517,6 +484,48 @@ module EtOrbi
       ) unless o.is_a?(EoTime) || o.is_a?(Time)
 
       o.to_f
+    end
+
+    #
+    # system tz determination
+
+    def self.debian_tz
+
+      path = '/etc/timezone'
+
+      File.exist?(path) ? File.read(path).strip : nil
+    rescue; nil; end
+
+    def self.centos_tz
+
+      path = '/etc/sysconfig/clock'
+
+      File.open(path, 'rb') do |f|
+        until f.eof?
+          if m = f.readline.match(/ZONE="([^"]+)"/); return m[1]; end
+        end
+      end if File.exist?(path)
+
+      nil
+    rescue; nil; end
+
+    def self.osx_tz
+
+      path = '/etc/localtime'
+
+      File.symlink?(path) ?
+        File.readlink(path).split('/')[4..-1].join('/') :
+        nil
+    rescue; nil; end
+
+#    def self.find_tz
+#
+#      debian_tz || centos_tz || osx_tz
+#    end
+
+    def self.gather_tzs
+
+      { :debian => debian_tz, :centos => centos_tz, :osx => osx_tz }
     end
   end
 end
