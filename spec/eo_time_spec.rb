@@ -296,6 +296,33 @@ describe EtOrbi::EoTime do
         expect(EtOrbi::EoTime.local_tzone.name).to eq('America/Jamaica')
       end
     end
+
+    it 'returns the Rails tzone if available' do
+
+      class ArZone
+        def initialize(z); @z = z; end
+        def tzinfo; @z; end
+      end
+
+      Time.class_eval do
+        def self.zone
+          ArZone.new(::TZInfo::Timezone.get('Europe/Vilnius'))
+        end
+      end
+
+      in_zone(nil) do
+        expect(EtOrbi::EoTime.local_tzone.name).to eq('Europe/Vilnius')
+      end
+      in_zone('Asia/Tehran') do
+        expect(EtOrbi::EoTime.local_tzone.name).to eq('Asia/Tehran')
+      end
+
+      Time.class_eval do
+        class << self
+          undef zone
+        end
+      end
+    end
   end
 
   describe '.now' do

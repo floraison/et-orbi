@@ -254,11 +254,13 @@ module EtOrbi
       tz = ::TZInfo::Timezone.get(etz) rescue nil
       return tz if tz
 
+      tz = Time.zone.tzinfo \
+        if Time.respond_to?(:zone) && Time.zone.respond_to?(:tzinfo)
+      return tz if tz
+
       tzs = determine_local_tzones
 
-      tz = tzs.find { |z| z.name == etz } if etz
-
-      tz || tzs.first
+      (etz && tzs.find { |z| z.name == etz }) || tzs.first
     end
 
     def self.determine_local_tzones
