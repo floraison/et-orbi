@@ -237,7 +237,7 @@ module EtOrbi
 
     def self.platform_info
 
-      etos = lambda { |k, v| "#{k}:#{v.inspect}" }
+      etos = Proc.new { |k, v| "#{k}:#{v.inspect}" }
 
       '(' +
         {
