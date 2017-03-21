@@ -76,6 +76,7 @@ module EtOrbi
       local = Time.parse(str)
 
       izone = get_tzone(list_iso8601_zones(str).last)
+p izone
 
       zone = izone
       list_olson_zones(str).each { |s| break if zone; zone = get_tzone(s) }
@@ -240,10 +241,14 @@ p [ :else, o ]
         %r{
           (?<=:\d\d)
           \s*
-          [-+]
-          (?:[0-1][0-9]|2[0-4])
-          (?:(?::)?(?:[0-5][0-9]|60))?
-          (?![-+])
+          (?:
+            [-+]
+            (?:[0-1][0-9]|2[0-4])
+            (?:(?::)?(?:[0-5][0-9]|60))?
+            (?![-+])
+            |
+            Z
+          )
         }x).collect(&:strip)
     end
 
