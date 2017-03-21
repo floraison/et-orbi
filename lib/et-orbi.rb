@@ -8,18 +8,6 @@ module EtOrbi
 
   class EoTime
 
-#    def seconds=(f)
-#
-#      @time = nil
-#      @seconds = f
-#    end
-#
-#    def zone=(z)
-#
-#      @time = nil
-#      @zone = self.class.get_tzone(zone || :current)
-#    end
-###
 #    def self.debian_tz
 #
 #      path = '/etc/timezone'
@@ -303,6 +291,18 @@ module EtOrbi
 fail unless @zone
 
       @time = nil # cache for #to_time result
+    end
+
+    def seconds=(f)
+
+      @time = nil
+      @seconds = f
+    end
+
+    def zone=(z)
+
+      @time = nil
+      @zone = self.class.get_tzone(zone || :current)
     end
 
     def utc
