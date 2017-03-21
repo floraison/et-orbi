@@ -19,31 +19,7 @@ module EtOrbi
 #      @time = nil
 #      @zone = self.class.get_tzone(zone || :current)
 #    end
-#
-#    def to_s
-#
-#      strftime('%Y-%m-%d %H:%M:%S %z')
-#    end
-#
-#    # Debug current time by showing local time / delta / utc time
-#    # for example: "0120-7(0820)"
-#    #
-#    def to_utc_comparison_s
-#
-#      per = @zone.period_for_utc(utc)
-#      off = per.utc_total_offset
-#
-#      off = off / 3600
-#      off = off >= 0 ? "+#{off}" : off.to_s
-#
-#      strftime('%H%M') + off + utc.strftime('(%H%M)')
-#    end
-#
-#    def to_time_s
-#
-#      strftime("%H:%M:%S.#{'%06d' % usec}")
-#    end
-#
+###
 #    def self.debian_tz
 #
 #      path = '/etc/timezone'
@@ -109,31 +85,6 @@ module EtOrbi
 #      ) unless zt.is_a?(EoTime)
 #
 #      zt
-#    end
-#
-#    #def in_zone(&block)
-#    #
-#    #  current_timezone = ENV['TZ']
-#    #  ENV['TZ'] = @zone
-#    #
-#    #  block.call
-#    #
-#    #ensure
-#    #
-#    #  ENV['TZ'] = current_timezone
-#    #end
-#      #
-#      # kept around as a (thread-unsafe) relic
-#
-#
-#    def self.determine_tzone(time)
-#
-#      tzs = list_tzones(time)
-#
-#      tzname = ENV['TZ']
-#      if tz = tzname && tzs.find { |z| z.name == tzname }; return tz; end
-#
-#      tzs.first
 #    end
 
     #
@@ -314,6 +265,20 @@ module EtOrbi
         }x)
     end
 
+    #def in_zone(&block)
+    #
+    #  current_timezone = ENV['TZ']
+    #  ENV['TZ'] = @zone
+    #
+    #  block.call
+    #
+    #ensure
+    #
+    #  ENV['TZ'] = current_timezone
+    #end
+      #
+      # kept around as a (thread-unsafe) relic
+
     #
     # instance methods
 
@@ -453,6 +418,30 @@ fail unless @zone
       end
 
       [ "#{date.wday}##{pos}", "#{date.wday}##{neg}" ]
+    end
+
+    def to_s
+
+      strftime('%Y-%m-%d %H:%M:%S %z')
+    end
+
+    # Debug current time by showing local time / delta / utc time
+    # for example: "0120-7(0820)"
+    #
+    def to_utc_comparison_s
+
+      per = @zone.period_for_utc(utc)
+      off = per.utc_total_offset
+
+      off = off / 3600
+      off = off >= 0 ? "+#{off}" : off.to_s
+
+      strftime('%H%M') + off + utc.strftime('(%H%M)')
+    end
+
+    def to_time_s
+
+      strftime("%H:%M:%S.#{'%06d' % usec}")
     end
 
     #
