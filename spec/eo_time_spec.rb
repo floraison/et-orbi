@@ -576,10 +576,12 @@ describe EtOrbi::EoTime do
 
       expect(
         EtOrbi::EoTime.make(
-          Date.new(2016, 11, 01))
+          Date.new(2016, 11, 01)
+        ).to_debug_s
       ).to eq(
         EtOrbi::EoTime.new(
-          Time.local(2016, 11, 01).to_f, nil)
+          Time.local(2016, 11, 01).to_f, nil
+        ).to_debug_s
       )
     end
 
