@@ -516,6 +516,17 @@ describe EtOrbi::EoTime do
 
   describe '.make' do
 
+    it 'accepts a EtOrbi::EoTime' do
+
+      expect(
+        EtOrbi::EoTime.make(
+          EtOrbi::EoTime.parse('2017-03-21 12:00:34 Asia/Ulan_Bator')
+        ).to_debug_s
+      ).to eq(
+        'ot 2017-03-21 12:00:34 +08:00 dst:false'
+      )
+    end
+
     it 'accepts a Time' do
 
       expect(
