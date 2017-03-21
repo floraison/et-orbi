@@ -148,6 +148,16 @@ describe EtOrbi::EoTime do
       end
     end
 
+    it 'parses even when the tz is out of place' do
+
+      expect(
+        EtOrbi::EoTime.parse('Sun Nov 18 16:01:00 Asia/Singapore 2012')
+          .to_debug_s
+      ).to eq(
+        "ot 2012-11-18 16:01:00 +08:00 dst:false"
+      )
+    end
+
     it 'fails on invalid strings' do
 
       expect {

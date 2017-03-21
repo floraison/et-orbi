@@ -28,6 +28,7 @@ module EtOrbi
       #rold = RUBY_VERSION < '1.9.0'
       #rold = RUBY_VERSION < '2.0.0'
 
+#p [ '---', str ]
       begin
         DateTime.parse(str)
       rescue
@@ -36,15 +37,18 @@ module EtOrbi
         #
         # is necessary since Time.parse('xxx') in Ruby < 1.9 yields `now`
 
-#p str
-      local = Time.parse(str)
+      zone = izone = get_tzone(list_iso8601_zones(str).last)
 
-      izone = get_tzone(list_iso8601_zones(str).last)
-
-      zone = izone
       list_olson_zones(str).each { |s| break if zone; zone = get_tzone(s) }
 
-      zone ||= get_tzone(:local)
+      zone ||= local_tzone
+
+      str = str.sub(zone.name, '') unless zone.name.match(/\A[-+]/)
+        #
+        # for 'Sun Nov 18 16:01:00 Asia/Singapore 2012',
+        # although where does rufus-scheduler have it from?
+
+      local = Time.parse(str)
 
       secs =
         if izone
