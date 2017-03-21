@@ -285,6 +285,21 @@ describe EtOrbi::EoTime do
     end
   end
 
+  describe '.now' do
+
+    it 'returns a current, local EoTime instance' do
+
+      in_zone 'Asia/Shanghai' do
+
+        t = EtOrbi::EoTime.now
+        n = Time.now
+
+        expect(t.seconds).to be_between((n - 1).to_f, (n + 1).to_f)
+        expect(t.zone.name).to eq('Asia/Shanghai')
+      end
+    end
+  end
+
   describe '.new' do
 
     it 'accepts an integer' do

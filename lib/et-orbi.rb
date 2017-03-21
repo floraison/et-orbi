@@ -44,11 +44,6 @@ module EtOrbi
 #      strftime("%H:%M:%S.#{'%06d' % usec}")
 #    end
 #
-#    def self.now(zone=nil)
-#
-#      EoTime.new(Time.now.to_f, zone)
-#    end
-#
 #    def self.debian_tz
 #
 #      path = '/etc/timezone'
@@ -179,6 +174,11 @@ module EtOrbi
         end
 
       EoTime.new(secs, zone)
+    end
+
+    def self.now(zone=nil)
+
+      EoTime.new(Time.now.to_f, zone)
     end
 
     def self.get_tzone(o)
