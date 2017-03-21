@@ -529,11 +529,44 @@ describe EtOrbi::EoTime do
       )
     end
 
-    it 'accepts a Time' do
+    it 'accepts a local Time' do
+
+      in_zone 'Asia/Tbilisi' do
+
+        expect(
+          EtOrbi::EoTime.make(
+            Time.local(2016, 11, 01, 12, 30, 9)
+          ).to_debug_s
+        ).to eq(
+          'ot 2016-11-01 12:30:09 +04:00 dst:false'
+        )
+      end
+    end
+
+    it 'rejects a Time in a non-local ambiguous timezone' do
+
+      t = Time.local(2016, 11, 01, 12, 30, 9)
+      class << t; def zone; 'CEST'; end; end
+
+      in_zone 'Asia/Tbilisi' do
+
+        #expect(
+        #  EtOrbi::EoTime.make(t).to_debug_s
+        #).to eq(
+        #  'ot 2016-11-01 12:30:09 +04:00 dst:false'
+        #)
+        expect {
+          EtOrbi::EoTime.make(t).to_debug_s
+        }.to raise_error(ArgumentError, /cannot determine timezone from "CEST"/)
+      end
+    end
+
+    it 'accepts a UTC Time' do
 
       expect(
         EtOrbi::EoTime.make(
-          Time.utc(2016, 11, 01, 12, 30, 9)).to_debug_s
+          Time.utc(2016, 11, 01, 12, 30, 9)
+        ).to_debug_s
       ).to eq(
         'ot 2016-11-01 12:30:09 +00:00 dst:false'
       )

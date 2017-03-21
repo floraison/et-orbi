@@ -53,23 +53,36 @@ module EtOrbi
       EoTime.new(secs, zone)
     end
 
+    def self.time_to_eo_time(t)
+
+      z =
+        get_tzone(t.zone) ||
+        (
+          local_tzone.period_for_local(t).abbreviation.to_s == t.zone &&
+          local_tzone
+        ) ||
+        t.zone
+
+      EoTime.new(t.to_f, z)
+    end
+
     def self.make(o)
 
       ot =
         case o
-          when Time
-            EoTime.new(o.to_f, o.zone)
-          when Date
-            t =
-              o.respond_to?(:to_time) ?
-              o.to_time :
-              Time.parse(o.strftime('%Y-%m-%d %H:%M:%S'))
-            EoTime.new(t.to_f, t.zone)
-          when String
-            #Rufus::Scheduler.parse_in(o, :no_error => true) || self.parse(o)
-            self.parse(o)
-          else
-            o
+        when Time
+          time_to_eo_time(
+            o)
+        when Date
+          time_to_eo_time(
+            o.respond_to?(:to_time) ?
+            o.to_time :
+            Time.parse(o.strftime('%Y-%m-%d %H:%M:%S')))
+        when String
+          #Rufus::Scheduler.parse_in(o, :no_error => true) || self.parse(o)
+          parse(o)
+        else
+          o
         end
 
       ot = EoTime.new(Time.now.to_f + ot, nil) if ot.is_a?(Numeric)
