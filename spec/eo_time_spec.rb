@@ -184,11 +184,14 @@ describe EtOrbi::EoTime do
       expect(gtz('+0800')).to eq('+0800') # no normalization to "+08:00"
 
       expect(gtz(3600)).to eq('+01:00')
+    end
 
+#    it 'returns a timezone for well-known abbreviations' do
+#
 #      expect(gtz('JST')).to eq('Japan')
 #      expect(gtz('PST')).to eq('America/Dawson')
 #      expect(gtz('CEST')).to eq('Africa/Ceuta')
-    end
+#    end
 
     it 'returns nil for unknown zone names' do
 
