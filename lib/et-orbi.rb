@@ -258,6 +258,17 @@ module EtOrbi
         }x)
     end
 
+    def self.platform_info
+
+      '(' + {
+        'etz' => ENV['TZ'],
+        'tnz' => Time.now.zone,
+        'tzid' => defined?(TZInfo::Data),
+        'rv' => RUBY_VERSION,
+        'rp' => RUBY_PLATFORM
+      }.collect { |k, v| "#{k}:#{v.inspect}" }.join(',') + ')'
+    end
+
     #def in_zone(&block)
     #
     #  current_timezone = ENV['TZ']
@@ -293,7 +304,13 @@ module EtOrbi
       #  "(see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)" +
       #  (defined?(TZInfo::Data) ? '' : " and adding 'tzinfo-data' to your gems")
       #) unless @zone
-fail unless @zone
+      fail ArgumentError.new(
+        "cannot determine timezone from #{zone.inspect}" +
+        " #{self.class.platform_info}" +
+        "\nTry setting `ENV['TZ'] = 'Continent/City'` in your script " +
+        "(see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)" +
+        (defined?(TZInfo::Data) ? '' : "\nand adding 'tzinfo-data' to your gems")
+      ) unless @zone
 
       @time = nil # cache for #to_time result
     end
