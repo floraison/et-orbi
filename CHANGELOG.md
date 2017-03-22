@@ -2,7 +2,10 @@
 # et-orbi CHANGELOG.md
 
 
-## et-orbi 1.0.0  not yet released
+## et-orbi 1.0.1  not yet released
+
+
+## et-orbi 1.0.0  released 2017-03-22
 
 - First release for rufus-scheduler
 
