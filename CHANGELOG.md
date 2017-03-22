@@ -2,7 +2,7 @@
 # et-orbi CHANGELOG.md
 
 
-## et-orbi 1.0.1  not yet released
+## et-orbi 1.0.1  released 2017-03-22
 
 - Detail Rails and Active Support info in nozone err
 
