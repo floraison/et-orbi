@@ -6,6 +6,53 @@
 
 Time zones for [fugit](https://github.com/floraison/fugit) and for [rufus-scheduler](https://github.com/jmettraux/rufus-scheduler). Urbi et Orbi.
 
+`EtOrbi::EoTime` instances quack like Ruby `Time` instances, but their `#zone` returns a `TZInfo::TimeZone` instance.
+
+Getting `EoTime` instances:
+```ruby
+require 'et-orbi'
+
+EtOrbi.now
+  # => #<EtOrbi::EoTime:0x007f94d94 ...>
+EtOrbi.parse('2017-12-13 13:00:00 America/Jamaica')
+  # => #<EtOrbi::EoTime:0x007f94d90 @zone=#<TZInfo::DataTimezone: America/Jamaica>...>
+EtOrbi.make(Time.now)
+  # => #<EtOrbi::EoTime:0x007f94d91 ...>
+
+EtOrbi::EoTime.new(0, 'UTC').to_s
+  # => "1970-01-01 00:00:00 +0000"
+EtOrbi::EoTime.new(0, 'Europe/Moscow').to_s
+  # => "1970-01-01 03:00:00 +0300"
+```
+
+Helper methods:
+```ruby
+require 'et-orbi'
+
+EtOrbi.get_tzone('Europe/Vilnius')
+  # => #<TZInfo::DataTimezone: Europe/Vilnius>
+EtOrbi.local_tzone
+  # => #<TZInfo::TimezoneProxy: Asia/Tokyo>
+
+EtOrbi.platform_info
+  # => "(etz:nil,tnz:\"JST\",tzid:nil,rv:\"2.2.6\",rp:\"x86_64-darwin14\",eov:\"1.0.1\",rorv:nil,astz:nil,debian:nil,centos:nil,osx:\"Asia/Tokyo\")"
+    #
+    # etz: ENV['TZ']
+    # tnz: Time.now.zone
+    # tzid: defined?(TZInfo::Data)
+    # rv: RUBY_VERSION
+    # rp: RUBY_PLATFORM
+    # eov: EtOrbi::VERSION
+    # rorv: Rails::VERSION::STRING
+    # astz: ActiveSupport provided Time.zone
+```
+
+### Rails?
+
+If Rails is present, `Time.zone` is provided and EtOrbi will use it.
+
+Rails sets its timezone under `config/application.rb`.
+
 
 ## Related projects
 
