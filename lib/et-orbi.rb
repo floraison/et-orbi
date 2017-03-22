@@ -239,23 +239,6 @@ module EtOrbi
         }x)
     end
 
-    def self.platform_info
-
-      etos = Proc.new { |k, v| "#{k}:#{v.inspect}" }
-
-      '(' +
-        {
-          'etz' => ENV['TZ'],
-          'tnz' => Time.now.zone,
-          'tzid' => defined?(TZInfo::Data),
-          'rv' => RUBY_VERSION,
-          'rp' => RUBY_PLATFORM,
-          'eov' => EtOrbi::VERSION,
-        }.collect(&etos).join(',') + ',' +
-        gather_tzs.collect(&etos).join(',') +
-      ')'
-    end
-
     #def in_zone(&block)
     #
     #  current_timezone = ENV['TZ']
@@ -270,6 +253,26 @@ module EtOrbi
       #
       # kept around as a (thread-unsafe) relic
 
+    def self.platform_info
+
+      etos = Proc.new { |k, v| "#{k}:#{v.inspect}" }
+
+      '(' +
+        {
+          'etz' => ENV['TZ'],
+          'tnz' => Time.now.zone,
+          'tzid' => defined?(TZInfo::Data),
+          'rv' => RUBY_VERSION,
+          'rp' => RUBY_PLATFORM,
+          'eov' => EtOrbi::VERSION,
+          'rorv' => (Rails::VERSION::STRING rescue nil),
+          'astz' => Time.respond_to?(:zone) ? Time.zone.name : nil,
+            # Active Support Time.zone
+        }.collect(&etos).join(',') + ',' +
+        gather_tzs.collect(&etos).join(',') +
+      ')'
+    end
+
     #
     # instance methods
 
@@ -281,16 +284,6 @@ module EtOrbi
       @seconds = s.to_f
       @zone = self.class.get_tzone(zone || :local)
 
-      #fail ArgumentError.new(
-      #  "cannot determine timezone from #{zone.inspect}" +
-      #  " (etz:#{ENV['TZ'].inspect},tnz:#{Time.now.zone.inspect}," +
-      #  "tzid:#{defined?(TZInfo::Data).inspect}," +
-      #  "rv:#{RUBY_VERSION.inspect},rp:#{RUBY_PLATFORM.inspect}," +
-      #  "stz:(#{self.class.gather_tzs.map { |k, v| "#{k}:#{v.inspect}"}.join(',')})) \n" +
-      #  "Try setting `ENV['TZ'] = 'Continent/City'` in your script " +
-      #  "(see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)" +
-      #  (defined?(TZInfo::Data) ? '' : " and adding 'tzinfo-data' to your gems")
-      #) unless @zone
       fail ArgumentError.new(
         "cannot determine timezone from #{zone.inspect}" +
         "\n#{self.class.platform_info}" +
