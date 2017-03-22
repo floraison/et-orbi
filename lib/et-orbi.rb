@@ -541,5 +541,38 @@ module EtOrbi
       { :debian => debian_tz, :centos => centos_tz, :osx => osx_tz }
     end
   end
+
+  #
+  # providing the core class methods here as well
+
+  def self.now
+
+    EtOrbi::EoTime.now
+  end
+
+  def self.parse(str, opts={})
+
+    EtOrbi::EoTime.parse(str, opts)
+  end
+
+  def self.make(o)
+
+    EtOrbi::EoTime.make(o)
+  end
+
+  def self.get_tzone(o)
+
+    EtOrbi::EoTime.get_tzone(o)
+  end
+
+  def self.local_tzone
+
+    EtOrbi::EoTime.local_tzone
+  end
+
+  def self.platform_info
+
+    EtOrbi::EoTime.platform_info
+  end
 end
 
