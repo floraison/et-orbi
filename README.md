@@ -35,7 +35,8 @@ EtOrbi.local_tzone
   # => #<TZInfo::TimezoneProxy: Asia/Tokyo>
 
 EtOrbi.platform_info
-  # => "(etz:nil,tnz:\"JST\",tzid:nil,rv:\"2.2.6\",rp:\"x86_64-darwin14\",eov:\"1.0.1\",rorv:nil,astz:nil,debian:nil,centos:nil,osx:\"Asia/Tokyo\")"
+  # => "(etz:nil,tnz:\"JST\",tzid:nil,rv:\"2.2.6\",rp:\"x86_64-darwin14\",eov:\"1.0.1\",
+  #      rorv:nil,astz:nil,debian:nil,centos:nil,osx:\"Asia/Tokyo\")"
     #
     # etz: ENV['TZ']
     # tnz: Time.now.zone
