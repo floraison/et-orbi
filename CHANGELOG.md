@@ -2,7 +2,7 @@
 # et-orbi CHANGELOG.md
 
 
-## et-orbi 1.1.0  not yet released
+## et-orbi 1.0.2  not yet released
 
 - Enhance no zone ArgumentError data
 - Separate module methods from EoTime methods
