@@ -4,6 +4,8 @@
 
 ## et-orbi 1.1.0  not yet released
 
+- Separate module methods from EoTime methods
+
 
 ## et-orbi 1.0.1  released 2017-03-22
 

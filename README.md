@@ -16,7 +16,7 @@ EtOrbi.now
   # => #<EtOrbi::EoTime:0x007f94d94 ...>
 EtOrbi.parse('2017-12-13 13:00:00 America/Jamaica')
   # => #<EtOrbi::EoTime:0x007f94d90 @zone=#<TZInfo::DataTimezone: America/Jamaica>...>
-EtOrbi.make(Time.now)
+EtOrbi.make_time(Time.now)
   # => #<EtOrbi::EoTime:0x007f94d91 ...>
 
 EtOrbi::EoTime.new(0, 'UTC').to_s
