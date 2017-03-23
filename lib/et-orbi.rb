@@ -63,10 +63,10 @@ module EtOrbi
     ot =
       case o
       when Time
-        EtOrbi.time_to_eo_time(
+        time_to_eo_time(
           o)
       when Date
-        EtOrbi.time_to_eo_time(
+        time_to_eo_time(
           o.respond_to?(:to_time) ?
           o.to_time :
           Time.parse(o.strftime('%Y-%m-%d %H:%M:%S')))
@@ -194,7 +194,8 @@ module EtOrbi
 
       fail ArgumentError.new(
         "cannot determine timezone from #{zone.inspect}" +
-        "\n#{self.class.platform_info}" +
+        "\n#{render_nozone_time(s)}" +
+        "\n#{self.class.platform_info.sub(',debian:', ",\ndebian:")}" +
         "\nTry setting `ENV['TZ'] = 'Continent/City'` in your script " +
         "(see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)" +
         (defined?(TZInfo::Data) ? '' : "\nand adding gem 'tzinfo-data'")
@@ -355,6 +356,19 @@ module EtOrbi
     end
 
     protected
+
+    def render_nozone_time(seconds)
+
+      t =
+        Time.utc(0) + seconds
+      ts =
+        t.strftime('%Y-%m-%d %H:%M:%S') +
+        ".#{(seconds % 1).to_s.split('.').last}"
+      z =
+        EtOrbi.local_tzone.period_for_local(t).abbreviation.to_s
+
+      "(secs:#{seconds},utc~:#{ts.inspect},zo~:#{z.inspect})"
+    end
 
     def strfz(code)
 
