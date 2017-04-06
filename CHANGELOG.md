@@ -4,6 +4,8 @@
 
 ## et-orbi 1.0.3  not yet released
 
+- Let not #render_nozone_time fail when local_tzone is nil
+
 
 ## et-orbi 1.0.2  released 2017-03-24
 

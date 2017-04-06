@@ -365,9 +365,11 @@ module EtOrbi
         t.strftime('%Y-%m-%d %H:%M:%S') +
         ".#{(seconds % 1).to_s.split('.').last}"
       z =
-        EtOrbi.local_tzone.period_for_local(t).abbreviation.to_s
+        EtOrbi.local_tzone ?
+        EtOrbi.local_tzone.period_for_local(t).abbreviation.to_s :
+        nil
 
-      "(secs:#{seconds},utc~:#{ts.inspect},zo~:#{z.inspect})"
+      "(secs:#{seconds},utc~:#{ts.inspect},ltz~:#{z.inspect})"
     end
 
     def strfz(code)
