@@ -4,6 +4,8 @@
 
 ## et-orbi 1.0.4  not yet released
 
+- Survive older versions of TZInfo with poor <=> impl, gh-1
+
 
 ## et-orbi 1.0.3  released 2017-04-07
 

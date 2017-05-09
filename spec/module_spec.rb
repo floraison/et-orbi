@@ -205,7 +205,7 @@ describe EtOrbi do
       expect(gtz('Mazda Zoom Zoom Stadium')).to eq(nil)
     end
 
-    # gh-222
+    # rufus-scheduler gh-222
     it "falls back to ENV['TZ'] if it doesn't know Time.now.zone" do
 
       begin
@@ -253,7 +253,7 @@ describe EtOrbi do
       )
     end
 
-    [ # for gh-228
+    [ # for rufus-scheduler gh-228
 
       [ 'Asia/Tokyo', 'Asia/Tokyo' ],
       [ 'Asia/Shanghai', 'Asia/Shanghai' ],
@@ -273,6 +273,24 @@ describe EtOrbi do
           )
         end
       end
+    end
+
+    it "doesn't mind being given a TZInfo::Timezone" do
+
+      tz = ::TZInfo::Timezone.get('Zulu')
+      class << tz
+        def <=>(tz)
+          #return nil unless tz.is_a?(Timezone)
+          identifier <=> tz.identifier
+        end
+      end
+        # simulate tzinfo 0.3.53 issue
+
+      expect(
+        EtOrbi.get_tzone(tz)
+      ).to eq(
+        ::TZInfo::Timezone.get('Zulu')
+      )
     end
   end
 

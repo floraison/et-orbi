@@ -88,10 +88,9 @@ module EtOrbi
 
   def self.get_tzone(o)
 
-#p [ :gtz, o ]
+    return o if o.is_a?(::TZInfo::Timezone)
     return nil if o == nil
     return local_tzone if o == :local
-    return o if o.is_a?(::TZInfo::Timezone)
     return ::TZInfo::Timezone.get('Zulu') if o == 'Z'
 
     o = to_offset(o) if o.is_a?(Numeric)
