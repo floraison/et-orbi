@@ -2,9 +2,9 @@
 # et-orbi CHANGELOG.md
 
 
-## et-orbi 1.0.4  not yet released
+## et-orbi 1.0.4  released 2017-05-10
 
-- Survive older versions of TZInfo with poor <=> impl, gh-1
+- Survive older versions of TZInfo with poor `<=>` impl, gh-1
 
 
 ## et-orbi 1.0.3  released 2017-04-07
