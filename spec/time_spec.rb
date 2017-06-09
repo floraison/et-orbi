@@ -69,6 +69,24 @@ describe EtOrbi::EoTime do
     end
   end
 
+  describe '#utc?' do
+
+    it 'returns true if the EoTime zone is UTC' do
+
+      expect(EtOrbi::EoTime.new(1193898300, 'Z').utc?).to eq(true)
+      expect(EtOrbi::EoTime.new(1193898300, 'UTC').utc?).to eq(true)
+      expect(EtOrbi::EoTime.new(1193898300, 'GMT').utc?).to eq(true)
+      expect(EtOrbi::EoTime.new(1193898300, 'Zulu').utc?).to eq(true)
+    end
+
+    it 'returns false else' do
+
+      ot = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
+
+      expect(ot.utc?).to eq(false)
+    end
+  end
+
   describe '#add' do
 
     it 'adds seconds' do

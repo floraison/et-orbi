@@ -220,6 +220,15 @@ module EtOrbi
       Time.utc(1970, 1, 1) + @seconds
     end
 
+    def utc?
+
+      %w[ zulu utc gmt ].include?(@zone.canonical_identifier.downcase)
+
+      #t = Time.now
+      #@zone.period_for_local(t).utc_offset == 0 &&
+      #@zone.period_for_local(t + 183 * 24 * 3600).utc_offset == 0
+    end
+
     alias getutc utc
     alias getgm utc
 
