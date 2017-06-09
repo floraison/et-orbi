@@ -363,6 +363,20 @@ module EtOrbi
       strftime("%H:%M:%S.#{'%06d' % usec}")
     end
 
+    def inc(t, dir=1)
+
+      if t.is_a?(Numeric)
+        nt = self.dup
+        nt.seconds += dir * t.to_f
+        nt
+      elsif t.respond_to?(:to_f)
+        @seconds + dir * t.to_f
+      else
+        fail ArgumentError.new(
+          "cannot call EoTime #- or #+ with arg of class #{t.class}")
+      end
+    end
+
     protected
 
     def render_nozone_time(seconds)
@@ -405,20 +419,6 @@ module EtOrbi
         end
 
       fmt % [ sn, hr, mn, sc ]
-    end
-
-    def inc(t, dir)
-
-      if t.is_a?(Numeric)
-        nt = self.dup
-        nt.seconds += dir * t.to_f
-        nt
-      elsif t.respond_to?(:to_f)
-        @seconds + dir * t.to_f
-      else
-        fail ArgumentError.new(
-          "cannot call EoTime #- or #+ with arg of class #{t.class}")
-      end
     end
 
     def _to_f(o)
