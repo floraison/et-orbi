@@ -2,6 +2,12 @@
 # et-orbi CHANGELOG.md
 
 
+## et-orbi 1.0.5  not yet released
+
+- Make #inc(seconds, direction) public
+- Implement EoTime#utc?
+
+
 ## et-orbi 1.0.4  released 2017-05-10
 
 - Survive older versions of TZInfo with poor `<=>` impl, gh-1
