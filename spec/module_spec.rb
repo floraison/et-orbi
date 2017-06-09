@@ -474,7 +474,7 @@ describe EtOrbi do
       )
     end
 
-    it 'accepts a duration String' #do
+    it 'accepts a duration String'# do
 #
 #      expect(
 #        EtOrbi.make_time('1h')
@@ -482,6 +482,10 @@ describe EtOrbi do
 #        Time.now + 3600 - 1, Time.now + 3600 + 1
 #      )
 #    end
+  #
+  # String parsing is fugit's job. Et-orbi should be a dependency of
+  # fugit, not the other way around. When fugit is present, this
+  # spec should succeed, else it should not.
 
     it 'accepts a Numeric' do
 
