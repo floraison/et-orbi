@@ -365,15 +365,18 @@ module EtOrbi
 
     def inc(t, dir=1)
 
-      if t.is_a?(Numeric)
+      case t
+      when Numeric
         nt = self.dup
         nt.seconds += dir * t.to_f
         nt
-      elsif t.respond_to?(:to_f)
+      when ::EtOrbi::EoTime
+        fail ArgumentError.new(
+          "cannot add EoTime to EoTime") if dir > 0
         @seconds + dir * t.to_f
       else
         fail ArgumentError.new(
-          "cannot call EoTime #- or #+ with arg of class #{t.class}")
+          "cannot call add or subtract #{t.class} to EoTime instance")
       end
     end
 

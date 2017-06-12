@@ -226,5 +226,66 @@ describe EtOrbi::EoTime do
       expect(mds(local(2011, 3, 11))).to eq(%w[ 5#2 5#-3 ])
     end
   end
+
+  describe '#+' do
+
+    it 'adds seconds' do
+
+      ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
+      ot1 = ot + 111
+
+      expect(ot1.seconds).to eq(1193898300 + 111)
+      expect(ot1.object_id).not_to eq(ot.object_id)
+    end
+
+    it 'rejects Time instances'
+
+    it 'rejects EoTime instances' do
+
+      ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
+      ot1 = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
+
+      expect {
+        ot + ot1
+      }.to raise_error(
+        ArgumentError, 'cannot add EoTime to EoTime'
+      )
+    end
+  end
+
+  describe '#-' do
+
+    it 'subtracts seconds' do
+
+      ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
+      ot1 = ot - 111
+
+      expect(ot1.seconds).to eq(1193898300 - 111)
+      expect(ot1.object_id).not_to eq(ot.object_id)
+    end
+
+    it 'rejects Time instances' do
+
+      ot0 =
+        EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
+      t1 =
+        in_zone('America/Los_Angeles') { Time.local(2017, 10, 31, 23, 28, 40) }
+
+      expect {
+        ot0 - t1
+      }.to raise_error(
+        ArgumentError, 'cannot call add or subtract Time to EoTime instance'
+      )
+    end
+
+    it 'subtracts EoTime instances' do
+
+      ot0 = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
+      ot1 = EtOrbi::EoTime.new(1193898300 + 222, 'America/Los_Angeles')
+p ot1.to_s
+
+      expect((ot0 - ot1).to_i).to eq(-222)
+    end
+  end
 end
 

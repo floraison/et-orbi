@@ -4,6 +4,7 @@
 
 ## et-orbi 1.0.5  not yet released
 
+- Clarify #add, #subtract, #- and #+ contracts
 - Ensure #add and #subtract return `self`
 - Make #inc(seconds, direction) public
 - Implement EoTime#utc?
