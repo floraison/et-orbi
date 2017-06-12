@@ -151,6 +151,33 @@ describe EtOrbi::EoTime do
       expect(t2 - t1).to eq(3600)
       expect(t3 - t2).to eq(1)
     end
+
+    it 'returns self' do
+
+      ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
+      ot1 = ot.subtract(111)
+
+      expect(ot1.object_id).to eq(ot.object_id)
+    end
+  end
+
+  describe '#subtract' do
+
+    it 'substracts seconds' do
+
+      ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
+      ot.subtract(111)
+
+      expect(ot.seconds).to eq(1193898300 - 111)
+    end
+
+    it 'returns self' do
+
+      ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
+      ot1 = ot.subtract(111)
+
+      expect(ot1.object_id).to eq(ot.object_id)
+    end
   end
 
   describe '#to_f' do

@@ -306,8 +306,8 @@ module EtOrbi
     def <=(o); @seconds <= _to_f(o); end
     def <=>(o); @seconds <=> _to_f(o); end
 
-    def add(t); @time = nil; @seconds += t.to_f; end
-    def subtract(t); @time = nil; @seconds -= t.to_f; end
+    def add(t); @time = nil; @seconds += t.to_f; self; end
+    def subtract(t); @time = nil; @seconds -= t.to_f; self; end
 
     def +(t); inc(t, 1); end
     def -(t); inc(t, -1); end
