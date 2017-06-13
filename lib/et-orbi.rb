@@ -370,9 +370,9 @@ module EtOrbi
         nt = self.dup
         nt.seconds += dir * t.to_f
         nt
-      when ::EtOrbi::EoTime
+      when ::Time, ::EtOrbi::EoTime
         fail ArgumentError.new(
-          "cannot add EoTime to EoTime") if dir > 0
+          "cannot add #{t.class} to EoTime") if dir > 0
         @seconds + dir * t.to_f
       else
         fail ArgumentError.new(

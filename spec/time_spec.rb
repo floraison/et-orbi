@@ -238,7 +238,19 @@ describe EtOrbi::EoTime do
       expect(ot1.object_id).not_to eq(ot.object_id)
     end
 
-    it 'rejects Time instances'
+    it 'rejects Time instances' do
+
+      ot =
+        EtOrbi.make_time('2017-10-31 22:00:10 Europe/Paris')
+      t =
+        in_zone('America/Los_Angeles') { Time.local(2017, 10, 30, 22, 00, 10) }
+
+      expect {
+        ot + t
+      }.to raise_error(
+        ArgumentError, 'cannot add Time to EoTime'
+      )
+    end
 
     it 'rejects EoTime instances' do
 
@@ -248,7 +260,7 @@ describe EtOrbi::EoTime do
       expect {
         ot + ot1
       }.to raise_error(
-        ArgumentError, 'cannot add EoTime to EoTime'
+        ArgumentError, 'cannot add EtOrbi::EoTime to EoTime'
       )
     end
   end
@@ -264,18 +276,16 @@ describe EtOrbi::EoTime do
       expect(ot1.object_id).not_to eq(ot.object_id)
     end
 
-    it 'rejects Time instances' do
+    it 'subtracts Time instances' do
 
-      ot0 =
-        EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
-      t1 =
-        in_zone('America/Los_Angeles') { Time.local(2017, 10, 31, 23, 28, 40) }
+      ot =
+        EtOrbi.make_time('2017-10-31 22:00:10 Europe/Paris')
+      t =
+        in_zone('America/Los_Angeles') { Time.local(2017, 10, 30, 22, 00, 10) }
 
-      expect {
-        ot0 - t1
-      }.to raise_error(
-        ArgumentError, 'cannot call add or subtract Time to EoTime instance'
-      )
+      r = ot - t
+
+      expect(r.to_i).to eq(57600)
     end
 
     it 'subtracts EoTime instances' do
