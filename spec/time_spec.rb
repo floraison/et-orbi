@@ -282,7 +282,6 @@ describe EtOrbi::EoTime do
 
       ot0 = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
       ot1 = EtOrbi::EoTime.new(1193898300 + 222, 'America/Los_Angeles')
-p ot1.to_s
 
       expect((ot0 - ot1).to_i).to eq(-222)
     end
