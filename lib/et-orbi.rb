@@ -58,20 +58,22 @@ module EtOrbi
     EoTime.new(secs, zone)
   end
 
-  def self.make_time(o)
+  def self.make_time(*a)
+
+    o = a.length > 1 ? a : a.first
 
     ot =
       case o
+      when Array
+        time_to_eo_time(Time.local(*o))
       when Time
-        time_to_eo_time(
-          o)
+        time_to_eo_time(o)
       when Date
         time_to_eo_time(
           o.respond_to?(:to_time) ?
           o.to_time :
           Time.parse(o.strftime('%Y-%m-%d %H:%M:%S')))
       when String
-        #Rufus::Scheduler.parse_in(o, :no_error => true) || self.parse(o)
         parse(o)
       else
         o

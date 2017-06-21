@@ -496,6 +496,20 @@ describe EtOrbi do
       )
     end
 
+    it 'accepts an array (as Time.local does)' do
+
+      t = in_zone('Europe/Moscow') { EtOrbi.make([ 2017, 2, 28 ]) }
+
+      expect(t.to_s).to eq('2017-02-28 00:00:00 +0300')
+    end
+
+    it 'accepts an array of arguments (as Time.local does)' do
+
+      t = in_zone('Europe/Moscow') { EtOrbi.make(2017, 1, 31) }
+
+      expect(t.to_s).to eq('2017-01-31 00:00:00 +0300')
+    end
+
     it 'rejects unparseable input' do
 
       expect {

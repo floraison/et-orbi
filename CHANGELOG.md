@@ -4,6 +4,7 @@
 
 ## et-orbi 1.0.5  not yet released
 
+- Let EtOrbi.make_time accept array or array of args
 - Implement EoTime#localtime(zone=nil)
 - Move Fugit#wday_in_month into EoTime
 - Clarify #add, #subtract, #- and #+ contracts
