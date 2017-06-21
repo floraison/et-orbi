@@ -380,7 +380,24 @@ module EtOrbi
       end
     end
 
+    def wday_in_month
+
+      [ count_weeks(-1), - count_weeks(1) ]
+    end
+
     protected
+
+    def count_weeks(dir)
+
+      c = 0
+      t = self
+      until t.month != self.month
+        c += 1
+        t += dir * (7 * 24 * 3600)
+      end
+
+      c
+    end
 
     def render_nozone_time(seconds)
 
