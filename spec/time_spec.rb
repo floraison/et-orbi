@@ -310,5 +310,35 @@ describe EtOrbi::EoTime do
       expect(t.wday_in_month).to eq([ 3, -2 ])
     end
   end
+
+  describe '#localtime' do
+
+    it 'returns a new EoTime instance in the local zone' do
+
+      t = EtOrbi::EoTime.new(1193898300, 'Pacific/Apia')
+
+      expect(t.to_s).to eq('2007-10-31 19:25:00 -1100')
+
+      t1 = in_zone('Europe/Moscow') { t.localtime }
+
+      expect(t1.to_s).to eq('2007-11-01 09:25:00 +0300')
+      expect(t1.object_id).not_to eq(t.object_id)
+    end
+  end
+
+  describe '#localtime(zone)' do
+
+    it 'returns a new EoTime instance local to a given zone' do
+
+      t = EtOrbi::EoTime.new(1193898300, 'Pacific/Apia')
+
+      expect(t.to_s).to eq('2007-10-31 19:25:00 -1100')
+
+      t1 = t.localtime('Europe/Paris')
+
+      expect(t1.to_s).to eq('2007-11-01 07:25:00 +0100')
+      expect(t1.object_id).not_to eq(t.object_id)
+    end
+  end
 end
 

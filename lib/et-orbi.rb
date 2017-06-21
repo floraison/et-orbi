@@ -380,6 +380,11 @@ module EtOrbi
       end
     end
 
+    def localtime(zone=nil)
+
+      EoTime.new(self.to_f, zone)
+    end
+
     def wday_in_month
 
       [ count_weeks(-1), - count_weeks(1) ]

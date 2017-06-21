@@ -4,6 +4,7 @@
 
 ## et-orbi 1.0.5  not yet released
 
+- Implement EoTime#localtime(zone=nil)
 - Move Fugit#wday_in_month into EoTime
 - Clarify #add, #subtract, #- and #+ contracts
 - Ensure #add and #subtract return `self`
