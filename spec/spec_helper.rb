@@ -19,6 +19,8 @@ require 'et-orbi'
 
 def in_zone(zone_name, &block)
 
+  return block.call unless zone_name
+
   prev_tz = ENV['TZ']
   ENV['TZ'] = zone_name
 

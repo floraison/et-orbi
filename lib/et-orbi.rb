@@ -62,33 +62,113 @@ module EtOrbi
 
     def make_time(*a)
 
+#p a
+      zone = a.length > 1 ? get_tzone(a.last) : nil
+      a.pop if zone
+#p [ :mt, zone ]
+
       o = a.length > 1 ? a : a.first
+#p o
 
-      ot =
-        case o
-        when Array
-          time_to_eo_time(Time.local(*o))
-        when Time
-          time_to_eo_time(o)
-        when Date
-          time_to_eo_time(
-            o.respond_to?(:to_time) ?
-            o.to_time :
-            Time.parse(o.strftime('%Y-%m-%d %H:%M:%S')))
-        when String
-          parse(o)
-        else
-          o
-        end
-
-      ot = EoTime.new(Time.now.to_f + ot, nil) if ot.is_a?(Numeric)
-
-      fail ArgumentError.new(
-        "cannot turn #{o.inspect} to a EoTime instance"
-      ) unless ot.is_a?(EoTime)
-
-      ot
+      case o
+      when Time then make_from_time(o, zone)
+      when Date then make_from_date(o, zone)
+      when Array then make_from_array(o, zone)
+      when String then make_from_string(o, zone)
+      when Numeric then make_from_numeric(o, zone)
+      when ::EtOrbi::EoTime then make_from_eotime(o, zone)
+      else fail ArgumentError.new(
+        "cannot turn #{o.inspect} to a ::EtOrbi::EoTime instance")
+      end
     end
+
+    def make_from_time(t, zone)
+
+      z =
+        zone ||
+        get_tzone(t.zone) ||
+        (
+          local_tzone.period_for_local(t).abbreviation.to_s == t.zone &&
+          local_tzone
+        ) ||
+        t.zone
+
+#p [ :mft, t, z ]
+#p t.strftime("%Y-%m-%d %H:%M:%S.#{'%06d' % t.usec}")
+      EoTime.new(t.to_f, z)
+    end
+
+    def make_from_date(d, zone)
+
+      make_from_time(
+        d.respond_to?(:to_time) ?
+        d.to_time :
+        Time.parse(d.strftime('%Y-%m-%d %H:%M:%S')),
+        zone)
+    end
+
+    def make_from_array(a, zone)
+
+#p [ a, zone ]
+#p Time.local(*a)
+#p Time.utc(*a)
+      make_from_time(Time.local(*a), zone)
+    end
+
+    def make_from_string(s, zone)
+
+      parse(s, zone: zone)
+    end
+
+    def make_from_numeric(f, zone)
+
+      EoTime.new(Time.now.to_f + f, zone)
+    end
+
+    def make_from_eotime(eot, zone)
+
+      EoTime.new(eot.to_f, zone || eot.zone)
+    end
+
+#    def make_time(*a)
+#
+#      o = a.length > 1 ? a : a.first
+#
+#      zo = nil
+#      if a.length > 1
+#        if a.last.is_a?(::TZInfo::Timezone)
+#          zo = a.pop
+#        elsif zo = get_tzone(a.last)
+#          a.pop
+#        end
+#      end
+#
+#      ot =
+#        case o
+#        when Array
+#          to_eo_time(Time.local(*o), zo)
+#        when Time
+#          to_eo_time(o, zo)
+#        when Date
+#          to_eo_time(
+#            o.respond_to?(:to_time) ?
+#            o.to_time :
+#            Time.parse(o.strftime('%Y-%m-%d %H:%M:%S')),
+#            zo)
+#        when String
+#          parse(o)
+#        else
+#          o
+#        end
+#
+#      ot = EoTime.new(Time.now.to_f + ot, zo) if ot.is_a?(Numeric)
+#
+#      fail ArgumentError.new(
+#        "cannot turn #{o.inspect} to a EoTime instance"
+#      ) unless ot.is_a?(EoTime)
+#
+#      ot
+#    end
 
     def get_tzone(o)
 
@@ -514,19 +594,6 @@ module EtOrbi
     # protected module methods
 
     protected
-
-    def time_to_eo_time(t)
-
-      z =
-        get_tzone(t.zone) ||
-        (
-          local_tzone.period_for_local(t).abbreviation.to_s == t.zone &&
-          local_tzone
-        ) ||
-        t.zone
-
-      EoTime.new(t.to_f, z)
-    end
 
     def to_offset(n)
 

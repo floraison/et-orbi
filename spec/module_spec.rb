@@ -366,149 +366,143 @@ describe EtOrbi do
 
   describe '.make_time' do
 
-    it 'accepts a EtOrbi::EoTime' do
+    [
+      [ 'an EoTime instance',
+        nil,
+        lambda { EtOrbi.parse('2017-03-21 12:00:34 Asia/Ulan_Bator') },
+        'ot 2017-03-21 12:00:34 +08:00 dst:false' ],
 
-      expect(
-        EtOrbi.make_time(
-          EtOrbi.parse('2017-03-21 12:00:34 Asia/Ulan_Bator')
-        ).to_debug_s
-      ).to eq(
-        'ot 2017-03-21 12:00:34 +08:00 dst:false'
-      )
-    end
+      [ 'a local time',
+        'Asia/Tbilisi',
+        lambda { Time.local(2016, 11, 01, 12, 30, 9) },
+        'ot 2016-11-01 12:30:09 +04:00 dst:false' ],
 
-    it 'accepts a local Time' do
+      [ 'an UTC time',
+        nil,
+        Time.utc(2016, 11, 01, 12, 30, 9),
+        'ot 2016-11-01 12:30:09 +00:00 dst:false' ],
 
-      in_zone 'Asia/Tbilisi' do
-
-        expect(
-          EtOrbi.make_time(
-            Time.local(2016, 11, 01, 12, 30, 9)
-          ).to_debug_s
-        ).to eq(
-          'ot 2016-11-01 12:30:09 +04:00 dst:false'
-        )
-      end
-    end
-
-    it 'rejects a Time in a non-local ambiguous timezone' do
-
-      t = Time.local(2016, 11, 01, 12, 30, 9)
-      class << t; def zone; 'CEST'; end; end
-
-      in_zone 'Asia/Tbilisi' do
-
-        #expect(
-        #  EtOrbi::EoTime.make(t).to_debug_s
-        #).to eq(
-        #  'ot 2016-11-01 12:30:09 +04:00 dst:false'
-        #)
-        expect {
-          EtOrbi.make_time(t).to_debug_s
-        }.to raise_error(ArgumentError, /cannot determine timezone from "CEST"/)
-      end
-    end
-
-    it 'accepts a UTC Time' do
-
-      expect(
-        EtOrbi.make_time(
-          Time.utc(2016, 11, 01, 12, 30, 9)
-        ).to_debug_s
-      ).to eq(
-        'ot 2016-11-01 12:30:09 +00:00 dst:false'
-      )
-    end
-
-    it 'accepts a Date' do
-
-      expect(
-        EtOrbi.make_time(
-          Date.new(2016, 11, 01)
-        ).to_debug_s
-      ).to eq(
+      [ 'a Date instance',
+        nil,
+        Date.new(2016, 11, 01),
         EtOrbi::EoTime.new(
           Time.local(2016, 11, 01).to_f, nil
-        ).to_debug_s
-      )
+        ).to_debug_s ],
+
+      [ 'a String',
+        nil,
+        '2016-11-01 12:30:09',
+        EtOrbi::EoTime.new(Time.local(2016, 11, 01, 12, 30, 9).to_f, nil) ],
+
+      [ 'a Zulu String',
+        nil,
+        '2016-11-01 12:30:09Z',
+        EtOrbi::EoTime.new(Time.utc(2016, 11, 01, 12, 30, 9).to_f, 'Zulu') ],
+
+      [ 'a ss+01:00 String',
+        nil,
+        '2016-11-01 12:30:09+01:00',
+        'ot 2016-11-01 12:30:09 +01:00 dst:false' ],
+
+      [ 'a ss-01 String',
+        nil,
+        '2016-11-01 12:30:09-01',
+        'ot 2016-11-01 12:30:09 -01:00 dst:false' ],
+
+      [ 'a Numeric',
+        nil,
+        3600,
+        [ Time.now + 3600 - 1, Time.now + 3600 + 1 ] ],
+
+      [ 'an array [ y, m, d, ... ]',
+        'Europe/Moscow',
+        [ [ 2017, 2, 28 ] ],
+        'ot 2017-02-28 00:00:00 +03:00 dst:false' ],
+
+      [ 'an array of arguments (y, m, d, ...)',
+        'Europe/Moscow',
+        [ 2017, 1, 31, 10 ],
+        'ot 2017-01-31 10:00:00 +03:00 dst:false' ],
+
+      #[ 'an array of args with a zone as last arg',
+      #  nil,
+      #  [ 2017, 1, 31, 12, 'Europe/Moscow' ],
+      #  'ot 2017-01-31 12:00:00 +03:00 dst:false' ],
+
+    ].each do |name, zone, args, expected|
+
+      title = "turns #{name} into an EoTime instance"
+      title += " in #{zone}" if zone
+
+      it(title) do
+
+        eot, exp =
+          in_zone(zone) do
+
+            as = args.is_a?(Proc) ? args.call : args
+
+            t = as.is_a?(Array) ?
+              EtOrbi.make_time(*as) :
+              EtOrbi.make_time(as)
+            x = expected.is_a?(Proc) ?
+              expected.call :
+              expected
+
+            [ t, x ]
+          end
+
+        case exp
+        when String then expect(eot.to_debug_s).to eq(exp)
+        when Array then expect(eot).to be_between(*exp)
+        else expect(eot).to eq(exp)
+        end
+      end
     end
 
-    it 'accepts a String' do
-
-      expect(
-        EtOrbi.make_time(
-          '2016-11-01 12:30:09')
-      ).to eq(
-        EtOrbi::EoTime.new(
-          Time.local(2016, 11, 01, 12, 30, 9).to_f, nil)
-      )
-    end
-
-    it 'accepts a String (Zulu)' do
-
-      expect(
-        EtOrbi.make_time('2016-11-01 12:30:09Z')
-      ).to eq(
-        EtOrbi::EoTime.new(
-          Time.utc(2016, 11, 01, 12, 30, 9).to_f, 'Zulu')
-      )
-    end
-
-    it 'accepts a String (ss+01:00)' do
-
-      expect(
-        EtOrbi.make_time('2016-11-01 12:30:09+01:00')
-          .to_debug_s
-      ).to eq(
-        'ot 2016-11-01 12:30:09 +01:00 dst:false'
-      )
-    end
-
-    it 'accepts a String (ss-01)' do
-
-      expect(
-        EtOrbi.make_time('2016-11-01 12:30:09-01')
-          .to_debug_s
-      ).to eq(
-        'ot 2016-11-01 12:30:09 -01:00 dst:false'
-      )
-    end
-
-    it 'accepts a duration String'# do
+#    it 'accepts a TZInfo::TimeZone as last argument' do
 #
-#      expect(
-#        EtOrbi.make_time('1h')
-#      ).to be_between(
-#        Time.now + 3600 - 1, Time.now + 3600 + 1
-#      )
+#      t = EtOrbi.make(2017, 1, 31, EtOrbi.get_tzone('Europe/Oslo'))
+#
+#      expect(t.to_s).to eq('2017-01-31 00:00:00 +0300')
 #    end
-  #
-  # String parsing is fugit's job. Et-orbi should be a dependency of
-  # fugit, not the other way around. When fugit is present, this
-  # spec should succeed, else it should not.
+#
+#    it 'accepts a TZInfo::TimeZone as last argument' do
+#
+#      t = EtOrbi.make('2017-01-31', EtOrbi.get_tzone('Europe/Oslo'))
+#
+#      expect(t.to_s).to eq('2017-01-31 00:00:00 +0300')
+#    end
 
-    it 'accepts a Numeric' do
+#    it 'accepts a duration String'# do
+##
+##      expect(
+##        EtOrbi.make_time('1h')
+##      ).to be_between(
+##        Time.now + 3600 - 1, Time.now + 3600 + 1
+##      )
+##    end
+#  #
+#  # String parsing is fugit's job. Et-orbi should be a dependency of
+#  # fugit, not the other way around. When fugit is present, this
+#  # spec should succeed, else it should not.
 
-      expect(
-        EtOrbi.make_time(3600)
-      ).to be_between(
-        Time.now + 3600 - 1, Time.now + 3600 + 1
-      )
-    end
-
-    it 'accepts an array (as Time.local does)' do
-
-      t = in_zone('Europe/Moscow') { EtOrbi.make([ 2017, 2, 28 ]) }
-
-      expect(t.to_s).to eq('2017-02-28 00:00:00 +0300')
-    end
-
-    it 'accepts an array of arguments (as Time.local does)' do
-
-      t = in_zone('Europe/Moscow') { EtOrbi.make(2017, 1, 31) }
-
-      expect(t.to_s).to eq('2017-01-31 00:00:00 +0300')
-    end
+#    it 'rejects a Time in a non-local ambiguous timezone' do
+#
+#      t = Time.local(2016, 11, 01, 12, 30, 9)
+#      class << t; def zone; 'CEST'; end; end
+#
+#      in_zone 'Asia/Tbilisi' do
+#
+#        #expect(
+#        #  EtOrbi::EoTime.make(t).to_debug_s
+#        #).to eq(
+#        #  'ot 2016-11-01 12:30:09 +04:00 dst:false'
+#        #)
+#        expect {
+#          EtOrbi.make_time(t).to_debug_s
+#        }.to raise_error(ArgumentError, /cannot determine timezone from "CEST"/)
+#      end
+#    end
 
     it 'rejects unparseable input' do
 
