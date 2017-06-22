@@ -232,34 +232,37 @@ module EtOrbi
     #
     # class methods
 
-    def self.now(zone=nil)
+    class << self
 
-      EtOrbi.now(zone)
-    end
+      def now(zone=nil)
 
-    def self.parse(str, opts={})
+        EtOrbi.now(zone)
+      end
 
-      EtOrbi.parse(str, opts)
-    end
+      def parse(str, opts={})
 
-    def self.get_tzone(o)
+        EtOrbi.parse(str, opts)
+      end
 
-      EtOrbi.get_tzone(o)
-    end
+      def get_tzone(o)
 
-    def self.local_tzone
+        EtOrbi.get_tzone(o)
+      end
 
-      EtOrbi.local_tzone
-    end
+      def local_tzone
 
-    def self.platform_info
+        EtOrbi.local_tzone
+      end
 
-      EtOrbi.platform_info
-    end
+      def platform_info
 
-    def self.make(o)
+        EtOrbi.platform_info
+      end
 
-      EtOrbi.make_time(o)
+      def make(o)
+
+        EtOrbi.make_time(o)
+      end
     end
 
     #
