@@ -37,7 +37,8 @@ module EtOrbi
         #
         # is necessary since Time.parse('xxx') in Ruby < 1.9 yields `now`
 
-      zone = izone = get_tzone(list_iso8601_zones(str).last)
+      str_zone = get_tzone(list_iso8601_zones(str).last)
+      zone = str_zone
 
       list_olson_zones(str).each { |s| break if zone; zone = get_tzone(s) }
 
@@ -51,7 +52,7 @@ module EtOrbi
       local = Time.parse(str)
 
       secs =
-        if izone
+        if str_zone
           local.to_f
         else
           zone.period_for_local(local).to_utc(local).to_f
