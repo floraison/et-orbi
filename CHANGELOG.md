@@ -2,7 +2,7 @@
 # et-orbi CHANGELOG.md
 
 
-## et-orbi 1.0.5  not yet released
+## et-orbi 1.0.5  released 2017-06-23
 
 - Rework EtOrbi.make_time
 - Let EtOrbi.make_time accept array or array of args

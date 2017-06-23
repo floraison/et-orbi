@@ -19,6 +19,9 @@ EtOrbi.parse('2017-12-13 13:00:00 America/Jamaica')
 EtOrbi.make_time(Time.now)
   # => #<EtOrbi::EoTime:0x007f94d91 ...>
 
+EtOrbi.make_time(2017, 1, 31, 12, 'Europe/Moscow').to_debug_s
+  # => 'ot 2017-01-31 12:00:00 +03:00 dst:false'
+
 EtOrbi::EoTime.new(0, 'UTC').to_s
   # => "1970-01-01 00:00:00 +0000"
 EtOrbi::EoTime.new(0, 'Europe/Moscow').to_s
