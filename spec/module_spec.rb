@@ -366,6 +366,26 @@ describe EtOrbi do
 
   describe '.make_time' do
 
+    it 'returns an EoTime instance as is' do
+
+      t0 = EtOrbi.parse('2017-03-21 12:00:34 Asia/Ulan_Bator')
+      t1 = EtOrbi.make_time(t0)
+
+      expect(t1.class).to eq(::EtOrbi::EoTime)
+      expect(t1).to eq(t0)
+      expect(t1.object_id).to eq(t0.object_id)
+    end
+
+    it 'returns an EoTime instance as is' do
+
+      t0 = EtOrbi.parse('2017-03-21 12:00:34 Asia/Ulan_Bator')
+      t1 = EtOrbi.make_time(t0, t0.zone)
+
+      expect(t1.class).to eq(::EtOrbi::EoTime)
+      expect(t1).to eq(t0)
+      expect(t1.object_id).to eq(t0.object_id)
+    end
+
     [
       [ 'an EoTime instance',
         nil,

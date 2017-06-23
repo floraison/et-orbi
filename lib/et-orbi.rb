@@ -125,7 +125,8 @@ module EtOrbi
 
     def make_from_eotime(eot, zone)
 
-      EoTime.new(eot.to_f, zone || eot.zone)
+      return eot if zone == nil || zone == eot.zone
+      EoTime.new(eot.to_f, zone)
     end
 
     def get_tzone(o)
