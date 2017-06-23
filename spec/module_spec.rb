@@ -424,20 +424,35 @@ describe EtOrbi do
         [ [ 2017, 2, 28 ] ],
         'ot 2017-02-28 00:00:00 +03:00 dst:false' ],
 
-      [ 'an array of arguments (y, m, d, ...)',
+      [ 'an array of args (y, m, d, ...)',
         'Europe/Moscow',
         [ 2017, 1, 31, 10 ],
         'ot 2017-01-31 10:00:00 +03:00 dst:false' ],
 
-      #[ 'an array of args and a zone as last arg',
-      #  nil,
-      #  [ 2017, 1, 31, 12, 'Europe/Moscow' ],
-      #  'ot 2017-01-31 12:00:00 +03:00 dst:false' ],
+      [ 'an array of args and a zone as last arg',
+        nil,
+        [ 2017, 1, 31, 12, 'Europe/Moscow' ],
+        'ot 2017-01-31 12:00:00 +03:00 dst:false' ],
 
       [ 'a string and a zone as last arg',
         nil,
         [ '2016-05-01 12:30:09', 'America/Chicago' ],
         'ot 2016-05-01 12:30:09 -06:00 dst:true' ],
+
+      [ 'a string and an overriding zone as last arg',
+        nil,
+        [ '2016-05-01 11:30:09 America/New_York', 'America/Chicago' ],
+        'ot 2016-05-01 11:30:09 -06:00 dst:true' ],
+
+      [ 'an array of args and a TZInfo zone as last arg',
+        nil,
+        [ 2017, 1, 31, EtOrbi.get_tzone('Europe/Oslo') ],
+        'ot 2017-01-31 00:00:00 +01:00 dst:false' ],
+
+      [ 'a string and a TZInfo zone as last arg',
+        nil,
+        [ '2017-01-31 12:30', EtOrbi.get_tzone('Europe/Oslo') ],
+        'ot 2017-01-31 12:30:00 +01:00 dst:false' ],
 
     ].each do |name, zone, args, expected|
 
@@ -469,20 +484,6 @@ describe EtOrbi do
       end
     end
 
-#    it 'accepts a TZInfo::TimeZone as last argument' do
-#
-#      t = EtOrbi.make(2017, 1, 31, EtOrbi.get_tzone('Europe/Oslo'))
-#
-#      expect(t.to_s).to eq('2017-01-31 00:00:00 +0300')
-#    end
-#
-#    it 'accepts a TZInfo::TimeZone as last argument' do
-#
-#      t = EtOrbi.make('2017-01-31', EtOrbi.get_tzone('Europe/Oslo'))
-#
-#      expect(t.to_s).to eq('2017-01-31 00:00:00 +0300')
-#    end
-
 #    it 'accepts a duration String'# do
 ##
 ##      expect(
@@ -496,23 +497,18 @@ describe EtOrbi do
 #  # fugit, not the other way around. When fugit is present, this
 #  # spec should succeed, else it should not.
 
-#    it 'rejects a Time in a non-local ambiguous timezone' do
-#
-#      t = Time.local(2016, 11, 01, 12, 30, 9)
-#      class << t; def zone; 'CEST'; end; end
-#
-#      in_zone 'Asia/Tbilisi' do
-#
-#        #expect(
-#        #  EtOrbi::EoTime.make(t).to_debug_s
-#        #).to eq(
-#        #  'ot 2016-11-01 12:30:09 +04:00 dst:false'
-#        #)
-#        expect {
-#          EtOrbi.make_time(t).to_debug_s
-#        }.to raise_error(ArgumentError, /cannot determine timezone from "CEST"/)
-#      end
-#    end
+    it 'rejects a Time in a non-local ambiguous timezone' do
+
+      t = Time.local(2016, 11, 01, 12, 30, 9)
+      class << t; def zone; 'CEST'; end; end
+
+      in_zone 'Asia/Tbilisi' do
+
+        expect {
+          EtOrbi.make_time(t).to_debug_s
+        }.to raise_error(ArgumentError, /cannot determine timezone from "CEST"/)
+      end
+    end
 
     it 'rejects unparseable input' do
 

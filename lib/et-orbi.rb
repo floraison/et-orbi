@@ -25,7 +25,6 @@ module EtOrbi
         return EoTime.new(t, nil)
       end
 
-#p [ '---', str ]
       #rold = RUBY_VERSION < '1.9.0'
       #rold = RUBY_VERSION < '2.0.0'
       begin
@@ -94,8 +93,6 @@ module EtOrbi
         ) ||
         t.zone
 
-#p [ :mft, t, z ]
-#p t.strftime("%Y-%m-%d %H:%M:%S.#{'%06d' % t.usec}")
       EoTime.new(t.to_f, z)
     end
 
@@ -110,10 +107,10 @@ module EtOrbi
 
     def make_from_array(a, zone)
 
-#p [ a, zone ]
-#p Time.local(*a)
-#p Time.utc(*a)
-      make_from_time(Time.local(*a), zone)
+      t = Time.utc(*a)
+      s = t.strftime("%Y-%m-%d %H:%M:%S.#{'%06d' % t.usec}")
+
+      make_from_string(s, zone)
     end
 
     def make_from_string(s, zone)
@@ -130,46 +127,6 @@ module EtOrbi
 
       EoTime.new(eot.to_f, zone || eot.zone)
     end
-
-#    def make_time(*a)
-#
-#      o = a.length > 1 ? a : a.first
-#
-#      zo = nil
-#      if a.length > 1
-#        if a.last.is_a?(::TZInfo::Timezone)
-#          zo = a.pop
-#        elsif zo = get_tzone(a.last)
-#          a.pop
-#        end
-#      end
-#
-#      ot =
-#        case o
-#        when Array
-#          to_eo_time(Time.local(*o), zo)
-#        when Time
-#          to_eo_time(o, zo)
-#        when Date
-#          to_eo_time(
-#            o.respond_to?(:to_time) ?
-#            o.to_time :
-#            Time.parse(o.strftime('%Y-%m-%d %H:%M:%S')),
-#            zo)
-#        when String
-#          parse(o)
-#        else
-#          o
-#        end
-#
-#      ot = EoTime.new(Time.now.to_f + ot, zo) if ot.is_a?(Numeric)
-#
-#      fail ArgumentError.new(
-#        "cannot turn #{o.inspect} to a EoTime instance"
-#      ) unless ot.is_a?(EoTime)
-#
-#      ot
-#    end
 
     def get_tzone(o)
 
