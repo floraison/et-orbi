@@ -409,6 +409,11 @@ describe EtOrbi do
         '2016-11-01 12:30:09-01',
         'ot 2016-11-01 12:30:09 -01:00 dst:false' ],
 
+      [ 'a String with an explicit time zone',
+        nil,
+        '2016-05-01 12:30:09 America/New_York',
+        'ot 2016-05-01 12:30:09 -05:00 dst:true' ],
+
       [ 'a Numeric',
         nil,
         3600,
@@ -424,10 +429,15 @@ describe EtOrbi do
         [ 2017, 1, 31, 10 ],
         'ot 2017-01-31 10:00:00 +03:00 dst:false' ],
 
-      #[ 'an array of args with a zone as last arg',
+      #[ 'an array of args and a zone as last arg',
       #  nil,
       #  [ 2017, 1, 31, 12, 'Europe/Moscow' ],
       #  'ot 2017-01-31 12:00:00 +03:00 dst:false' ],
+
+      [ 'a string and a zone as last arg',
+        nil,
+        [ '2016-05-01 12:30:09', 'America/Chicago' ],
+        'ot 2016-05-01 12:30:09 -06:00 dst:true' ],
 
     ].each do |name, zone, args, expected|
 

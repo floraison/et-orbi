@@ -25,10 +25,9 @@ module EtOrbi
         return EoTime.new(t, nil)
       end
 
+#p [ '---', str ]
       #rold = RUBY_VERSION < '1.9.0'
       #rold = RUBY_VERSION < '2.0.0'
-
-#p [ '---', str ]
       begin
         DateTime.parse(str)
       rescue
@@ -38,11 +37,12 @@ module EtOrbi
         # is necessary since Time.parse('xxx') in Ruby < 1.9 yields `now`
 
       str_zone = get_tzone(list_iso8601_zones(str).last)
-      zone = str_zone
 
-      list_olson_zones(str).each { |s| break if zone; zone = get_tzone(s) }
-
-      zone ||= local_tzone
+      zone =
+        opts[:zone] ||
+        str_zone ||
+        find_olson_zone(str) ||
+        local_tzone
 
       str = str.sub(zone.name, '') unless zone.name.match(/\A[-+]/)
         #
@@ -576,6 +576,12 @@ module EtOrbi
           (?:[A-Za-z][A-Za-z0-9+_-]+)
           (?:\/(?:[A-Za-z][A-Za-z0-9+_-]+)){0,2}
         }x)
+    end
+
+    def find_olson_zone(str)
+
+      list_olson_zones(str).each { |s| z = get_tzone(s); return z if z }
+      nil
     end
 
     def determine_local_tzone
