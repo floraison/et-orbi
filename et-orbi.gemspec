@@ -20,9 +20,11 @@ Time zones for fugit and rufus-scheduler. Urbi et Orbi.
 
   #s.files = `git ls-files`.split("\n")
   s.files = Dir[
+    'README.{md,txt}',
+    'CHANGELOG.{md,txt}', 'CREDITS.{md,txt}', 'LICENSE.{md,txt}',
     'Makefile',
     'lib/**/*.rb', #'spec/**/*.rb', 'test/**/*.rb',
-    '*.gemspec', '*.txt', '*.md'
+    "#{s.name}.gemspec",
   ]
 
   s.add_runtime_dependency 'tzinfo'
