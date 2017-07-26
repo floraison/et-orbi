@@ -2,6 +2,9 @@
 # et-orbi CHANGELOG.md
 
 
+## et-orbi 1.0.6  not yet released
+
+
 ## et-orbi 1.0.5  released 2017-06-23
 
 - Rework EtOrbi.make_time
