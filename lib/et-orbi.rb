@@ -183,9 +183,15 @@ module EtOrbi
     alias make make_time
   end
 
+  # Our EoTime class (which quacks like a ::Time).
   #
-  # our EoTime class (which quacks like a ::Time)
-
+  # An EoTime instance should respond to most of the methods ::Time instances
+  # respond to. If a method is missing, feel free to open an issue to
+  # ask (politely) for it. If it makes sense, it'll get added, else
+  # a workaround will get suggested.
+  # The immediate workaround is to call #to_t on the EoTime instance to get
+  # equivalent ::Time instance in the local, current, timezone.
+  #
   class EoTime
 
     #
@@ -259,22 +265,25 @@ module EtOrbi
       @zone = self.class.get_tzone(zone || :current)
     end
 
+    # Returns this ::EtOrbi::EoTime as a ::Time instance
+    # in the current UTC timezone.
+    #
     def utc
 
       Time.utc(1970, 1, 1) + @seconds
     end
 
+    # Returns true if this ::EtOrbi::EoTime instance timezone is UTC.
+    # Returns false else.
+    #
     def utc?
 
       %w[ zulu utc gmt ].include?(@zone.canonical_identifier.downcase)
-
-      #t = Time.now
-      #@zone.period_for_local(t).utc_offset == 0 &&
-      #@zone.period_for_local(t + 183 * 24 * 3600).utc_offset == 0
     end
 
     alias getutc utc
     alias getgm utc
+    alias to_utc_time utc
 
     def to_f
 
@@ -293,10 +302,17 @@ module EtOrbi
       to_time.strftime(format)
     end
 
+    # Returns this ::EtOrbi::EoTime as a ::Time instance
+    # in the current timezone.
+    #
+    # Has a #to_t alias.
+    #
     def to_local_time
 
       Time.at(@seconds)
     end
+
+    alias to_t to_local_time
 
     def is_dst?
 

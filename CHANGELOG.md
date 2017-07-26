@@ -4,6 +4,8 @@
 
 ## et-orbi 1.0.6  not yet released
 
+- Alias EoTime#to_utc_time to #utc
+- Alias EoTime#to_t to #to_local_time
 - Implement EoTime#to_local_time (since #to_time returns a UTC Time instance)
 
 

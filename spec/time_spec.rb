@@ -62,11 +62,40 @@ describe EtOrbi::EoTime do
       ot = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
       t = ot.to_local_time
 
+      expect(t.class).to eq(::Time)
       expect(t.to_i).to eq(1193898300)
       expect(t.usec).to eq(0)
 
       t1 = Time.parse(t.strftime("%Y-%m-%d %H:%M:%S.#{'%06d' % t.usec}"))
       expect(t.to_s).to eq(t1.to_s)
+    end
+  end
+
+  describe '#to_t' do
+
+    it 'is an alias to #to_local_time' do
+
+      ot = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
+      t = ot.to_t
+
+      expect(t.class).to eq(::Time)
+      expect(t.to_i).to eq(1193898300)
+      expect(t.usec).to eq(0)
+    end
+  end
+
+  describe '#to_utc_time' do
+
+    it 'is an alias to #to_utc' do
+
+      ot = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
+      ut = ot.to_utc_time
+
+      expect(ut.class).to eq(::Time)
+      expect(ut.to_i).to eq(1193898300)
+      expect(ut.usec).to eq(0)
+
+      expect(ut.to_s).to eq('2007-11-01 06:25:00 UTC')
     end
   end
 
