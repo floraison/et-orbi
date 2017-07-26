@@ -4,6 +4,8 @@
 
 ## et-orbi 1.0.6  not yet released
 
+- Implement EoTime#to_local_time (since #to_time returns a UTC Time instance)
+
 
 ## et-orbi 1.0.5  released 2017-06-23
 

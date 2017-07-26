@@ -302,6 +302,11 @@ module EtOrbi
       @time ||= begin; u = utc; @zone.period_for_utc(u).to_local(u); end
     end
 
+    def to_local_time
+
+      Time.at(@seconds)
+    end
+
     def is_dst?
 
       @zone.period_for_utc(utc).std_offset != 0

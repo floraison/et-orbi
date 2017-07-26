@@ -55,6 +55,21 @@ describe EtOrbi::EoTime do
     end
   end
 
+  describe '#to_local_time' do
+
+    it 'returns a local Time instance in the local time zone' do
+
+      ot = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
+      t = ot.to_local_time
+
+      expect(t.to_i).to eq(1193898300)
+      expect(t.usec).to eq(0)
+
+      t1 = Time.parse(t.strftime("%Y-%m-%d %H:%M:%S.#{'%06d' % t.usec}"))
+      expect(t.to_s).to eq(t1.to_s)
+    end
+  end
+
   describe '#utc' do
 
     it 'returns an UTC Time instance' do
