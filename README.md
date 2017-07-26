@@ -28,6 +28,19 @@ EtOrbi::EoTime.new(0, 'Europe/Moscow').to_s
   # => "1970-01-01 03:00:00 +0300"
 ```
 
+More about `EtOrbi::EoTime` instances:
+```
+eot = EtOrbi::EoTime.new(0, 'Europe/Moscow')
+
+eot.to_time.class  # => Time
+eot.to_time.to_s   # => "1970-01-01 03:00:00 UTC"
+
+eot.to_local_time.class  # => Time
+eot.to_local_time.to_s   # => "1970-01-01 09:00:00 +0900" (at least on my system)
+
+# For the rest, EtOrbi::EoTime mimicks ::Time
+```
+
 Helper methods:
 ```ruby
 require 'et-orbi'
