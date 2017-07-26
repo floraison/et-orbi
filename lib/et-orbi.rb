@@ -293,15 +293,6 @@ module EtOrbi
       to_time.strftime(format)
     end
 
-    # Returns a Ruby Time instance.
-    #
-    # Warning: the timezone of that Time instance will be UTC.
-    #
-    def to_time
-
-      @time ||= begin; u = utc; @zone.period_for_utc(u).to_local(u); end
-    end
-
     def to_local_time
 
       Time.at(@seconds)
@@ -440,6 +431,15 @@ module EtOrbi
     end
 
     protected
+
+    # Returns a Ruby Time instance.
+    #
+    # Warning: the timezone of that Time instance will be UTC.
+    #
+    def to_time
+
+      @time ||= begin; u = utc; @zone.period_for_utc(u).to_local(u); end
+    end
 
     def count_weeks(dir)
 

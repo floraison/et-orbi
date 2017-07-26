@@ -39,12 +39,12 @@ describe EtOrbi::EoTime do
     end
   end
 
-  describe '#to_time' do
+  describe '#to_time (protected)' do
 
     it 'returns a local Time instance, although with a UTC zone' do
 
       ot = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
-      t = ot.to_time
+      t = ot.send(:to_time)
 
       expect(ot.to_debug_s).to eq('ot 2007-10-31 23:25:00 -08:00 dst:true')
 
