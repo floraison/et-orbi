@@ -173,7 +173,7 @@ module EtOrbi
           'rp' => RUBY_PLATFORM,
           'eov' => EtOrbi::VERSION,
           'rorv' => (Rails::VERSION::STRING rescue nil),
-          'astz' => Time.respond_to?(:zone) ? Time.zone.name : nil,
+          'astz' => Time.respond_to?(:zone) && Time.zone.respond_to?(:name) ? Time.zone.name : nil,
             # Active Support Time.zone
         }.collect(&etos).join(',') + ',' +
         gather_tzs.collect(&etos).join(',') +
