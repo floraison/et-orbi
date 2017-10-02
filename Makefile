@@ -1,5 +1,5 @@
 
-## gem tasks ##
+## core floraison make ##
 
 NAME = \
   $(shell ruby -e "s = eval(File.read(Dir['*.gemspec'][0])); puts s.name")
@@ -31,5 +31,15 @@ spec:
 test: spec
 
 
-.PHONY: build push spec
+## specific to project ##
+
+info:
+	uname -a
+	bundle exec ruby -v
+	bundle exec ruby -Ilib -r et-orbi -e "EtOrbi._make_info"
+
+
+## done ##
+
+.PHONY: build info push spec
 

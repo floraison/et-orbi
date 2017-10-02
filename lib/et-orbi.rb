@@ -160,6 +160,21 @@ module EtOrbi
         end
     end
 
+    def render_nozone_time(seconds)
+
+      t =
+        Time.utc(0) + seconds
+      ts =
+        t.strftime('%Y-%m-%d %H:%M:%S') +
+        ".#{(seconds % 1).to_s.split('.').last}"
+      z =
+        EtOrbi.local_tzone ?
+        EtOrbi.local_tzone.period_for_local(t).abbreviation.to_s :
+        nil
+
+      "(secs:#{seconds},utc~:#{ts.inspect},ltz~:#{z.inspect})"
+    end
+
     def platform_info
 
       etos = Proc.new { |k, v| "#{k}:#{v.inspect}" }
@@ -181,6 +196,14 @@ module EtOrbi
     end
 
     alias make make_time
+
+    # For `make info`
+    #
+    def _make_info
+
+      puts render_nozone_time(Time.now.to_f)
+      puts platform_info
+    end
   end
 
   # Our EoTime class (which quacks like a ::Time).
@@ -243,8 +266,8 @@ module EtOrbi
 
       fail ArgumentError.new(
         "cannot determine timezone from #{zone.inspect}" +
-        "\n#{render_nozone_time(s)}" +
-        "\n#{self.class.platform_info.sub(',debian:', ",\ndebian:")}" +
+        "\n#{EtOrbi.render_nozone_time(s)}" +
+        "\n#{EtOrbi.platform_info.sub(',debian:', ",\ndebian:")}" +
         "\nTry setting `ENV['TZ'] = 'Continent/City'` in your script " +
         "(see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)" +
         (defined?(TZInfo::Data) ? '' : "\nand adding gem 'tzinfo-data'")
@@ -467,21 +490,6 @@ module EtOrbi
       end
 
       c
-    end
-
-    def render_nozone_time(seconds)
-
-      t =
-        Time.utc(0) + seconds
-      ts =
-        t.strftime('%Y-%m-%d %H:%M:%S') +
-        ".#{(seconds % 1).to_s.split('.').last}"
-      z =
-        EtOrbi.local_tzone ?
-        EtOrbi.local_tzone.period_for_local(t).abbreviation.to_s :
-        nil
-
-      "(secs:#{seconds},utc~:#{ts.inspect},ltz~:#{z.inspect})"
     end
 
     def strfz(code)
