@@ -26,6 +26,10 @@ build: gemspec_validate
 push: build
 	gem push pkg/$(NAME)-$(VERSION).gem
 
+spec:
+	bundle exec rspec
+test: spec
 
-.PHONY: build push
+
+.PHONY: build push spec
 
