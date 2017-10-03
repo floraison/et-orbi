@@ -186,6 +186,10 @@ if Time.respond_to?(:zone) && Time.zone
   puts "-" * 80
   p Time.zone.class
   p Time.zone.public_methods.sort
+  p Time.zone.display
+  p Time.zone
+  p Time.zone.to_s
+  p Time.zone.inspect
   puts "-" * 80
 end
       etos = Proc.new { |k, v| "#{k}:#{v.inspect}" }
