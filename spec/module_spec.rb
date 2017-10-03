@@ -442,7 +442,7 @@ describe EtOrbi do
       [ 'a Numeric',
         nil,
         3600,
-        [ Time.now + 3600 - 1.4, Time.now + 3600 + 1.4 ] ],
+        [ Time.now + 3600, Time.now + 3600 + 2.8 ] ],
 
       [ 'an array [ y, m, d, ... ]',
         'Europe/Moscow',
