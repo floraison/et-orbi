@@ -190,6 +190,8 @@ if Time.respond_to?(:zone) && Time.zone
   p Time.zone
   p Time.zone.to_s
   p Time.zone.inspect
+  p Time.zone.tzinfo
+  p Time.zone.gem
   puts "-" * 80
 end
       etos = Proc.new { |k, v| "#{k}:#{v.inspect}" }
