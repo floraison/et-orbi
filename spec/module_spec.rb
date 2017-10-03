@@ -311,6 +311,15 @@ describe EtOrbi do
 
   describe '.local_tzone' do
 
+    after :each do
+
+      Time.class_eval do
+        class << self
+          undef zone
+        end
+      end rescue nil
+    end
+
     it 'caches and returns the local timezone' do
 
       in_zone('Europe/Berlin') do
@@ -323,14 +332,16 @@ describe EtOrbi do
 
     it 'returns the Rails tzone if available' do
 
-      class ArZone
+      class EoSpecArZone
         def initialize(z); @z = z; end
         def tzinfo; @z; end
       end
 
       Time.class_eval do
-        def self.zone
-          ArZone.new(::TZInfo::Timezone.get('Europe/Vilnius'))
+        class << self
+          def zone
+            EoSpecArZone.new(::TZInfo::Timezone.get('Europe/Vilnius'))
+          end
         end
       end
 
@@ -339,12 +350,6 @@ describe EtOrbi do
       end
       in_zone('Asia/Tehran') do
         expect(EtOrbi.local_tzone.name).to eq('Asia/Tehran')
-      end
-
-      Time.class_eval do
-        class << self
-          undef zone
-        end
       end
     end
   end

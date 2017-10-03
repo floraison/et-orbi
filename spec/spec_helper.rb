@@ -19,6 +19,12 @@ require 'et-orbi'
 
 def in_zone(zone_name, &block)
 
+  EtOrbi.class_eval do
+    @local_tzone = nil
+    @local_tzone_tz = nil
+    @local_tzone_loaded_at = nil
+  end
+
   return block.call unless zone_name
 
   prev_tz = ENV['TZ']
