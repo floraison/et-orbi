@@ -11,6 +11,15 @@ require 'pp'
 require 'et-orbi'
 
 
+puts '-' * 80
+  #
+puts `uname -a`
+puts [ RUBY_VERSION, RUBY_PLATFORM ].join(' ')
+EtOrbi._make_info
+  #
+puts '-' * 80
+
+
 #def jruby?
 #
 #  !! RUBY_PLATFORM.match(/java/)
