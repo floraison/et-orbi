@@ -87,10 +87,7 @@ module EtOrbi
       z =
         zone ||
         get_tzone(t.zone) ||
-        (
-          local_tzone.period_for_local(t).abbreviation.to_s == t.zone &&
-          local_tzone
-        ) ||
+        get_local_tzone(t) ||
         t.zone
 
       EoTime.new(t.to_f, z)
@@ -202,6 +199,22 @@ module EtOrbi
 
       puts render_nozone_time(Time.now.to_f)
       puts platform_info
+    end
+
+    protected
+
+    def get_local_tzone(t)
+
+      lt = local_tzone
+      lp = lt.period_for_local(t)
+      ab = lp.abbreviation.to_s
+
+      return lt \
+        if ab == t.zone
+      return lt \
+        if ab.match(/\A[-+]\d{2}(:?\d{2})?\z/) && lp.utc_offset == t.utc_offset
+
+      nil
     end
   end
 
