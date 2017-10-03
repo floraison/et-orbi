@@ -182,6 +182,12 @@ module EtOrbi
 
     def platform_info
 
+if Time.respond_to?(:zone) && Time.zone
+  puts "-" * 80
+  p Time.zone.class
+  p Time.zone.public_methods.sort
+  puts "-" * 80
+end
       etos = Proc.new { |k, v| "#{k}:#{v.inspect}" }
 
       '(' +
