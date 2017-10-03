@@ -410,14 +410,17 @@ describe EtOrbi do
       [ 'a Date instance',
         nil,
         Date.new(2016, 11, 01),
-        EtOrbi::EoTime.new(
-          Time.local(2016, 11, 01).to_f, nil
-        ).to_debug_s ],
+        lambda {
+          EtOrbi::EoTime.new(
+            Time.local(2016, 11, 01).to_f, nil
+          ).to_debug_s } ],
 
       [ 'a String',
         nil,
         '2016-11-01 12:30:09',
-        EtOrbi::EoTime.new(Time.local(2016, 11, 01, 12, 30, 9).to_f, nil) ],
+        lambda {
+          EtOrbi::EoTime.new(
+            Time.local(2016, 11, 01, 12, 30, 9).to_f, nil) } ],
 
       [ 'a Zulu String',
         nil,
