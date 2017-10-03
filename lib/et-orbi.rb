@@ -175,25 +175,24 @@ module EtOrbi
       "(secs:#{seconds},utc~:#{ts.inspect},ltz~:#{z.inspect})"
     end
 
-    def platform_astz
+    def platform_info_astz
 
-      Time.respond_to?(:zone) ? Time.zone : nil
+      return nil \
+        unless Time.respond_to?(:zone)
+
+      zone = Time.zone
+
+      return [ zone.class, zone.name ] \
+        if zone.respond_to?(:name)
+
+      return [ zone.class, zone.tzinfo.class, zone.tzinfo.name ] \
+        if zone.respond_to?(:tzinfo)
+
+      [ zone.class, nil ]
     end
 
     def platform_info
 
-if Time.respond_to?(:zone) && Time.zone
-  puts "-" * 80
-  p Time.zone.class
-  p Time.zone.public_methods.sort
-  p Time.zone.display
-  p Time.zone
-  p Time.zone.to_s
-  p Time.zone.inspect
-  p Time.zone.tzinfo
-  p Time.zone.gem
-  puts "-" * 80
-end
       etos = Proc.new { |k, v| "#{k}:#{v.inspect}" }
 
       '(' +
@@ -205,8 +204,7 @@ end
           'rp' => RUBY_PLATFORM,
           'eov' => EtOrbi::VERSION,
           'rorv' => (Rails::VERSION::STRING rescue nil),
-          'astz' => ([ Time.zone.class, Time.zone.name ] rescue nil)
-            # Active Support Time.zone
+          'astz' => platform_info_astz # Active Support Time.zone[.tzinfo]
         }.collect(&etos).join(',') + ',' +
         gather_tzs.collect(&etos).join(',') +
       ')'
