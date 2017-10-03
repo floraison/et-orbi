@@ -572,18 +572,25 @@ module EtOrbi
 
     def determine_local_tzone
 
+p [ :dlt ]
       etz = ENV['TZ']
+p [ :dlt, :etz, etz ]
 
       tz = ::TZInfo::Timezone.get(etz) rescue nil
+p [ :dlt, :tz, 0, tz ]
       return tz if tz
 
       tz = Time.zone.tzinfo \
         if Time.respond_to?(:zone) && Time.zone.respond_to?(:tzinfo)
+p [ :dlt, :tz, 1, tz ]
       return tz if tz
 
       tzs = determine_local_tzones
+p [ :dlt, :tzs_names, tzs.collect(&:name) ]
 
+(
       (etz && tzs.find { |z| z.name == etz }) || tzs.first
+).tap { |x| p [ :dlt, x ] }
     end
 
     #
