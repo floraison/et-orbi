@@ -359,9 +359,6 @@ module EtOrbi
 
     def utc_offset
 
-      #@zone.period_for_utc(utc).utc_offset
-      #@zone.period_for_utc(utc).utc_total_offset
-      #@zone.period_for_utc(utc).std_offset
       @zone.period_for_utc(utc).utc_offset
     end
 
@@ -374,9 +371,11 @@ module EtOrbi
 
     def ==(o)
 
-      o.is_a?(EoTime) && o.seconds == @seconds && o.zone == @zone
+      o.is_a?(EoTime) &&
+      o.seconds == @seconds &&
+      (o.zone == @zone || o.zone.current_period == @zone.current_period)
     end
-    #alias eq? == # FIXME see Object#== (ri)
+    #alias eql? == # FIXME see Object#== (ri)
 
     def >(o); @seconds > _to_f(o); end
     def >=(o); @seconds >= _to_f(o); end
