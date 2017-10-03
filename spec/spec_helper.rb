@@ -34,8 +34,6 @@ def in_zone(zone_name, &block)
     @local_tzone_loaded_at = nil
   end
 
-  return block.call unless zone_name
-
   prev_tz = ENV['TZ']
   ENV['TZ'] = zone_name
 
