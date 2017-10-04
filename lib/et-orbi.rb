@@ -36,12 +36,19 @@ module EtOrbi
         # is necessary since Time.parse('xxx') in Ruby < 1.9 yields `now`
 
       str_zone = get_tzone(list_iso8601_zones(str).last)
-
+#p [ :parse, str, str_zone ]
+#p ENV['TZ']
+#
+#p [ :parse, :oz, opts[:zone] ]
+#p [ :parse, :sz, str_zone ]
+#p [ :parse, :foz, find_olson_zone(str) ]
+#p [ :parse, :ltz, local_tzone ]
       zone =
         opts[:zone] ||
         str_zone ||
         find_olson_zone(str) ||
         local_tzone
+#p [ :parse, :zone, zone ]
 
       str = str.sub(zone.name, '') unless zone.name.match(/\A[-+]/)
         #
@@ -62,13 +69,13 @@ module EtOrbi
 
     def make_time(*a)
 
-#p a
+#p [ :mt, a ]
       zone = a.length > 1 ? get_tzone(a.last) : nil
       a.pop if zone
 #p [ :mt, zone ]
 
       o = a.length > 1 ? a : a.first
-#p o
+#p [ :mt, :o, o ]
 
       case o
       when Time then make_from_time(o, zone)
@@ -115,6 +122,7 @@ module EtOrbi
 
     def make_from_string(s, zone)
 
+#p [ :mfs, s, zone ]
       parse(s, zone: zone)
     end
 
@@ -594,16 +602,17 @@ module EtOrbi
       etz = ENV['TZ']
 
       tz = ::TZInfo::Timezone.get(etz) rescue nil
-
       return tz if tz
 
-      tz = Time.zone.tzinfo \
-        if Time.respond_to?(:zone) && Time.zone.respond_to?(:tzinfo)
+      if Time.respond_to?(:zone) && Time.zone.respond_to?(:tzinfo)
+        tz = Time.zone.tzinfo
+        return tz if tz
+      end
 
+      tz = ::TZInfo::Timezone.get(os_tz) rescue nil
       return tz if tz
 
       tzs = determine_local_tzones
-
       (etz && tzs.find { |z| z.name == etz }) || tzs.first
     end
 
@@ -703,10 +712,10 @@ module EtOrbi
         nil
     rescue; nil; end
 
-#    def find_tz
-#
-#      debian_tz || centos_tz || osx_tz
-#    end
+    def os_tz
+
+      debian_tz || centos_tz || osx_tz
+    end
 
     def gather_tzs
 

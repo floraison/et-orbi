@@ -422,6 +422,13 @@ describe EtOrbi do
           EtOrbi::EoTime.new(
             Time.local(2016, 11, 01, 12, 30, 9).to_f, nil) } ],
 
+      [ 'a String',
+        'America/Chicago',
+        '2016-11-01 12:30:09',
+        lambda {
+          EtOrbi::EoTime.new(
+            Time.local(2016, 11, 01, 12, 30, 9).to_f, nil) } ],
+
       [ 'a Zulu String',
         nil,
         '2016-11-01 12:30:09Z',
