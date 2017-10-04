@@ -35,8 +35,15 @@ def in_zone(zone_name, &block)
   end
 
   prev_tz = ENV['TZ']
-  ENV['TZ'] = zone_name
 
+  if zone_name == :no_env_tz
+    ENV.delete('TZ')
+  else
+    ENV['TZ'] = zone_name || EtOrbi.os_tz
+  end
+
+#p [ :in_zone, :etz, ENV['TZ'] ]
+#p [ :in_zone, :now, Time.now, Time.now.zone ]
   block.call
 
 ensure

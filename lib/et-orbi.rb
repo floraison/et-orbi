@@ -38,7 +38,7 @@ module EtOrbi
       str_zone = get_tzone(list_iso8601_zones(str).last)
 #p [ :parse, str, str_zone ]
 #p ENV['TZ']
-#
+
 #p [ :parse, :oz, opts[:zone] ]
 #p [ :parse, :sz, str_zone ]
 #p [ :parse, :foz, find_olson_zone(str) ]
@@ -56,6 +56,7 @@ module EtOrbi
         # although where does rufus-scheduler have it from?
 
       local = Time.parse(str)
+#p [ :parse, :local, local, local.zone ]
 
       secs =
         if str_zone
@@ -63,6 +64,7 @@ module EtOrbi
         else
           zone.period_for_local(local).to_utc(local).to_f
         end
+#p [ :parse, :secs, secs ]
 
       EoTime.new(secs, zone)
     end
@@ -616,6 +618,11 @@ module EtOrbi
       (etz && tzs.find { |z| z.name == etz }) || tzs.first
     end
 
+    def os_tz
+
+      debian_tz || centos_tz || osx_tz
+    end
+
     #
     # protected module methods
 
@@ -711,11 +718,6 @@ module EtOrbi
         File.readlink(path).split('/')[4..-1].join('/') :
         nil
     rescue; nil; end
-
-    def os_tz
-
-      debian_tz || centos_tz || osx_tz
-    end
 
     def gather_tzs
 

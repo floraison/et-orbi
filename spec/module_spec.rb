@@ -345,7 +345,7 @@ describe EtOrbi do
         end
       end
 
-      in_zone(nil) do
+      in_zone(:no_env_tz) do
         expect(EtOrbi.local_tzone.name).to eq('Europe/Vilnius')
       end
       in_zone('Asia/Tehran') do
@@ -508,6 +508,10 @@ describe EtOrbi do
               expected.call :
               expected
 
+#p [ :t, t ]
+#p [ :x, x ]
+#p [ :t, t.to_s ]
+#p [ :x, x.to_s ]
             [ t, x ]
           end
 
