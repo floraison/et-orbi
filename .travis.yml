@@ -15,11 +15,11 @@ matrix:
   include:
     - rvm: jruby-9.1.13.0
     #- env: JRUBY_OPTS="--profile.api"
-    - env:
-      - TZ=""
-      - TZ=UTC
-      - TZ=Asia/Tokyo
-      - TZ=America/Chicago
+    #- env:
+    #  - TZ=""
+    #  - TZ=UTC
+    #  - TZ=Asia/Tokyo
+    #  - TZ=America/Chicago
 
 #before_install: gem install bundler
 script: bundle exec rspec
@@ -33,7 +33,7 @@ sudo: false
 cache: bundler
 
 env:
-  - TZ=""
+  - ""
   - TZ=UTC
   - TZ=Asia/Tokyo
   - TZ=America/Chicago
