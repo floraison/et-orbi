@@ -87,8 +87,11 @@ module EtOrbi
       z =
         zone ||
         get_tzone(t.zone) ||
-        get_local_tzone(t) ||
-        t.zone
+        get_local_tzone(t)
+
+      z ||= t.zone
+        # pass the abbreviation anyway,
+        # it will be used in resulting the error message
 
       EoTime.new(t.to_f, z)
     end
@@ -205,16 +208,20 @@ module EtOrbi
 
     def get_local_tzone(t)
 
-      lt = local_tzone
-      lp = lt.period_for_local(t)
-      ab = lp.abbreviation.to_s
+#      lt = local_tzone
+#      lp = lt.period_for_local(t)
+#      ab = lp.abbreviation.to_s
+#
+#      return lt \
+#        if ab == t.zone
+#      return lt \
+#        if ab.match(/\A[-+]\d{2}(:?\d{2})?\z/) && lp.utc_offset == t.utc_offset
+#
+#      nil
 
-      return lt \
-        if ab == t.zone
-      return lt \
-        if ab.match(/\A[-+]\d{2}(:?\d{2})?\z/) && lp.utc_offset == t.utc_offset
+      l = Time.local(t.year, t.month, t.day, t.hour, t.min, t.sec, t.usec)
 
-      nil
+      t.zone == l.zone ? local_tzone : nil
     end
   end
 
