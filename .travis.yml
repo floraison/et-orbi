@@ -24,3 +24,8 @@ branches:
 sudo: false
 cache: bundler
 
+env:
+  - TZ=UTC
+  - TZ=Asia/Tokyo
+  - TZ=America/Chicago
+
