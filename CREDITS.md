@@ -1,7 +1,9 @@
 
 # et-orbi credits
 
-* Jeremy Strouse https://github.com/jstrouse help alleviate issue with older versions of TZInfo
+* Chris Arcand https://github.com/chrisarcand shew various issues around America/Chicago on OSX, gh-4
+* Jeremy Strouse https://github.com/jstrouse helped alleviate issue with older versions of TZInfo
+
 
 ## since rufus-scheduler
 
