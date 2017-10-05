@@ -2,6 +2,9 @@
 # et-orbi CHANGELOG.md
 
 
+## et-orbi 1.0.7  not yet released
+
+
 ## et-orbi 1.0.6  released 2017-10-05
 
 - Introduce `make info`
