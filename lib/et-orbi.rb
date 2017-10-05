@@ -30,7 +30,7 @@ module EtOrbi
       begin
         DateTime.parse(str)
       rescue
-        fail ArgumentError, "no time information in #{str.inspect}"
+        fail ArgumentError, "No time information in #{str.inspect}"
       end #if rold
         #
         # is necessary since Time.parse('xxx') in Ruby < 1.9 yields `now`
@@ -87,7 +87,7 @@ module EtOrbi
       when Numeric then make_from_numeric(o, zone)
       when ::EtOrbi::EoTime then make_from_eotime(o, zone)
       else fail ArgumentError.new(
-        "cannot turn #{o.inspect} to a ::EtOrbi::EoTime instance")
+        "Cannot turn #{o.inspect} to a ::EtOrbi::EoTime instance")
       end
     end
 
@@ -294,7 +294,7 @@ module EtOrbi
       @zone = self.class.get_tzone(zone || :local)
 
       fail ArgumentError.new(
-        "cannot determine timezone from #{zone.inspect}" +
+        "Cannot determine timezone from #{zone.inspect}" +
         "\n#{EtOrbi.render_nozone_time(s)}" +
         "\n#{EtOrbi.platform_info.sub(',debian:', ",\ndebian:")}" +
         "\nTry setting `ENV['TZ'] = 'Continent/City'` in your script " +
@@ -479,11 +479,11 @@ module EtOrbi
         nt
       when ::Time, ::EtOrbi::EoTime
         fail ArgumentError.new(
-          "cannot add #{t.class} to EoTime") if dir > 0
+          "Cannot add #{t.class} to EoTime") if dir > 0
         @seconds + dir * t.to_f
       else
         fail ArgumentError.new(
-          "cannot call add or subtract #{t.class} to EoTime instance")
+          "Cannot call add or subtract #{t.class} to EoTime instance")
       end
     end
 
@@ -550,7 +550,7 @@ module EtOrbi
     def _to_f(o)
 
       fail ArgumentError(
-        "comparison of EoTime with #{o.inspect} failed"
+        "Comparison of EoTime with #{o.inspect} failed"
       ) unless o.is_a?(EoTime) || o.is_a?(Time)
 
       o.to_f

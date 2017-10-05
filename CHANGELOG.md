@@ -4,6 +4,8 @@
 
 ## et-orbi 1.0.7  not yet released
 
+- Start error messages with a capital
+
 
 ## et-orbi 1.0.6  released 2017-10-05
 

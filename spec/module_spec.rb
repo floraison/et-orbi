@@ -153,7 +153,7 @@ describe EtOrbi do
       expect {
         EtOrbi.parse('xxx')
       }.to raise_error(
-        ArgumentError, 'no time information in "xxx"'
+        ArgumentError, 'No time information in "xxx"'
       )
     end
   end
@@ -545,7 +545,9 @@ describe EtOrbi do
 
         expect {
           EtOrbi.make_time(t).to_debug_s
-        }.to raise_error(ArgumentError, /cannot determine timezone from "CEST"/)
+        }.to raise_error(
+          ArgumentError, /\ACannot determine timezone from "CEST"/
+        )
       end
     end
 
@@ -554,12 +556,12 @@ describe EtOrbi do
       expect {
         EtOrbi.make_time('xxx')
       #}.to raise_error(ArgumentError, 'couldn\'t parse "xxx"')
-      }.to raise_error(ArgumentError, 'no time information in "xxx"')
+      }.to raise_error(ArgumentError, 'No time information in "xxx"')
         # straight out of Time.parse()
 
       expect {
         EtOrbi.make_time(Object.new)
-      }.to raise_error(ArgumentError, /\Acannot turn /)
+      }.to raise_error(ArgumentError, /\ACannot turn /)
     end
   end
 end

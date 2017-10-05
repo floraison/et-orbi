@@ -292,7 +292,7 @@ describe EtOrbi::EoTime do
       expect {
         ot + t
       }.to raise_error(
-        ArgumentError, 'cannot add Time to EoTime'
+        ArgumentError, 'Cannot add Time to EoTime'
       )
     end
 
@@ -304,7 +304,7 @@ describe EtOrbi::EoTime do
       expect {
         ot + ot1
       }.to raise_error(
-        ArgumentError, 'cannot add EtOrbi::EoTime to EoTime'
+        ArgumentError, 'Cannot add EtOrbi::EoTime to EoTime'
       )
     end
   end
