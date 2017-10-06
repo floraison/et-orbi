@@ -541,6 +541,28 @@ describe EtOrbi do
 #  # fugit, not the other way around. When fugit is present, this
 #  # spec should succeed, else it should not.
 
+    it 'accepts a Rails TimeWithZone' do
+
+      # http://api.rubyonrails.org/classes/ActiveSupport/TimeWithZone.html
+
+      n = Time.now
+      z = EtOrbi.get_tzone('Pacific/Easter')
+
+      #t = ActiveSupport::TimeWithZone.new(n, z)
+        #
+      t = n
+      t.instance_eval { @z = z }
+      class << t; def time_zone; @z; end; end
+        #
+        # fake an ActiveSupport::TimeWithZone instance with a #time_zone
+
+      eot = EtOrbi.make_time(t)
+
+      expect(eot.class).to eq(EtOrbi::EoTime)
+      expect(eot.seconds).to eq(t.to_f)
+      expect(eot.zone).to eq(t.time_zone)
+    end
+
     it 'rejects a Time in a non-local ambiguous timezone' do
 
       t = Time.local(2016, 11, 01, 12, 30, 9)
@@ -549,7 +571,7 @@ describe EtOrbi do
       in_zone 'Asia/Tbilisi' do
 
         expect {
-          EtOrbi.make_time(t).to_debug_s
+          EtOrbi.make_time(t)
         }.to raise_error(
           ArgumentError, /\ACannot determine timezone from "CEST"/
         )

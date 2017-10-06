@@ -95,6 +95,7 @@ module EtOrbi
 
       z =
         zone ||
+        get_as_tzone(t) ||
         get_tzone(t.zone) ||
         get_local_tzone(t)
 
@@ -218,20 +219,27 @@ module EtOrbi
 
     def get_local_tzone(t)
 
-#      lt = local_tzone
-#      lp = lt.period_for_local(t)
-#      ab = lp.abbreviation.to_s
-#
-#      return lt \
-#        if ab == t.zone
-#      return lt \
-#        if ab.match(/\A[-+]\d{2}(:?\d{2})?\z/) && lp.utc_offset == t.utc_offset
-#
-#      nil
+      #lt = local_tzone
+      #lp = lt.period_for_local(t)
+      #ab = lp.abbreviation.to_s
+      #
+      #return lt \
+      #  if ab == t.zone
+      #return lt \
+      #  if ab.match(/\A[-+]\d{2}(:?\d{2})?\z/) && lp.utc_offset == t.utc_offset
+      #
+      #nil
+        #
+        # keep that in the fridge for now
 
       l = Time.local(t.year, t.month, t.day, t.hour, t.min, t.sec, t.usec)
 
       t.zone == l.zone ? local_tzone : nil
+    end
+
+    def get_as_tzone(t)
+
+      t.respond_to?(:time_zone) ? t.time_zone : nil
     end
   end
 
