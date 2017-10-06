@@ -2,8 +2,9 @@
 # et-orbi CHANGELOG.md
 
 
-## et-orbi 1.0.7  not yet released
+## et-orbi 1.0.7  released 2017-10-07
 
+- Leverage ActiveSupport::TimeWithZone when present, gh-6
 - Start error messages with a capital
 
 
