@@ -330,9 +330,11 @@ describe EtOrbi do
       end
     end
 
-    it 'returns the Rails tzone if available' do
+    it 'returns the Rails-provided Time.zone.tzinfo if available' do
 
-      class EoSpecArZone
+      # http://api.rubyonrails.org/classes/ActiveSupport/TimeZone.html
+
+      class SpecActiveSupportTimeZone
         def initialize(z); @z = z; end
         def tzinfo; @z; end
       end
@@ -340,15 +342,18 @@ describe EtOrbi do
       Time.class_eval do
         class << self
           def zone
-            EoSpecArZone.new(::TZInfo::Timezone.get('Europe/Vilnius'))
+            SpecActiveSupportTimeZone.new(
+              ::TZInfo::Timezone.get('Europe/Vilnius'))
           end
         end
       end
 
       in_zone(:no_env_tz) do
+        expect(EtOrbi.local_tzone.class).to eq(::TZInfo::DataTimezone)
         expect(EtOrbi.local_tzone.name).to eq('Europe/Vilnius')
       end
       in_zone('Asia/Tehran') do
+        expect(EtOrbi.local_tzone.class).to eq(::TZInfo::DataTimezone)
         expect(EtOrbi.local_tzone.name).to eq('Asia/Tehran')
       end
     end
