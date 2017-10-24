@@ -2,7 +2,9 @@
 # et-orbi CHANGELOG.md
 
 
-## et-orbi 1.0.8  not yet released
+## et-orbi 1.0.8  released 2017-10-24
+
+- Ensure ::EoTime.new accepts ActiveSupport::TimeZone, closes gh-8
 
 
 ## et-orbi 1.0.7  released 2017-10-07
