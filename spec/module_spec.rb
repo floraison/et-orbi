@@ -334,11 +334,6 @@ describe EtOrbi do
 
       # http://api.rubyonrails.org/classes/ActiveSupport/TimeZone.html
 
-      class SpecActiveSupportTimeZone
-        def initialize(z); @z = z; end
-        def tzinfo; @z; end
-      end
-
       Time.class_eval do
         class << self
           def zone

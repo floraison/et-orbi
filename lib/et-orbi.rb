@@ -146,6 +146,7 @@ module EtOrbi
       return nil if o == nil
       return local_tzone if o == :local
       return ::TZInfo::Timezone.get('Zulu') if o == 'Z'
+      return o.tzinfo if o.respond_to?(:tzinfo)
 
       o = to_offset(o) if o.is_a?(Numeric)
 

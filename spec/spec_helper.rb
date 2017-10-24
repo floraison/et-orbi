@@ -80,3 +80,11 @@ class Time
   end
 end
 
+class SpecActiveSupportTimeZone
+
+  def initialize(z); @z = z; end
+  def tzinfo; @z; end
+
+  def self.make(s); self.new(::TZInfo::Timezone.get(s)); end
+end
+

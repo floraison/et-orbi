@@ -14,28 +14,58 @@ describe EtOrbi::EoTime do
 
   describe '.new' do
 
-    it 'accepts an integer' do
+    context "zone 'America/Los_Angeles'" do
 
-      ot = EtOrbi::EoTime.new(1234567890, 'America/Los_Angeles')
+      it 'accepts an integer' do
 
-      expect(ot.seconds.to_i).to eq(1234567890)
+        ot = EtOrbi::EoTime.new(1234567890, 'America/Los_Angeles')
+
+        expect(ot.seconds.to_i).to eq(1234567890)
+        expect(ot.zone.name).to eq('America/Los_Angeles')
+      end
+
+      it 'accepts a float' do
+
+        ot = EtOrbi::EoTime.new(1234567890.1234, 'America/Los_Angeles')
+
+        expect(ot.seconds.to_i).to eq(1234567890)
+        expect(ot.zone.name).to eq('America/Los_Angeles')
+      end
+
+      it 'accepts a Time instance' do
+
+        ot =
+          EtOrbi::EoTime.new(
+            Time.utc(2007, 11, 1, 15, 25, 0),
+            'America/Los_Angeles')
+
+        expect(ot.seconds.to_i).to eq(1193930700)
+        expect(ot.zone.name).to eq('America/Los_Angeles')
+      end
     end
 
-    it 'accepts a float' do
+    context "zone TZInfo instance 'Europe/Paris'" do
 
-      ot = EtOrbi::EoTime.new(1234567890.1234, 'America/Los_Angeles')
+      it 'accepts an integer' do
 
-      expect(ot.seconds.to_i).to eq(1234567890)
+        ot = EtOrbi::EoTime
+          .new(1234567890, ::TZInfo::Timezone.get('Europe/Paris'))
+
+        expect(ot.seconds.to_i).to eq(1234567890)
+        expect(ot.zone.name).to eq('Europe/Paris')
+      end
     end
 
-    it 'accepts a Time instance' do
+    context "zone ActiveSupport::TimeZone instance 'America/New_York'" do
 
-      ot =
-        EtOrbi::EoTime.new(
-          Time.utc(2007, 11, 1, 15, 25, 0),
-          'America/Los_Angeles')
+      it 'accepts an integer' do
 
-      expect(ot.seconds.to_i).to eq(1193930700)
+        ot = EtOrbi::EoTime
+          .new(1234567890, SpecActiveSupportTimeZone.make('America/New_York'))
+
+        expect(ot.seconds.to_i).to eq(1234567890)
+        expect(ot.zone.name).to eq('America/New_York')
+      end
     end
   end
 
