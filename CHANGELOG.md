@@ -2,6 +2,11 @@
 # et-orbi CHANGELOG.md
 
 
+## et-orbi 1.0.9  not yet released
+
+- @philr added support for upcoming tzinfo 2.x, gh-9
+
+
 ## et-orbi 1.0.8  released 2017-10-24
 
 - Ensure ::EoTime.new accepts ActiveSupport::TimeZone, closes gh-8
