@@ -71,17 +71,38 @@ describe EtOrbi::EoTime do
 
   describe '#to_time (protected)' do
 
-    it 'returns a local Time instance, although with a UTC zone' do
+    if TZInfo::Timezone.get('America/Los_Angeles').utc_to_local(Time.at(1193898300)).utc?
+      # TZInfo < 2.0.0
 
-      ot = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
-      t = ot.send(:to_time)
+      it 'returns a local Time instance, although with a UTC zone' do
 
-      expect(ot.to_debug_s).to eq('ot 2007-10-31 23:25:00 -08:00 dst:true')
+        ot = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
+        t = ot.send(:to_time)
 
-      expect(t.to_i).to eq(1193898300 - 7 * 3600) # /!\
+        expect(ot.to_debug_s).to eq('ot 2007-10-31 23:25:00 -08:00 dst:true')
 
-      expect(t.to_debug_s).to eq('t 2007-10-31 23:25:00 +00:00 dst:false')
-        # Time instance stuck to UTC...
+        expect(t.to_i).to eq(1193898300 - 7 * 3600) # /!\
+
+        expect(t.to_debug_s).to eq('t 2007-10-31 23:25:00 +00:00 dst:false')
+          # Time instance stuck to UTC...
+      end
+
+    else
+      # TZInfo >= 2.0.0
+
+      it 'returns a local Time instance' do
+
+        ot = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
+        t = ot.send(:to_time)
+
+        expect(ot.to_debug_s).to eq('ot 2007-10-31 23:25:00 -08:00 dst:true')
+
+        expect(t.to_i).to eq(1193898300)
+        expect(t.utc_offset).to eq(-7 * 3600)
+
+        expect(t.to_debug_s).to eq('t 2007-10-31 23:25:00 -07:00 dst:true')
+      end
+
     end
   end
 
