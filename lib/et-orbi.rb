@@ -62,7 +62,7 @@ module EtOrbi
         if str_zone
           local.to_f
         else
-          zone.period_for_local(local).to_utc(local).to_f
+          zone.local_to_utc(local).to_f
         end
 #p [ :parse, :secs, secs ]
 
@@ -510,11 +510,12 @@ module EtOrbi
 
     # Returns a Ruby Time instance.
     #
-    # Warning: the timezone of that Time instance will be UTC.
+    # Warning: the timezone of that Time instance will be UTC when used with
+    # TZInfo < 2.0.0.
     #
     def to_time
 
-      @time ||= begin; u = utc; @zone.period_for_utc(u).to_local(u); end
+      @time ||= begin; u = utc; @zone.utc_to_local(u); end
     end
 
     def count_weeks(dir)
@@ -660,15 +661,32 @@ module EtOrbi
       mn = -mn if hr && hr < 0
 
       return (
-        @custom_tz_cache[str] =
-          begin
-            tzi = TZInfo::TransitionDataTimezoneInfo.new(str)
-            tzi.offset(str, hr * 3600 + mn * 60, 0, str)
-            tzi.create_timezone
-          end
+        @custom_tz_cache[str] = create_offset_tzone(hr * 3600 + mn * 60, str)
       ) if hr
 
       nil
+    end
+
+    if defined? TZInfo::DataSources::ConstantOffsetDataTimezoneInfo
+      # TZInfo >= 2.0.0
+
+      def create_offset_tzone(utc_off, id)
+
+        off = TZInfo::TimezoneOffset.new(utc_off, 0, id)
+        tzi = TZInfo::DataSources::ConstantOffsetDataTimezoneInfo.new(id, off)
+        tzi.create_timezone
+      end
+
+    else
+      # TZInfo < 2.0.0
+
+      def create_offset_tzone(utc_off, id)
+
+        tzi = TZInfo::TransitionDataTimezoneInfo.new(id)
+        tzi.offset(id, utc_off, 0, id)
+        tzi.create_timezone
+      end
+
     end
 
     def determine_local_tzones
