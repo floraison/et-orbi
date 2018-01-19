@@ -159,6 +159,9 @@ module EtOrbi
 
     def local_tzone
 
+      @local_tzone_tz ||= nil
+      @local_tzone_loaded_at ||= nil
+
       @local_tzone = nil \
         if @local_tzone_loaded_at && (Time.now > @local_tzone_loaded_at + 1800)
       @local_tzone = nil \
@@ -697,7 +700,7 @@ module EtOrbi
         .sort
 
       t = Time.now
-      tu = t.dup.utc # /!\ dup is necessary, #utc modifies its target
+      #tu = t.dup.utc # /!\ dup is necessary, #utc modifies its target
 
       twin = Time.utc(t.year, 1, 1) # winter
       tsum = Time.utc(t.year, 7, 1) # summer
