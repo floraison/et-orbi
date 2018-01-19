@@ -2,7 +2,7 @@
 # et-orbi CHANGELOG.md
 
 
-## et-orbi 1.0.9  not yet released
+## et-orbi 1.0.9  released 2018-01-19
 
 - Silence EoTime#strfz warning
 - Silence warnings reported by @mdave16, gh-10

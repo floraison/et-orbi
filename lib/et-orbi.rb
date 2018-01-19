@@ -125,7 +125,6 @@ module EtOrbi
 
     def make_from_string(s, zone)
 
-#p [ :mfs, s, zone ]
       parse(s, zone: zone)
     end
 
