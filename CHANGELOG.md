@@ -4,6 +4,7 @@
 
 ## et-orbi 1.0.9  not yet released
 
+- Silence EoTime#strfz warning
 - Silence warnings reported by @mdave16, gh-10
 - @philr added support for upcoming tzinfo 2.x, gh-9
 

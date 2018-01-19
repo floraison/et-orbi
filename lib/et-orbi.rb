@@ -548,16 +548,13 @@ module EtOrbi
       mn = (off % 3600) / 60
       sc = 0
 
-      fmt =
-        if code == '%z'
-          "%s%02d%02d"
-        elsif code == '%:z'
-          "%s%02d:%02d"
-        else
-          "%s%02d:%02d:%02d"
-        end
-
-      fmt % [ sn, hr, mn, sc ]
+      if code == '%z'
+        '%s%02d%02d' % [ sn, hr, mn ]
+      elsif code == '%:z'
+        '%s%02d:%02d' % [ sn, hr, mn ]
+      else
+        '%s%02d:%02d:%02d' % [ sn, hr, mn, sc ]
+      end
     end
 
     def _to_f(o)
