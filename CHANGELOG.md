@@ -4,6 +4,8 @@
 
 ## et-orbi 1.0.10  not yet released
 
+- Correct EoTime#iso8601 (was always returning zulu iso8601 string)
+
 
 ## et-orbi 1.0.9  released 2018-01-19
 

@@ -472,5 +472,35 @@ describe EtOrbi::EoTime do
       expect(t1.object_id).not_to eq(t.object_id)
     end
   end
+
+  describe '#iso8601' do
+
+    [
+
+      [ 1193898300, 'Pacific/Apia', nil, '2007-10-31T19:25:00-11:00' ],
+      [ 1193898300, 'UTC', nil, '2007-11-01T06:25:00Z' ],
+      [ '2017-06-21 Europe/Paris', nil, nil, '2017-06-21T00:00:00+02:00' ],
+      [ '2017-01-21 Europe/Paris', nil, nil, '2017-01-21T00:00:00+01:00' ],
+
+      [ 1193898300.11, 'Pacific/Apia', 2, '2007-10-31T19:25:00.10-11:00' ], # ??
+      [ 1193898300.70, 'UTC', 1, '2007-11-01T06:25:00.7Z' ],
+      [ '2017-06-21 Europe/Paris', nil, 2, '2017-06-21T00:00:00.00+02:00' ],
+      [ '2017-01-21 Europe/Paris', nil, 3, '2017-01-21T00:00:00.000+01:00' ],
+
+    ].each do |s, z, f, i|
+
+      it "returns #{i.inspect}" do
+
+        t =
+          if z
+            EtOrbi::EoTime.new(s, z)
+          else
+            EtOrbi.make_time(s)
+          end
+
+        expect(t.iso8601(f)).to eq(i)
+      end
+    end
+  end
 end
 

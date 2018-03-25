@@ -408,7 +408,6 @@ module EtOrbi
     ].each do |m|
       define_method(m) { to_time.send(m) }
     end
-    def iso8601(fraction_digits=0); to_time.iso8601(fraction_digits); end
 
     def ==(o)
 
@@ -460,6 +459,12 @@ module EtOrbi
     def to_s
 
       strftime('%Y-%m-%d %H:%M:%S %z')
+    end
+
+    def iso8601(fraction_digits=0)
+
+      s = (fraction_digits || 0) > 0 ? ".%#{fraction_digits}N" : ''
+      strftime("%Y-%m-%dT%H:%M:%S#{s}%:z")
     end
 
     # Debug current time by showing local time / delta / utc time
@@ -547,7 +552,9 @@ module EtOrbi
       mn = (off % 3600) / 60
       sc = 0
 
-      if code == '%z'
+      if @zone.name == 'UTC'
+        'Z' # align on Ruby ::Time#iso8601
+      elsif code == '%z'
         '%s%02d%02d' % [ sn, hr, mn ]
       elsif code == '%:z'
         '%s%02d:%02d' % [ sn, hr, mn ]
