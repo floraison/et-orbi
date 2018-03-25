@@ -32,11 +32,48 @@ describe EtOrbi::EoTime do
         expect(ot.zone.name).to eq('America/Los_Angeles')
       end
 
-      it 'accepts a Time instance' do
+      it 'accepts a UTC ::Time instance' do
 
         ot =
           EtOrbi::EoTime.new(
             Time.utc(2007, 11, 1, 15, 25, 0),
+            'America/Los_Angeles')
+
+        expect(ot.seconds.to_i).to eq(1193930700)
+        expect(ot.zone.name).to eq('America/Los_Angeles')
+      end
+
+      it 'accepts a UTC EtOrbi::EoTime instance' do
+
+        ot =
+          EtOrbi::EoTime.new(
+            EtOrbi::EoTime.new(1193930700, 'UTC'),
+            'America/Los_Angeles')
+
+        expect(ot.seconds.to_i).to eq(1193930700)
+        expect(ot.zone.name).to eq('America/Los_Angeles')
+      end
+
+      it 'accepts a local ::Time instance' do
+
+        in_zone 'Asia/Samarkand' do
+
+          ot =
+            EtOrbi::EoTime.new(
+              Time.local(2007, 11, 1, 15, 25, 0),
+              'America/Los_Angeles')
+
+          expect(ot.seconds.to_i).to eq(1193912700)
+          expect(ot.zone.name).to eq('America/Los_Angeles')
+#          expect(ot.iso8601).to eq('xxx')
+        end
+      end
+
+      it 'accepts a Local EtOrbi::EoTime instance' do
+
+        ot =
+          EtOrbi::EoTime.new(
+            EtOrbi::EoTime.new(1193930700, 'Asia/Yekaterinburg'),
             'America/Los_Angeles')
 
         expect(ot.seconds.to_i).to eq(1193930700)
