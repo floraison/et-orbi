@@ -7,7 +7,7 @@ require 'tzinfo'
 
 module EtOrbi
 
-  VERSION = '1.0.10'
+  VERSION = '1.1.0'
 
   #
   # module methods

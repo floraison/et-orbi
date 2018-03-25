@@ -2,7 +2,7 @@
 # et-orbi CHANGELOG.md
 
 
-## et-orbi 1.0.10  not yet released
+## et-orbi 1.1.0  not yet released
 
 - Implement EoTime .utc and .local (based on Time .utc and .local)
 - Add EoTime#translate(target_zone) as #localtime(target_zone) alias
