@@ -291,6 +291,16 @@ module EtOrbi
 
         EtOrbi.make_time(o)
       end
+
+      def utc(*a)
+
+        EtOrbi.make_from_array(a, EtOrbi.get_tzone('UTC'))
+      end
+
+      def local(*a)
+
+        EtOrbi.make_from_array(a, EtOrbi.local_tzone)
+      end
     end
 
     #

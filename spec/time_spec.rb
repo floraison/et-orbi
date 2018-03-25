@@ -106,6 +106,54 @@ describe EtOrbi::EoTime do
     end
   end
 
+  describe '.utc' do
+
+    [
+
+      [ [ 2017, 3, 25 ], '2017-03-25T00:00:00Z' ],
+      [ [ 2017, 3, 25, 21, 23, 29 ], '2017-03-25T21:23:29Z' ],
+
+
+    ].each do |a, s|
+
+      it "accepts #{a.inspect}" do
+
+        ot = EtOrbi::EoTime.utc(*a)
+
+        expect(ot.class).to eq(EtOrbi::EoTime)
+        expect(ot.zone.name).to eq('UTC')
+        expect(ot.iso8601).to eq(s)
+      end
+    end
+  end
+
+  describe '.local' do
+
+    [
+
+      [ [ 2017, 3, 25 ], 'Europe/Lisbon',
+        '2017-03-25T00:00:00+00:00' ],
+      [ [ 2017, 3, 25, 21, 23, 29 ], 'Europe/Lisbon',
+        '2017-03-25T21:23:29+00:00' ],
+      [ [ 2017, 3, 25, 21, 23, 29 ], 'Europe/Moscow',
+        '2017-03-25T21:23:29+03:00' ],
+
+    ].each do |a, z, s|
+
+      it "accepts #{a.inspect} in #{z}" do
+
+        in_zone(z) do
+
+          ot = EtOrbi::EoTime.local(*a)
+
+          expect(ot.class).to eq(EtOrbi::EoTime)
+          expect(ot.zone.name).to eq(z)
+          expect(ot.iso8601).to eq(s)
+        end
+      end
+    end
+  end
+
   describe '#to_time (protected)' do
 
     if TZInfo::Timezone.get('America/Los_Angeles').utc_to_local(Time.at(1193898300)).utc?
