@@ -508,6 +508,8 @@ module EtOrbi
       EoTime.new(self.to_f, zone)
     end
 
+    alias translate localtime
+
     def wday_in_month
 
       [ count_weeks(-1), - count_weeks(1) ]

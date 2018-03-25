@@ -471,6 +471,33 @@ describe EtOrbi::EoTime do
       expect(t1.to_s).to eq('2007-11-01 07:25:00 +0100')
       expect(t1.object_id).not_to eq(t.object_id)
     end
+
+    it 'returns a new EoTime instance event if target zone is the same' do
+
+      t = EtOrbi::EoTime.new(1193898300, 'Pacific/Apia')
+
+      expect(t.to_s).to eq('2007-10-31 19:25:00 -1100')
+
+      t1 = t.localtime('Pacific/Apia')
+
+      expect(t1.to_s).to eq('2007-10-31 19:25:00 -1100')
+      expect(t1.object_id).not_to eq(t.object_id)
+    end
+  end
+
+  describe '#translate(zone)' do
+
+    it 'is an alias to #localtime(zone)' do
+
+      t = EtOrbi::EoTime.new(1193898300, 'Pacific/Apia')
+
+      expect(t.to_s).to eq('2007-10-31 19:25:00 -1100')
+
+      t1 = t.translate('Europe/Paris')
+
+      expect(t1.to_s).to eq('2007-11-01 07:25:00 +0100')
+      expect(t1.object_id).not_to eq(t.object_id)
+    end
   end
 
   describe '#iso8601' do
