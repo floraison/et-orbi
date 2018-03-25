@@ -73,7 +73,7 @@ Rails sets its timezone under `config/application.rb`.
 ### Sister projects
 
 * [rufus-scheduler](https://github.com/jmettraux/rufus-scheduler) - a cron/at/in/every/interval in-process scheduler, in fact, it's the father project to this fugit project
-* [fugit](https://github.com/floraison/fugit) - Time tools for flor and the floraison project. Cron parsing and occurence computing. Timestamps and more.
+* [fugit](https://github.com/floraison/fugit) - Time tools for flor and the floraison project. Cron parsing and occurrence computing. Timestamps and more.
 
 
 ## LICENSE
