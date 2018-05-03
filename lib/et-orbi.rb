@@ -200,9 +200,12 @@ module EtOrbi
           'tzid' => defined?(TZInfo::Data),
           'rv' => RUBY_VERSION,
           'rp' => RUBY_PLATFORM,
-          'eov' => EtOrbi::VERSION,
           'rorv' => (Rails::VERSION::STRING rescue nil),
           'astz' => ([ Time.zone.class, Time.zone.tzinfo.name ] rescue nil),
+          'eov' => EtOrbi::VERSION,
+          'eotnz' => EtOrbi::EoTime.now.zone,
+          'eotnfz' => EtOrbi::EoTime.now.strftime('%z'),
+          'eotlzn' => EtOrbi::EoTime.local_tzone.name,
         }.collect(&etos).join(',') + ',' +
         gather_tzs.collect(&etos).join(',') +
       ')'
