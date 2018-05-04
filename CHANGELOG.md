@@ -2,7 +2,7 @@
 # et-orbi CHANGELOG.md
 
 
-## et-orbi 1.1.1  not yet released
+## et-orbi 1.1.1  released 2018-05-04
 
 - Stop caching the local tzone, cache the tools used for determining it
 
