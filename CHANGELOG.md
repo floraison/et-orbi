@@ -4,6 +4,8 @@
 
 ## et-orbi 1.1.1  not yet released
 
+- Stop caching the local tzone, cache the tools used for determining it
+
 
 ## et-orbi 1.1.0  released 2018-03-25
 

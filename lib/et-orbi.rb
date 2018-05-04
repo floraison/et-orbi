@@ -47,7 +47,7 @@ module EtOrbi
         opts[:zone] ||
         str_zone ||
         find_olson_zone(str) ||
-        local_tzone
+        determine_local_tzone
 #p [ :parse, :zone, zone ]
 
       str = str.sub(zone.name, '') unless zone.name.match(/\A[-+]/)
@@ -143,7 +143,7 @@ module EtOrbi
 
       return o if o.is_a?(::TZInfo::Timezone)
       return nil if o == nil
-      return local_tzone if o == :local
+      return determine_local_tzone if o == :local
       return ::TZInfo::Timezone.get('Zulu') if o == 'Z'
       return o.tzinfo if o.respond_to?(:tzinfo)
 
@@ -156,24 +156,6 @@ module EtOrbi
       (::TZInfo::Timezone.get(o) rescue nil)
     end
 
-    def local_tzone
-
-      @local_tzone_tz ||= nil
-      @local_tzone_loaded_at ||= nil
-
-      @local_tzone = nil \
-        if @local_tzone_loaded_at && (Time.now > @local_tzone_loaded_at + 1800)
-      @local_tzone = nil \
-        if @local_tzone_tz != ENV['TZ']
-
-      @local_tzone ||=
-        begin
-          @local_tzone_tz = ENV['TZ']
-          @local_tzone_loaded_at = Time.now
-          determine_local_tzone
-        end
-    end
-
     def render_nozone_time(seconds)
 
       t =
@@ -181,10 +163,10 @@ module EtOrbi
       ts =
         t.strftime('%Y-%m-%d %H:%M:%S') +
         ".#{(seconds % 1).to_s.split('.').last}"
+      tz =
+        EtOrbi.determine_local_tzone
       z =
-        EtOrbi.local_tzone ?
-        EtOrbi.local_tzone.period_for_local(t).abbreviation.to_s :
-        nil
+        tz ? tz.period_for_local(t).abbreviation.to_s : nil
 
       "(secs:#{seconds},utc~:#{ts.inspect},ltz~:#{z.inspect})"
     end
@@ -240,7 +222,7 @@ module EtOrbi
 
       l = Time.local(t.year, t.month, t.day, t.hour, t.min, t.sec, t.usec)
 
-      t.zone == l.zone ? local_tzone : nil
+      (t.zone == l.zone) ? determine_local_tzone : nil
     end
 
     def get_as_tzone(t)
@@ -282,7 +264,7 @@ module EtOrbi
 
       def local_tzone
 
-        EtOrbi.local_tzone
+        EtOrbi.determine_local_tzone
       end
 
       def platform_info
@@ -302,7 +284,7 @@ module EtOrbi
 
       def local(*a)
 
-        EtOrbi.make_from_array(a, EtOrbi.local_tzone)
+        EtOrbi.make_from_array(a, local_tzone)
       end
     end
 
@@ -651,7 +633,7 @@ module EtOrbi
 
     def os_tz
 
-      debian_tz || centos_tz || osx_tz
+      @os_tz ||= (debian_tz || centos_tz || osx_tz)
     end
 
     #
@@ -707,7 +689,6 @@ module EtOrbi
         tzi.offset(id, utc_off, 0, id)
         tzi.create_timezone
       end
-
     end
 
     def determine_local_tzones
@@ -716,6 +697,7 @@ module EtOrbi
         .collect { |i| (Time.now + i * 30 * 24 * 3600).zone }
         .uniq
         .sort
+        .join('|')
 
       t = Time.now
       #tu = t.dup.utc # /!\ dup is necessary, #utc modifies its target
@@ -723,16 +705,16 @@ module EtOrbi
       twin = Time.utc(t.year, 1, 1) # winter
       tsum = Time.utc(t.year, 7, 1) # summer
 
-      ::TZInfo::Timezone.all.select do |tz|
+      @tz_all ||= ::TZInfo::Timezone.all
+      @tz_winter_summer ||= {}
 
-        pabbs =
-          [
-            tz.period_for_utc(twin).abbreviation.to_s,
-            tz.period_for_utc(tsum).abbreviation.to_s
-          ].uniq.sort
-
-        pabbs == tabbs
-      end
+      @tz_winter_summer[tabbs] ||= @tz_all
+        .select { |tz|
+          tabbs ==
+            [
+              tz.period_for_utc(twin).abbreviation.to_s,
+              tz.period_for_utc(tsum).abbreviation.to_s
+            ].uniq.sort.join('|') }
     end
 
     #

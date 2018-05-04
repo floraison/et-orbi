@@ -309,7 +309,7 @@ describe EtOrbi do
     end
   end
 
-  describe '.local_tzone' do
+  describe '.determine_local_tzone' do
 
     after :each do
 
@@ -320,13 +320,13 @@ describe EtOrbi do
       end rescue nil
     end
 
-    it 'caches and returns the local timezone' do
+    it 'returns the local timezone' do
 
       in_zone('Europe/Berlin') do
-        expect(EtOrbi.local_tzone.name).to eq('Europe/Berlin')
+        expect(EtOrbi.determine_local_tzone.name).to eq('Europe/Berlin')
       end
       in_zone('America/Jamaica') do
-        expect(EtOrbi.local_tzone.name).to eq('America/Jamaica')
+        expect(EtOrbi.determine_local_tzone.name).to eq('America/Jamaica')
       end
     end
 
@@ -344,12 +344,12 @@ describe EtOrbi do
       end
 
       in_zone(:no_env_tz) do
-        expect(EtOrbi.local_tzone.class).to eq(::TZInfo::DataTimezone)
-        expect(EtOrbi.local_tzone.name).to eq('Europe/Vilnius')
+        expect(EtOrbi.determine_local_tzone.class).to eq(::TZInfo::DataTimezone)
+        expect(EtOrbi.determine_local_tzone.name).to eq('Europe/Vilnius')
       end
       in_zone('Asia/Tehran') do
-        expect(EtOrbi.local_tzone.class).to eq(::TZInfo::DataTimezone)
-        expect(EtOrbi.local_tzone.name).to eq('Asia/Tehran')
+        expect(EtOrbi.determine_local_tzone.class).to eq(::TZInfo::DataTimezone)
+        expect(EtOrbi.determine_local_tzone.name).to eq('Asia/Tehran')
       end
     end
   end
