@@ -12,7 +12,7 @@ environment:
 
 install:
   - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
-  - 'Add-Content Gemfile "`n gem \"tzinfo-data\""'
+  - echo "\ngem \"tzinfo-data\"" >> Gemfile
   - cat Gemfile
   - bundle install
 
