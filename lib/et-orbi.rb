@@ -162,7 +162,7 @@ module EtOrbi
     def render_nozone_time(seconds)
 
       t =
-        Time.utc(0) + seconds
+        Time.utc(1970) + seconds
       ts =
         t.strftime('%Y-%m-%d %H:%M:%S') +
         ".#{(seconds % 1).to_s.split('.').last}"
@@ -334,7 +334,7 @@ module EtOrbi
     #
     def utc
 
-      Time.utc(1970, 1, 1) + @seconds
+      Time.utc(1970) + @seconds
     end
 
     # Returns true if this ::EtOrbi::EoTime instance timezone is UTC.
