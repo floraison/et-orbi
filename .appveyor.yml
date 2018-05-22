@@ -4,11 +4,16 @@ version: 1.0.{build}-{branch}
 environment:
   matrix:
     - RUBY_VERSION: 193
+      TZ: UTC
     - RUBY_VERSION: 21
+      TZ: UTC
     - RUBY_VERSION: 24
+      TZ: UTC
 
 install:
   - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
+  - 'Add-Content Gemfile "`n gem \"tzinfo-data\""'
+  - cat Gemfile
   - bundle install
 
 build: off
