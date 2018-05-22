@@ -160,32 +160,42 @@ describe EtOrbi do
 
   describe '.get_tzone' do
 
-    def gtz(s); z = EtOrbi.get_tzone(s); z ? z.name : z; end
+    {
 
-    it 'returns a tzone for known zone strings' do
+      'GB' => 'GB',
+      'UTC' => 'UTC',
+      'GMT' => 'GMT',
+      'Zulu' => 'Zulu',
+      'Japan' => 'Japan',
+      'Turkey' => 'Turkey',
+      'Asia/Tokyo' => 'Asia/Tokyo',
+      'Europe/Paris' => 'Europe/Paris',
+      'Europe/Zurich' => 'Europe/Zurich',
+      'W-SU' => 'W-SU',
 
-      expect(gtz('GB')).to eq('GB')
-      expect(gtz('UTC')).to eq('UTC')
-      expect(gtz('GMT')).to eq('GMT')
-      expect(gtz('Zulu')).to eq('Zulu')
-      expect(gtz('Japan')).to eq('Japan')
-      expect(gtz('Turkey')).to eq('Turkey')
-      expect(gtz('Asia/Tokyo')).to eq('Asia/Tokyo')
-      expect(gtz('Europe/Paris')).to eq('Europe/Paris')
-      expect(gtz('Europe/Zurich')).to eq('Europe/Zurich')
-      expect(gtz('W-SU')).to eq('W-SU')
+      'Z' => 'Zulu',
 
-      expect(gtz('Z')).to eq('Zulu')
+      '+09:00' => '+09:00',
+      '-01:30' => '-01:30',
 
-      expect(gtz('+09:00')).to eq('+09:00')
-      expect(gtz('-01:30')).to eq('-01:30')
+      '+08:00' => '+08:00',
+      '+0800' => '+0800', # no normalization to "+08:00"
 
-      expect(gtz('+08:00')).to eq('+08:00')
-      expect(gtz('+0800')).to eq('+0800') # no normalization to "+08:00"
+      '-01' => '-01',
 
-      expect(gtz('-01')).to eq('-01')
+      3600 => '+01:00',
 
-      expect(gtz(3600)).to eq('+01:00')
+      #'Tokyo Standard Time' => 'Asia/Tokyo',
+
+    }.each do |a, b|
+
+      it "returns #{b.inspect} for #{a.inspect}" do
+
+        z = EtOrbi.get_tzone(a)
+
+        expect(z).not_to eq(nil)
+        expect(z.name).to eq(b)
+      end
     end
 
 #    it 'returns a timezone for well-known abbreviations' do
@@ -195,17 +205,18 @@ describe EtOrbi do
 #      expect(gtz('CEST')).to eq('Africa/Ceuta')
 #    end
 
-    it 'returns nil for unknown zone names' do
+    [
+      'Asia/Paris', 'Nada/Nada', '7', '06', 'sun#3', 'Mazda Zoom Zoom Stadium'
+    ].each do |s|
 
-      expect(gtz('Asia/Paris')).to eq(nil)
-      expect(gtz('Nada/Nada')).to eq(nil)
-      expect(gtz('7')).to eq(nil)
-      expect(gtz('06')).to eq(nil)
-      expect(gtz('sun#3')).to eq(nil)
-      expect(gtz('Mazda Zoom Zoom Stadium')).to eq(nil)
+      it "returns nil for #{s.inspect}" do
+
+        expect(EtOrbi.get_tzone(s)).to eq(nil)
+      end
     end
 
     # rufus-scheduler gh-222
+    #
     it "falls back to ENV['TZ'] if it doesn't know Time.now.zone" do
 
       begin
