@@ -20,7 +20,9 @@ environment:
       TZONE: "Eastern Standard Time"
 
 install:
-  - tzutil /s "%TZONE%"
+  - echo %RUBY_VERSION%
+  - echo %TZONE%
+  - tzutil /s %TZONE%
   - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
   - cp Gemfile.appveyor Gemfile
   - bundle install
