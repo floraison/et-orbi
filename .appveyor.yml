@@ -1,21 +1,27 @@
 
-version: 1.0.{build}-{branch}
+#version: 1.0.{build}-{branch}
+version: {build}-{branch}
 
 environment:
   matrix:
     - RUBY_VERSION: 193
-      TZ: UTC
-    - RUBY_VERSION: 21
+    - RUBY_VERSION: 24
+    - RUBY_VERSION: 193
       TZ: UTC
     - RUBY_VERSION: 24
       TZ: UTC
+    - RUBY_VERSION: 193
+      TZ: "Asia/Tokyo"
+    - RUBY_VERSION: 24
+      TZ: "Asia/Tokyo"
+    - RUBY_VERSION: 193
+      TZ: "America/Chicago"
+    - RUBY_VERSION: 24
+      TZ: "America/Chicago"
 
 install:
   - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
   - cp Gemfile.appveyor Gemfile
-  - echo ">>> Gemfile"
-  - cat Gemfile
-  - echo "<<< Gemfile"
   - bundle install
 
 build: off
