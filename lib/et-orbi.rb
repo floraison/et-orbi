@@ -105,7 +105,7 @@ module EtOrbi
         # pass the abbreviation anyway,
         # it will be used in resulting the error message
 
-      EoTime.new(t.to_f, z)
+      EoTime.new(t, z)
     end
 
     def make_from_date(d, zone)
@@ -307,7 +307,7 @@ module EtOrbi
 
       fail ArgumentError.new(
         "Cannot determine timezone from #{zone.inspect}" +
-        "\n#{EtOrbi.render_nozone_time(s)}" +
+        "\n#{EtOrbi.render_nozone_time(@seconds)}" +
         "\n#{EtOrbi.platform_info.sub(',debian:', ",\ndebian:")}" +
         "\nTry setting `ENV['TZ'] = 'Continent/City'` in your script " +
         "(see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)" +
