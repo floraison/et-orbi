@@ -310,15 +310,15 @@ describe EtOrbi do
 
     it 'favours the local timezone' do
 
-      in_zone(nil) do
+      in_zone(:no_env_tz) do
 
         Time._zone = 'Cape Verde Standard Time'
-        EtOrbi._os_zone = nil
+        EtOrbi._os_zone = '' # force #os_tz to return nil
 
         expect(
           EtOrbi.determine_local_tzone.name
         ).to eq(
-          'Europe/Berlin'
+          'Atlantic/Cape_Verde'
         )
       end
     end

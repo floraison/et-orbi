@@ -634,10 +634,17 @@ module EtOrbi
       return tz if tz
 
       tzs = determine_local_tzones
-      (etz && tzs.find { |z| z.name == etz }) || tzs.first
+      tz = (etz && tzs.find { |z| z.name == etz }) || tzs.first
+      return tz if tz
+
+      get_tzone(Time.now.zone)
     end
 
+    attr_accessor :_os_zone # test tool
+
     def os_tz
+
+      return (@_os_zone == '' ? nil : @_os_zone) if @_os_zone
 
       @os_tz ||= (debian_tz || centos_tz || osx_tz)
     end
