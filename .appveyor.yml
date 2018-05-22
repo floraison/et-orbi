@@ -24,7 +24,8 @@ environment:
 install:
   - echo %RUBY_VERSION%
   - echo %TZONE%
-  - if [ "%TZONE%" -ne "" ]; then tzutil /s "%TZONE%"; fi
+  #- if [ "%TZONE%" -ne "" ]; then tzutil /s "%TZONE%"; fi
+  - ps: if ($env:TZONE -ne "") { tzutil /s "$env:TZONE" }
   - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
   - cp Gemfile.appveyor Gemfile
   - bundle install
