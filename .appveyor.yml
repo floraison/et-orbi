@@ -7,19 +7,20 @@ environment:
     - RUBY_VERSION: 193
     - RUBY_VERSION: 24
     - RUBY_VERSION: 193
-      TZ: UTC
+      TZONE: "Coordinated Universal Time"
     - RUBY_VERSION: 24
-      TZ: UTC
+      TZONE: "Coordinated Universal Time"
     - RUBY_VERSION: 193
-      TZ: "Asia/Tokyo"
+      TZONE: "Tokyo Standard Time"
     - RUBY_VERSION: 24
-      TZ: "Asia/Tokyo"
+      TZONE: "Tokyo Standard Time"
     - RUBY_VERSION: 193
-      TZ: "America/Chicago"
+      TZONE: "Eastern Standard Time"
     - RUBY_VERSION: 24
-      TZ: "America/Chicago"
+      TZONE: "Eastern Standard Time"
 
 install:
+  - tzutil /s "%TZONE%"
   - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
   - cp Gemfile.appveyor Gemfile
   - bundle install
