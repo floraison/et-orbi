@@ -302,6 +302,27 @@ describe EtOrbi do
 
   describe '.determine_local_tzone' do
 
+    after :each do
+      Time._zone = nil
+      Time._as_zone = nil
+      EtOrbi._os_zone = nil
+    end
+
+    it 'favours the local timezone' do
+
+      in_zone(nil) do
+
+        Time._zone = 'Cape Verde Standard Time'
+        EtOrbi._os_zone = nil
+
+        expect(
+          EtOrbi.determine_local_tzone.name
+        ).to eq(
+          'Europe/Berlin'
+        )
+      end
+    end
+
     it 'favours the local timezone' do
 
       in_zone('Europe/Berlin') do
@@ -312,18 +333,6 @@ describe EtOrbi do
           'Europe/Berlin'
         )
       end
-    end
-  end
-
-  describe '.determine_local_tzone' do
-
-    after :each do
-
-      Time.class_eval do
-        class << self
-          undef zone
-        end
-      end rescue nil
     end
 
     it 'returns the local timezone' do
@@ -340,14 +349,8 @@ describe EtOrbi do
 
       # http://api.rubyonrails.org/classes/ActiveSupport/TimeZone.html
 
-      Time.class_eval do
-        class << self
-          def zone
-            SpecActiveSupportTimeZone.new(
-              ::TZInfo::Timezone.get('Europe/Vilnius'))
-          end
-        end
-      end
+      Time._as_zone =
+        SpecActiveSupportTimeZone.new(::TZInfo::Timezone.get('Europe/Vilnius'))
 
       in_zone(:no_env_tz) do
         expect(EtOrbi.determine_local_tzone.class).to eq(::TZInfo::DataTimezone)

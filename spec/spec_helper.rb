@@ -89,7 +89,18 @@ class Time
   end
 
   class << self
-    attr_accessor :_zone
+
+    attr_accessor :_zone # instance zone (Vanilla Ruby)
+
+    def _as_zone=(z) # class zone (ActiveSupport mimicry)
+
+      if z
+        @_as_zone = z
+        def zone; @_as_zone; end
+      else
+        undef zone rescue nil
+      end
+    end
   end
 end
 
