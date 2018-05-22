@@ -78,6 +78,19 @@ class Time
       "dst:#{self.isdst}"
     ].join(' ')
   end
+
+  #
+  # tools to "inject" a zone string at will
+
+  alias _original_zone zone
+
+  def zone
+    self.class._zone || _original_zone
+  end
+
+  class << self
+    attr_accessor :_zone
+  end
 end
 
 class SpecActiveSupportTimeZone

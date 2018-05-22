@@ -223,10 +223,7 @@ describe EtOrbi do
 
         current = EtOrbi.get_tzone(:local)
 
-        class ::Time
-          alias _original_zone zone
-          def zone; "中国标准时间"; end
-        end
+        Time._zone = '中国标准时间'
 
 #        expect(
 #          EtOrbi.get_tzone(:current)
@@ -252,9 +249,7 @@ describe EtOrbi do
 
       ensure
 
-        class ::Time
-          def zone; _original_zone; end
-        end
+        Time._zone = nil
       end
 
       expect(
