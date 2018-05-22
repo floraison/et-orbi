@@ -186,6 +186,7 @@ describe EtOrbi do
       3600 => '+01:00',
 
       'Tokyo Standard Time' => 'Asia/Tokyo',
+      'Coordinated Universal Time' => 'UTC',
 
     }.each do |a, b|
 
