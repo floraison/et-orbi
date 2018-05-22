@@ -12,8 +12,10 @@ environment:
 
 install:
   - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
-  - echo "\ngem \"tzinfo-data\"" >> Gemfile
+  - cp Gemfile.appveyor Gemfile
+  - echo ">>> Gemfile"
   - cat Gemfile
+  - echo "<<< Gemfile"
   - bundle install
 
 build: off
