@@ -5,7 +5,9 @@ version: "{build}-{branch}"
 environment:
   matrix:
     - RUBY_VERSION: 193
+      TZONE: ""
     - RUBY_VERSION: 24
+      TZONE: ""
     - RUBY_VERSION: 193
       TZONE: "Coordinated Universal Time"
     - RUBY_VERSION: 24
@@ -22,7 +24,7 @@ environment:
 install:
   - echo %RUBY_VERSION%
   - echo %TZONE%
-  - tzutil /s %TZONE%
+  - if [ "%TZONE%" -ne "" ]; then tzutil /s "%TZONE%"; fi
   - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
   - cp Gemfile.appveyor Gemfile
   - bundle install
