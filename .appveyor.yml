@@ -9,9 +9,9 @@ environment:
     - RUBY_VERSION: 24
       TZONE: ""
     - RUBY_VERSION: 193
-      TZONE: "Coordinated Universal Time"
+      TZONE: "UTC"
     - RUBY_VERSION: 24
-      TZONE: "Coordinated Universal Time"
+      TZONE: "UTC"
     - RUBY_VERSION: 193
       TZONE: "Tokyo Standard Time"
     - RUBY_VERSION: 24
