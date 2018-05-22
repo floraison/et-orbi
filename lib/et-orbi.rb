@@ -4,6 +4,8 @@ require 'time'
 
 require 'tzinfo'
 
+require 'et-orbi/zone_aliases'
+
 
 module EtOrbi
 
@@ -151,8 +153,10 @@ module EtOrbi
 
       return nil unless o.is_a?(String)
 
-      get_offset_tzone(o) ||
-      (::TZInfo::Timezone.get(o) rescue nil)
+      s = ZONE_ALIASES[o] || o
+
+      get_offset_tzone(s) ||
+      (::TZInfo::Timezone.get(s) rescue nil)
     end
 
     def render_nozone_time(seconds)
@@ -618,7 +622,7 @@ module EtOrbi
 
       etz = ENV['TZ']
 
-      tz = ::TZInfo::Timezone.get(etz) rescue nil
+      tz = etz && (::TZInfo::Timezone.get(etz) rescue false)
       return tz if tz
 
       if Time.respond_to?(:zone) && Time.zone.respond_to?(:tzinfo)

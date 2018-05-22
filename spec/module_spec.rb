@@ -185,7 +185,7 @@ describe EtOrbi do
 
       3600 => '+01:00',
 
-      #'Tokyo Standard Time' => 'Asia/Tokyo',
+      'Tokyo Standard Time' => 'Asia/Tokyo',
 
     }.each do |a, b|
 
