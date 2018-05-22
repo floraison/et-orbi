@@ -175,22 +175,25 @@ module EtOrbi
 
       etos = Proc.new { |k, v| "#{k}:#{v.inspect}" }
 
-      '(' +
-        {
-          'etz' => ENV['TZ'],
-          'tnz' => Time.now.zone,
-          'tzid' => defined?(TZInfo::Data),
-          'rv' => RUBY_VERSION,
-          'rp' => RUBY_PLATFORM,
-          'rorv' => (Rails::VERSION::STRING rescue nil),
-          'astz' => ([ Time.zone.class, Time.zone.tzinfo.name ] rescue nil),
-          'eov' => EtOrbi::VERSION,
-          'eotnz' => EtOrbi::EoTime.now.zone,
-          'eotnfz' => EtOrbi::EoTime.now.strftime('%z'),
-          'eotlzn' => EtOrbi::EoTime.local_tzone.name,
-        }.collect(&etos).join(',') + ',' +
-        gather_tzs.collect(&etos).join(',') +
-      ')'
+      h = {
+        'etz' => ENV['TZ'],
+        'tnz' => Time.now.zone,
+        'tzid' => defined?(TZInfo::Data),
+        'rv' => RUBY_VERSION,
+        'rp' => RUBY_PLATFORM,
+        'rorv' => (Rails::VERSION::STRING rescue nil),
+        'astz' => ([ Time.zone.class, Time.zone.tzinfo.name ] rescue nil),
+        'eov' => EtOrbi::VERSION,
+        'eotnz' => '???',
+        'eotnfz' => '???',
+        'eotlzn' => '???' }
+      if ltz = EtOrbi::EoTime.local_tzone
+        h['eotnz'] = EtOrbi::EoTime.now.zone
+        h['eotnfz'] = EtOrbi::EoTime.now.strftime('%z')
+        h['eotlzn'] = ltz.name
+      end
+
+      "(#{h.map(&etos).join(',')},#{gather_tzs.map(&etos).join(',')})"
     end
 
     alias make make_time
