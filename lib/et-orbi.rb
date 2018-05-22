@@ -151,7 +151,6 @@ module EtOrbi
 
       return nil unless o.is_a?(String)
 
-      (@custom_tz_cache ||= {})[o] ||
       get_offset_tzone(o) ||
       (::TZInfo::Timezone.get(o) rescue nil)
     end
@@ -667,7 +666,8 @@ module EtOrbi
       mn = -mn if hr && hr < 0
 
       return (
-        @custom_tz_cache[str] = create_offset_tzone(hr * 3600 + mn * 60, str)
+        (@custom_tz_cache ||= {})[str] =
+          create_offset_tzone(hr * 3600 + mn * 60, str)
       ) if hr
 
       nil
