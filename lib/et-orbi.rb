@@ -650,6 +650,27 @@ module EtOrbi
       @os_tz ||= (debian_tz || centos_tz || osx_tz)
     end
 
+    def to_windows_tz(zone_name)
+
+      t = Time.now
+      twin = Time.utc(t.year, 1, 1) # winter
+      tsum = Time.utc(t.year, 7, 1) # summer
+
+      tz = ::TZInfo::Timezone.get(zone_name)
+      tzo = tz.period_for_local(twin).utc_offset
+      tzop = tzo < 0 ? nil : '-'; tzo = tzo.abs
+      tzoh = tzo / 3600
+      tzos = tzo % 3600
+      tzos = tzos == 0 ? nil : ':%02d' % (tzos / 60)
+
+      abbs = [
+        tz.period_for_utc(twin).abbreviation.to_s,
+        tz.period_for_utc(tsum).abbreviation.to_s ]
+          .uniq
+
+      [ abbs[0], tzop, tzoh, tzos, abbs[1] ].compact.join
+    end
+
     #
     # protected module methods
 

@@ -599,5 +599,23 @@ describe EtOrbi do
       }.to raise_error(ArgumentError, /\ACannot turn /)
     end
   end
+
+  describe '.to_windows_tz' do
+
+    {
+
+      'Asia/Tokyo' => 'JST-9',
+      'Asia/Kolkata' => 'IST-5:30',
+      'Europe/Berlin' => 'CET-1CEST',
+      'America/New_York' => 'EST5EDT',
+
+    }.each do |k, v|
+
+      it "returns #{v.inspect} for #{k.inspect}" do
+
+        expect(EtOrbi.to_windows_tz(k)).to eq(v)
+      end
+    end
+  end
 end
 

@@ -4,6 +4,8 @@
 
 ## et-orbi 1.1.2  not yet released
 
+- Introduce EtOrbi.to_windows_tz (Asia/Kolkata to IST-5:30)
+
 
 ## et-orbi 1.1.1  released 2018-05-04
 
