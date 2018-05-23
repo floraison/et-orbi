@@ -604,16 +604,18 @@ describe EtOrbi do
 
     {
 
-      'Asia/Tokyo' => 'JST-9',
-      'Asia/Kolkata' => 'IST-5:30',
-      'Europe/Berlin' => 'CET-1CEST',
-      'America/New_York' => 'EST5EDT',
+      [ 'Asia/Tokyo', Time.local(2018, 5, 23) ] => 'JST-9',
+      [ 'Asia/Kolkata', Time.local(2018, 7, 1) ] => 'IST-5:30',
+      [ 'Europe/Berlin', Time.local(2018, 1, 1) ] => 'CET-1CEST',
+      [ 'Europe/Berlin', Time.local(2018, 7, 1) ] => 'CET-2CEST',
+      [ 'America/New_York', Time.local(2018, 1, 1) ] => 'EST5EDT',
+      [ 'America/New_York', Time.local(2018, 7, 1) ] => 'EST4EDT',
 
-    }.each do |k, v|
+    }.each do |(zone, time), v|
 
-      it "returns #{v.inspect} for #{k.inspect}" do
+      it "returns #{v.inspect} for #{zone.inspect} at #{time}" do
 
-        expect(EtOrbi.to_windows_tz(k)).to eq(v)
+        expect(EtOrbi.to_windows_tz(zone, time)).to eq(v)
       end
     end
   end
