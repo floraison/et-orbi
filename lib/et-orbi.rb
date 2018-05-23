@@ -184,6 +184,7 @@ module EtOrbi
         'tzid' => defined?(TZInfo::Data),
         'rv' => RUBY_VERSION,
         'rp' => RUBY_PLATFORM,
+        'win' => Gem.win_platform?,
         'rorv' => (Rails::VERSION::STRING rescue nil),
         'astz' => ([ Time.zone.class, Time.zone.tzinfo.name ] rescue nil),
         'eov' => EtOrbi::VERSION,
