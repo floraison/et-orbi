@@ -39,11 +39,10 @@ def in_zone(zone_name, &block)
   if zone_name == :no_env_tz
     ENV.delete('TZ')
   else
+    zone_name = EtOrbi.to_windows_tz if zone_name && Gem.win_platform?
     ENV['TZ'] = zone_name || EtOrbi.os_tz
   end
 
-#p [ :in_zone, :etz, ENV['TZ'] ]
-#p [ :in_zone, :now, Time.now, Time.now.zone ]
   block.call
 
 ensure
@@ -85,6 +84,7 @@ class Time
   alias _original_zone zone
 
   def zone
+
     self.class._zone || _original_zone
   end
 
