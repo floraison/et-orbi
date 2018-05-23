@@ -153,7 +153,7 @@ module EtOrbi
 
       return nil unless o.is_a?(String)
 
-      s = ZONE_ALIASES[o] || o
+      s = unalias(o)
 
       get_offset_tzone(s) ||
       (::TZInfo::Timezone.get(s) rescue nil)

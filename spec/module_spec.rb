@@ -188,6 +188,9 @@ describe EtOrbi do
       'Tokyo Standard Time' => 'Asia/Tokyo',
       'Coordinated Universal Time' => 'UTC',
 
+      'Eastern Standard Time' => 'America/New_York',
+      'Eastern Daylight Time' => 'America/New_York',
+
     }.each do |a, b|
 
       it "returns #{b.inspect} for #{a.inspect}" do

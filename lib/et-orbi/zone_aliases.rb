@@ -1,6 +1,11 @@
 
 module EtOrbi
 
+  def self.unalias(name)
+
+    ZONE_ALIASES[name.sub(/ Daylight /, ' Standard ')] || name
+  end
+
   ZONE_ALIASES = {
     'Coordinated Universal Time' => 'UTC',
     'Afghanistan Standard Time' => 'Asia/Kabul',
