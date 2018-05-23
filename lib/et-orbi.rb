@@ -342,7 +342,8 @@ module EtOrbi
     #
     def utc?
 
-      %w[ zulu utc gmt ].include?(@zone.canonical_identifier.downcase)
+      %w[ zulu utc gmt etc/utc ].include?(
+        @zone.canonical_identifier.downcase)
     end
 
     alias getutc utc
