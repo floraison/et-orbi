@@ -38,9 +38,11 @@ def in_zone(zone_name, &block)
 
   if zone_name == :no_env_tz
     ENV.delete('TZ')
+  elsif zone_name == nil
+    ENV['TZ'] = EtOrbi.os_tz
   else
-    zone_name = EtOrbi.to_windows_tz if zone_name && Gem.win_platform?
-    ENV['TZ'] = zone_name || EtOrbi.os_tz
+    zone_name = EtOrbi.to_windows_tz(zone_name) if Gem.win_platform?
+    ENV['TZ'] = zone_name
   end
 
   block.call
