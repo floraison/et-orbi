@@ -639,7 +639,10 @@ module EtOrbi
       tz = (etz && tzs.find { |z| z.name == etz }) || tzs.first
       return tz if tz
 
-      get_tzone(Time.now.zone)
+      n = Time.now
+
+      get_tzone(n.zone) ||
+      get_tzone(n.strftime('%Z%z'))
     end
 
     attr_accessor :_os_zone # test tool

@@ -191,6 +191,12 @@ describe EtOrbi do
       'Eastern Standard Time' => 'America/New_York',
       'Eastern Daylight Time' => 'America/New_York',
 
+      'CST+0800' => 'Asia/Chongqing',
+      'CST+08:00' => 'Asia/Chongqing',
+      'CST+08' => 'Asia/Chongqing',
+      'CST+8' => 'Asia/Chongqing',
+      'EDT-0400' => 'America/Detroit',
+
     }.each do |a, b|
 
       it "returns #{b.inspect} for #{a.inspect}" do

@@ -3,7 +3,31 @@ module EtOrbi
 
   def self.unalias(name)
 
-    ZONE_ALIASES[name.sub(/ Daylight /, ' Standard ')] || name
+    ZONE_ALIASES[name.sub(/ Daylight /, ' Standard ')] ||
+    unzz(name) ||
+    name
+  end
+
+  def self.unzz(name)
+
+    m = name.match(/\A([A-Z]{3,4})([+-])(\d{1,2}):?(\d{2})?\z/)
+    return nil unless m
+
+    nam = m[1]
+    off = (m[2] == '+' ? 1 : -1) * (m[3].to_i * 3600 + (m[4] || '0').to_i * 60)
+
+    t = Time.now
+    twin = Time.utc(t.year, 1, 1) # winter
+    tsum = Time.utc(t.year, 7, 1) # summer
+
+    (@tz_all ||= ::TZInfo::Timezone.all)
+      .each { |tz|
+        per = tz.period_for_utc(twin)
+        return tz.name \
+          if per.abbreviation.to_s == nam && per.utc_total_offset == off
+        per = tz.period_for_utc(tsum)
+        return tz.name \
+          if per.abbreviation.to_s == nam && per.utc_total_offset == off }
   end
 
   ZONE_ALIASES = {
