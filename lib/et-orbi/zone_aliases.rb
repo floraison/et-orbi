@@ -13,7 +13,9 @@ module EtOrbi
     m = name.match(/\A([A-Z]{3,4})([+-])(\d{1,2}):?(\d{2})?\z/)
     return nil unless m
 
-    nam = m[1]
+    abbs = [ m[1] ]; a = m[1]
+    abbs << "#{a}T" if a.size < 4
+
     off = (m[2] == '+' ? 1 : -1) * (m[3].to_i * 3600 + (m[4] || '0').to_i * 60)
 
     t = Time.now
@@ -22,12 +24,15 @@ module EtOrbi
 
     (@tz_all ||= ::TZInfo::Timezone.all)
       .each { |tz|
-        per = tz.period_for_utc(twin)
-        return tz.name \
-          if per.abbreviation.to_s == nam && per.utc_total_offset == off
-        per = tz.period_for_utc(tsum)
-        return tz.name \
-          if per.abbreviation.to_s == nam && per.utc_total_offset == off }
+        abbs.each { |abb|
+          per = tz.period_for_utc(twin)
+          return tz.name \
+            if per.abbreviation.to_s == abb && per.utc_total_offset == off
+          per = tz.period_for_utc(tsum)
+          return tz.name \
+            if per.abbreviation.to_s == abb && per.utc_total_offset == off } }
+
+    nil
   end
 
   ZONE_ALIASES = {

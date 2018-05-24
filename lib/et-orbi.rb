@@ -624,7 +624,7 @@ module EtOrbi
 
       etz = ENV['TZ']
 
-      tz = etz && (::TZInfo::Timezone.get(etz) rescue false)
+      tz = etz && (::TZInfo::Timezone.get(etz) rescue nil)
       return tz if tz
 
       if Time.respond_to?(:zone) && Time.zone.respond_to?(:tzinfo)
@@ -733,7 +733,9 @@ module EtOrbi
     def determine_local_tzones
 
       tabbs = (-6..5)
-        .collect { |i| (Time.now + i * 30 * 24 * 3600).zone }
+        .collect { |i|
+          t = Time.now + i * 30 * 24 * 3600
+          "#{t.zone}_#{t.utc_offset}" }
         .uniq
         .sort
         .join('|')
@@ -741,19 +743,22 @@ module EtOrbi
       t = Time.now
       #tu = t.dup.utc # /!\ dup is necessary, #utc modifies its target
 
-      twin = Time.utc(t.year, 1, 1) # winter
-      tsum = Time.utc(t.year, 7, 1) # summer
+      twin = Time.local(t.year, 1, 1) # winter
+      tsum = Time.local(t.year, 7, 1) # summer
 
       @tz_all ||= ::TZInfo::Timezone.all
       @tz_winter_summer ||= {}
 
       @tz_winter_summer[tabbs] ||= @tz_all
         .select { |tz|
+          pw = tz.period_for_local(twin)
+          ps = tz.period_for_local(tsum)
           tabbs ==
-            [
-              tz.period_for_utc(twin).abbreviation.to_s,
-              tz.period_for_utc(tsum).abbreviation.to_s
-            ].uniq.sort.join('|') }
+            [ "#{pw.abbreviation}_#{pw.utc_total_offset}",
+              "#{ps.abbreviation}_#{ps.utc_total_offset}" ]
+              .uniq.sort.join('|') }
+
+      @tz_winter_summer[tabbs]
     end
 
     #

@@ -250,11 +250,9 @@ describe EtOrbi do
 
         in_zone 'Asia/Shanghai' do
 
-          expect(
-            EtOrbi.get_tzone(:local)
-          ).to eq(
-            EtOrbi.get_tzone('Asia/Shanghai')
-          )
+          expect(EtOrbi.get_tzone(:local))
+            .to eq(EtOrbi.get_tzone('Asia/Shanghai'))
+            .or eq(EtOrbi.get_tzone('Asia/Chongqing'))
         end
 
       ensure
@@ -272,21 +270,19 @@ describe EtOrbi do
     [ # for rufus-scheduler gh-228
 
       [ 'Asia/Tokyo', 'Asia/Tokyo' ],
-      [ 'Asia/Shanghai', 'Asia/Shanghai' ],
-      [ 'Europe/Zurich', 'Europe/Zurich' ],
-      [ 'Europe/London', 'Europe/London' ]
+      [ 'Asia/Shanghai', 'Asia/Shanghai', 'Asia/Chongqing' ],
+      [ 'Europe/Zurich', 'Europe/Zurich', 'Africa/Ceuta' ],
+      [ 'Europe/London', 'Europe/London', 'Europe/Belfast' ]
 
-    ].each do |zone, target|
+    ].each do |zone, target0, target1|
 
       it "returns the current timezone for :current in #{zone}" do
 
         in_zone(zone) do
 
-          expect(
-            EtOrbi.get_tzone(:local)
-          ).to eq(
-            EtOrbi.get_tzone(target)
-          )
+          expect(EtOrbi.get_tzone(:local))
+            .to eq(EtOrbi.get_tzone(target0))
+            .or eq(EtOrbi.get_tzone(target1 || target0))
         end
       end
     end
@@ -337,21 +333,29 @@ describe EtOrbi do
 
       in_zone('Europe/Berlin') do
 
-        expect(
-          EtOrbi.determine_local_tzone.name
-        ).to eq(
-          'Europe/Berlin'
-        )
+        expect(EtOrbi.determine_local_tzone.name)
+          .to eq('Europe/Berlin')
+          .or eq('Africa/Ceuta')
       end
     end
 
     it 'returns the local timezone' do
 
       in_zone('Europe/Berlin') do
-        expect(EtOrbi.determine_local_tzone.name).to eq('Europe/Berlin')
+
+        expect(EtOrbi.determine_local_tzone.name)
+          .to eq('Europe/Berlin')
+          .or eq('Africa/Ceuta')
       end
+    end
+
+    it 'returns the local timezone' do
+
       in_zone('America/Jamaica') do
-        expect(EtOrbi.determine_local_tzone.name).to eq('America/Jamaica')
+
+        expect(EtOrbi.determine_local_tzone.name)
+          .to eq('America/Jamaica')
+          .or eq('America/Atikokan')
       end
     end
 
@@ -383,7 +387,10 @@ describe EtOrbi do
         n = Time.now
 
         expect(t.seconds).to be_between((n - 1).to_f, (n + 1).to_f)
-        expect(t.zone.name).to eq('Asia/Shanghai')
+
+        expect(t.zone.name)
+          .to eq('Asia/Shanghai')
+          .or eq('Asia/Chongqing')
       end
     end
   end
