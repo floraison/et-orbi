@@ -2,7 +2,7 @@
 # et-orbi CHANGELOG.md
 
 
-## et-orbi 1.1.2  not yet released
+## et-orbi 1.1.2  released 2018-05-24
 
 - Let EtOrbi.get_tzone understand "CST+0800"
 - Introduce EtOrbi.to_windows_tz (Asia/Kolkata to IST-5:30)
