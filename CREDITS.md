@@ -1,6 +1,7 @@
 
 # et-orbi credits
 
+* mlotfi2005 https://github.com/mlotfi2005 reported infinite loop, gh-12
 * Mayur Dave https://github.com/mdave16 reported trailing warning, gh-10
 * Phil Ross https://github.com/philr added support for upcoming TZInfo 2.x, gh-9
 * Miles Lane https://github.com/mileslane issue with ActiveSupport::TimeZone, gh-8
