@@ -1,5 +1,5 @@
 
-## core floraison make ##
+## gem tasks ##
 
 NAME = \
   $(shell ruby -e "s = eval(File.read(Dir['*.gemspec'][0])); puts s.name")
@@ -13,11 +13,14 @@ cl: count_lines
 
 gemspec_validate:
 	@echo "---"
-	ruby -e "s = eval(File.read(Dir['*.gemspec'].first)); s.validate"
+	ruby -e "s = eval(File.read(Dir['*.gemspec'].first)); p s.validate"
 	@echo "---"
 
 name: gemspec_validate
 	@echo "$(NAME) $(VERSION)"
+
+cw:
+	find lib -name "*.rb" -exec ruby -cw {} \;
 
 build: gemspec_validate
 	gem build $(NAME).gemspec
@@ -42,5 +45,5 @@ info:
 
 ## done ##
 
-.PHONY: build info push spec
+.PHONY: count_lines gemspec_validate name cw build push spec info
 
