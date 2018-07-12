@@ -464,6 +464,11 @@ module EtOrbi
       strftime('%Y-%m-%d %H:%M:%S %z')
     end
 
+    def to_zs
+
+      strftime('%Y-%m-%d %H:%M:%S %/Z')
+    end
+
     def iso8601(fraction_digits=0)
 
       s = (fraction_digits || 0) > 0 ? ".%#{fraction_digits}N" : ''

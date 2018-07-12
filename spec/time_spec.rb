@@ -370,6 +370,26 @@ describe EtOrbi::EoTime do
     end
   end
 
+  describe '#to_s' do
+
+    it 'returns the a formatted datetime string' do
+
+      ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
+
+      expect(ot.to_s).to eq('2007-11-01 07:25:00 +0100')
+    end
+  end
+
+  describe '#to_zs' do
+
+    it 'returns the a formatted datetime string with an explicit timezone' do
+
+      ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
+
+      expect(ot.to_zs).to eq('2007-11-01 07:25:00 Europe/Paris')
+    end
+  end
+
   describe '#strftime' do
 
     it 'accepts %Z, %z, %:z and %::z' do

@@ -4,6 +4,8 @@
 
 ## et-orbi 1.1.3  not yet released
 
+- Introduce EtOrbi::EoTime#to_z for precise timezones (not offsets)
+
 
 ## et-orbi 1.1.2  released 2018-05-24
 

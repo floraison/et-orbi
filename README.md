@@ -27,6 +27,12 @@ EtOrbi::EoTime.new(0, 'UTC').to_s
   # => "1970-01-01 00:00:00 +0000"
 EtOrbi::EoTime.new(0, 'Europe/Moscow').to_s
   # => "1970-01-01 03:00:00 +0300"
+EtOrbi::EoTime.new(0, 'Europe/Moscow').to_zs
+  # => "1970-01-01 03:00:00 Europe/Moscow" # "be precise in your speech"
+
+EtOrbi.parse('1970-01-01 03:00:00 Europe/Moscow')
+  # => #<EtOrbi::EoTime:0x00007fa4bc83fcd0
+  #  @seconds=0.0, @zone=#<TZInfo::DataTimezone: Europe/Moscow>, @time=nil>
 ```
 
 More about `EtOrbi::EoTime` instances:
