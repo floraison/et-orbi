@@ -532,7 +532,7 @@ module EtOrbi
     #
     def to_time
 
-      @time ||= begin; u = utc; @zone.utc_to_local(u); end
+      @time ||= @zone.utc_to_local(utc)
     end
 
     def count_weeks(dir)
