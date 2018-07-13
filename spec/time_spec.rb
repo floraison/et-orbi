@@ -629,13 +629,5 @@ describe EtOrbi::EoTime do
       expect(t.ambiguous?).to eq(true)
     end
   end
-
-  describe '#inexistent?' do
-
-    # https://www.timeanddate.com/time/change/usa/new-york?year=2018
-
-    it 'returns false if it has a corresponding UTC time'
-    it 'returns false if it has no corresponding UTC time (non-DST to DST)'
-  end
 end
 
