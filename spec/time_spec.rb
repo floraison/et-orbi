@@ -434,6 +434,7 @@ describe EtOrbi::EoTime do
       ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
       ot1 = ot + 111
 
+      expect(ot1.class).to eq(EtOrbi::EoTime)
       expect(ot1.seconds).to eq(1193898300 + 111)
       expect(ot1.object_id).not_to eq(ot.object_id)
     end
@@ -472,6 +473,7 @@ describe EtOrbi::EoTime do
       ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
       ot1 = ot - 111
 
+      expect(ot1.class).to eq(EtOrbi::EoTime)
       expect(ot1.seconds).to eq(1193898300 - 111)
       expect(ot1.object_id).not_to eq(ot.object_id)
     end
@@ -483,17 +485,20 @@ describe EtOrbi::EoTime do
       t =
         in_zone('America/Los_Angeles') { Time.local(2017, 10, 30, 22, 00, 10) }
 
-      r = ot - t
+      d = ot - t
 
-      expect(r.to_i).to eq(57600)
+      expect(d.class).to eq(Float)
+      expect(d.to_i).to eq(57600)
     end
 
     it 'subtracts EoTime instances' do
 
       ot0 = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
       ot1 = EtOrbi::EoTime.new(1193898300 + 222, 'America/Los_Angeles')
+      d = ot0 - ot1
 
-      expect((ot0 - ot1).to_i).to eq(-222)
+      expect(d.class).to eq(Float)
+      expect(d.to_i).to eq(-222)
     end
   end
 
