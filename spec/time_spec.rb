@@ -602,5 +602,40 @@ describe EtOrbi::EoTime do
       end
     end
   end
+
+  describe '#ambiguous?' do
+
+    # https://www.timeanddate.com/time/change/usa/new-york?year=2018
+
+    it 'returns false if it has a unique corresponding UTC time' do
+
+      # whatever the local zone!
+
+      t = EtOrbi::EoTime.new(
+        EtOrbi.parse('2018-11-04 00:00:00 -0400').to_f,
+        'America/New_York')
+
+      expect(t.ambiguous?).to eq(false)
+    end
+
+    it 'returns true if it has two corresponding UTC times (DST to non-DST)' do
+
+      # whatever the local zone!
+
+      t = EtOrbi::EoTime.new(
+        EtOrbi.parse('2018-11-04 01:30:00 -0400').to_f,
+        'America/New_York')
+
+      expect(t.ambiguous?).to eq(true)
+    end
+  end
+
+  describe '#inexistent?' do
+
+    # https://www.timeanddate.com/time/change/usa/new-york?year=2018
+
+    it 'returns false if it has a corresponding UTC time'
+    it 'returns false if it has no corresponding UTC time (non-DST to DST)'
+  end
 end
 

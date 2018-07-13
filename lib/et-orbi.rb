@@ -315,19 +315,6 @@ module EtOrbi
         (defined?(TZInfo::Data) ? '' : "\nand adding gem 'tzinfo-data'")
       ) unless @zone
 
-      #@zone.local_to_utc(Time.at(@seconds))
-        #
-        # will fail if the local time is ambiguous
-        # for example: '2018-11-04 01:59:00 America/New_York'
-        # <TZInfo::AmbiguousTime: Time: xxx is an ambiguous local time.>
-        #
-        # see https://www.timeanddate.com/time/change/usa/new-york?year=2018
-        #
-        # /!\
-        #
-        # The ambiguity is to be solved downstream (at fugit level), not here.
-        # Commented out.
-
       @time = nil
         # cache for #to_time result
     end
@@ -342,6 +329,23 @@ module EtOrbi
 
       @time = nil
       @zone = self.class.get_tzone(zone || :current)
+    end
+
+    # Returns true if this EoTime instance corresponds to 2 different UTC
+    # times.
+    # It happens when transitioning from DST to winter time.
+    #
+    # https://www.timeanddate.com/time/change/usa/new-york?year=2018
+    #
+    def ambiguous?
+
+      @zone.local_to_utc(@zone.utc_to_local(utc))
+
+      false
+
+    rescue TZInfo::AmbiguousTime => e
+
+      true
     end
 
     # Returns this ::EtOrbi::EoTime as a ::Time instance
