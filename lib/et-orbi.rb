@@ -541,6 +541,38 @@ module EtOrbi
       [ count_weeks(-1), - count_weeks(1) ]
     end
 
+    def reach(points)
+
+      t = EoTime.new(self.to_f, @zone)
+      step = 1
+
+      s = points[:second] || points[:sec] || points[:s]
+      m = points[:minute] || points[:min] || points[:m]
+      h = points[:hour] || points[:hou] || points[:h]
+
+      fail ArgumentError.new("missing :second, :minute, and :hour") \
+        unless s || m || h
+
+      if !s && !m
+        step = 60 * 60
+        t -= t.sec
+        t -= t.min * 60
+      elsif !s
+        step = 60
+        t -= t.sec
+      end
+
+      loop do
+        t += step
+        next if s && t.sec != s
+        next if m && t.min != m
+        next if h && t.hour != h
+        break
+      end
+
+      t
+    end
+
     protected
 
     # Returns a Ruby Time instance.

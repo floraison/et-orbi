@@ -629,5 +629,32 @@ describe EtOrbi::EoTime do
       expect(t.ambiguous?).to eq(true)
     end
   end
+
+  describe '#reach' do
+
+    {
+
+      [ '2018-07-24 01:31:00 America/New_York', { min: 30 } ] =>
+        '2018-07-24 02:30:00 America/New_York',
+      [ '2018-07-24 01:31:00 America/New_York', { hou: 7 } ] =>
+        '2018-07-24 07:00:00 America/New_York',
+      [ '2018-07-24 01:31:00 America/New_York', { hou: 7, min: 25 } ] =>
+        '2018-07-24 07:25:00 America/New_York',
+      [ '2018-07-24 01:31:00 America/New_York', { h: 7, m: 25, s: 10 } ] =>
+        '2018-07-24 07:25:10 America/New_York',
+      [ '2018-07-24 01:31:00 America/New_York', { h: 7, s: 10 } ] =>
+        '2018-07-24 07:00:10 America/New_York',
+
+    }.each do |(start, points), result|
+
+      it "reaches for #{points.inspect}" do
+
+        t = EtOrbi.parse(start)
+        t = t.reach(points)
+
+        expect(t.to_zs).to eq(result)
+      end
+    end
+  end
 end
 
