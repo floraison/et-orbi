@@ -739,7 +739,10 @@ module EtOrbi
       i = n.to_i
       sn = i < 0 ? '-' : '+'; i = i.abs
       hr = i / 3600; mn = i % 3600; sc = i % 60
-      (sc > 0 ? "%s%02d:%02d:%02d" : "%s%02d:%02d") % [ sn, hr, mn, sc ]
+
+      sc > 0 ?
+        '%s%02d:%02d:%02d' % [ sn, hr, mn, sc ] :
+        '%s%02d:%02d' % [ sn, hr, mn ]
     end
 
     def get_offset_tzone(str)
