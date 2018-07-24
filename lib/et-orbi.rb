@@ -343,7 +343,7 @@ module EtOrbi
 
       false
 
-    rescue TZInfo::AmbiguousTime => e
+    rescue TZInfo::AmbiguousTime
 
       true
     end
