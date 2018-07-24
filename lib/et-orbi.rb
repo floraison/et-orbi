@@ -704,7 +704,8 @@ module EtOrbi
 
     def os_tz
 
-      return (@_os_zone == '' ? nil : @_os_zone) if @_os_zone
+      return (@_os_zone == '' ? nil : @_os_zone) \
+        if defined?(@_os_zone) && @_os_zone
 
       @os_tz ||= (debian_tz || centos_tz || osx_tz)
     end
