@@ -2,7 +2,10 @@
 # et-orbi CHANGELOG.md
 
 
-## et-orbi 1.1.4  not yet released
+## et-orbi 1.1.4  released 2018-07-25
+
+- Silence 3 Ruby warnings (thanks Jamie Stackhouse, gh-13)
+- Introduce EtOrbi::Eotime.reach(points)
 
 
 ## et-orbi 1.1.3  released 2018-07-14
