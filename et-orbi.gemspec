@@ -17,8 +17,9 @@ Gem::Specification.new do |s|
   s.description = %{
 Time zones for fugit and rufus-scheduler. Urbi et Orbi.
   }.strip
+
   s.metadata = {
-    "changelog_uri" => "https://github.com/floraison/et-orbi/blob/master/CHANGELOG.md"
+    'changelog_uri' => s.homepage + '/blob/master/CHANGELOG.md'
   }
 
   #s.files = `git ls-files`.split("\n")
