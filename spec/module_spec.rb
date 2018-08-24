@@ -339,6 +339,19 @@ describe EtOrbi do
       end
     end
 
+    it 'favours the local timezone (Mitteleuropaeische Sommerzeit)' do
+
+      in_zone(:no_env_tz) do
+
+        Time._zone = "Mitteleurop\xE4ische Sommerzeit"
+        EtOrbi._os_zone = '' # force #os_tz to return nil
+
+        expect {
+          EtOrbi.determine_local_tzone.name
+        }.not_to raise_error
+      end
+    end
+
     it 'returns the local timezone' do
 
       in_zone('Europe/Berlin') do

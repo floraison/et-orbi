@@ -1,7 +1,21 @@
 
 module EtOrbi
 
+  def self.fix_encoding(name)
+
+    name.match(/ /); name
+
+  rescue ArgumentError
+
+    %w[ Windows-1252 ISO-8859-1 UTF-8 ].each do |e|
+      n = name.encode('UTF-8', e)
+      return n if (n.match(/./) rescue nil)
+    end
+  end
+
   def self.unalias(name)
+
+    name = fix_encoding(name)
 
     ZONE_ALIASES[name.sub(/ Daylight /, ' Standard ')] ||
     unzz(name) ||
