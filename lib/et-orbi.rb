@@ -750,7 +750,11 @@ module EtOrbi
 
       # custom timezones, no DST, just an offset, like "+08:00" or "-01:30"
 
-      m = str.match(/\A([+-][0-1][0-9]):?([0-5][0-9])?\z/)
+      m = str.match(/\A([+-][0-1][0-9]):?([0-5][0-9])?\z/) rescue nil
+        #
+        # On Windows, the real encoding could be something other than UTF-8,
+        # and make the match fail
+        #
       return nil unless m
 
       hr = m[1].to_i
