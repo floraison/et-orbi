@@ -1,6 +1,7 @@
 
 # et-orbi credits
 
+* Marcel https://github.com/MTRNord "Mitteleuropaeische Sommerzeit", gh-15
 * Stanisław Pitucha https://github.com/viraptor rubygems link to changelog, gh-14
 * Jamie Stackhouse https://github.com/itsjamie reported warnings, gh-13
 * mlotfi2005 https://github.com/mlotfi2005 reported infinite loop, gh-12

@@ -4,6 +4,8 @@
 
 ## et-orbi 1.1.5  not yet released
 
+- Prevent encoding issue on Windows with "Mitteleuropaeische Sommerzeit", gh-15
+
 
 ## et-orbi 1.1.4  released 2018-07-25
 
