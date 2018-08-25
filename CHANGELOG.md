@@ -2,7 +2,7 @@
 # et-orbi CHANGELOG.md
 
 
-## et-orbi 1.1.5  not yet released
+## et-orbi 1.1.5  released 2018-08-25
 
 - Prevent encoding issue on Windows with "Mitteleuropaeische Sommerzeit", gh-15
 
