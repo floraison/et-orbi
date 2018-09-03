@@ -113,7 +113,6 @@ describe EtOrbi::EoTime do
       [ [ 2017, 3, 25 ], '2017-03-25T00:00:00Z' ],
       [ [ 2017, 3, 25, 21, 23, 29 ], '2017-03-25T21:23:29Z' ],
 
-
     ].each do |a, s|
 
       it "accepts #{a.inspect}" do
@@ -156,7 +155,11 @@ describe EtOrbi::EoTime do
 
   describe '#to_time (protected)' do
 
-    if TZInfo::Timezone.get('America/Los_Angeles').utc_to_local(Time.at(1193898300)).utc?
+    if TZInfo::Timezone
+       .get('America/Los_Angeles')
+       .utc_to_local(Time.at(1193898300))
+       .utc?
+    then
       # TZInfo < 2.0.0
 
       it 'returns a local Time instance, although with a UTC zone' do
