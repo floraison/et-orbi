@@ -15,56 +15,49 @@ describe EtOrbi do
 
   describe '.list_iso8601_zones' do
 
-    def liz(s); EtOrbi.list_iso8601_zones(s); end
+    [
 
-    it 'returns the zone string' do
+      [ '2016-11-01 12:30:09-01', %w[ -01 ] ],
+      [ '2016-11-01 12:30:09-01:00', %w[ -01:00 ] ],
+      [ '2016-11-01 12:30:09 -01', %w[ -01 ] ],
+      [ '2016-11-01 12:30:09 -01:00', %w[ -01:00 ] ],
 
-      expect(liz '2016-11-01 12:30:09-01').to eq(%w[ -01 ])
-      expect(liz '2016-11-01 12:30:09-01:00').to eq(%w[ -01:00 ])
-      expect(liz '2016-11-01 12:30:09 -01').to eq(%w[ -01 ])
-      expect(liz '2016-11-01 12:30:09 -01:00').to eq(%w[ -01:00 ])
+      [ '2016-11-01 12:30:09-01:30', %w[ -01:30 ] ],
+      [ '2016-11-01 12:30:09 -01:30', %w[ -01:30 ] ],
 
-      expect(liz '2016-11-01 12:30:09-01:30').to eq(%w[ -01:30 ])
-      expect(liz '2016-11-01 12:30:09 -01:30').to eq(%w[ -01:30 ])
-    end
+      [ '2016-11-01 12:30:09', [] ],
+      [ '2016-11-01 12:30:09-25', [] ],
+      [ '2016-11-01 12:30:09-25:00', [] ],
 
-    it 'returns nil when it cannot find a zone' do
+    ].each do |string, zones|
 
-      expect(liz '2016-11-01 12:30:09').to eq([])
-      expect(liz '2016-11-01 12:30:09-25').to eq([])
-      expect(liz '2016-11-01 12:30:09-25:00').to eq([])
+      it "returns #{zones.inspect} for #{string.inspect}" do
+
+        expect(EtOrbi.list_iso8601_zones(string)).to eq(zones)
+      end
     end
   end
 
   describe '.list_olson_zones' do
 
-    def loz(s); EtOrbi.list_olson_zones(s); end
+    [
 
-    it 'returns the zone strings' do
+      [ '11/09/2002 America/New_York',
+        %w[ America/New_York ] ],
+      [ '11/09/2002 America/New_York Asia/Shanghai',
+        %w[ America/New_York Asia/Shanghai ] ],
+      [ 'America/New_York Asia/Shanghai',
+        %w[ America/New_York Asia/Shanghai ] ],
 
-      expect(
-        loz '11/09/2002 America/New_York'
-      ).to eq(%w[
-        America/New_York
-      ])
-      expect(
-        loz '11/09/2002 America/New_York Asia/Shanghai'
-      ).to eq(%w[
-        America/New_York Asia/Shanghai
-      ])
-      expect(
-        loz 'America/New_York Asia/Shanghai'
-      ).to eq(%w[
-        America/New_York Asia/Shanghai
-      ])
-    end
+      [ '11/09/2002 2utopiaNada?3Nada',
+        [] ]
 
-    it 'returns [] when it cannot find a zone' do
+    ].each do |string, zones|
 
-      expect(
-        loz '11/09/2002 2utopiaNada?3Nada'
-      ).to eq(%w[
-      ])
+      it "returns #{zones.inspect} for #{string.inspect}" do
+
+        expect(EtOrbi.list_olson_zones(string)).to eq(zones)
+      end
     end
   end
 
