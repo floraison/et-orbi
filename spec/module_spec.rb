@@ -48,6 +48,15 @@ describe EtOrbi do
         %w[ America/New_York Asia/Shanghai ] ],
       [ 'America/New_York Asia/Shanghai',
         %w[ America/New_York Asia/Shanghai ] ],
+      [ '2018-09-04 07:54:58 Etc/GMT-11',
+        %w[ Etc/GMT-11 ] ],
+
+      [ '2018-09-04 07:54:58 UTC+11',
+        %w[ UTC+11 ] ],
+      [ '2018-09-04 07:54:58 UTC+11 Etc/GMT-11',
+        %w[ UTC+11 Etc/GMT-11 ] ],
+          #
+          # https://github.com/floraison/fugit/issues/9
 
       [ '11/09/2002 2utopiaNada?3Nada',
         [] ]
