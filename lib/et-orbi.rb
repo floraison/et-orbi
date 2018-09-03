@@ -643,30 +643,32 @@ module EtOrbi
     #
     def list_iso8601_zones(s)
 
-      s.scan(
-        %r{
-          (?<=:\d\d)
-          \s*
-          (?:
-            [-+]
-            (?:[0-1][0-9]|2[0-4])
-            (?:(?::)?(?:[0-5][0-9]|60))?
-            (?![-+])
-            |
-            Z
-          )
-        }x
-        ).collect(&:strip)
+      s
+        .scan(
+          %r{
+            (?<=:\d\d)
+            \s*
+            (?:
+              [-+]
+              (?:[0-1][0-9]|2[0-4])
+              (?:(?::)?(?:[0-5][0-9]|60))?
+              (?![-+])
+              |
+              Z
+            )
+          }x)
+        .collect(&:strip)
     end
 
     def list_olson_zones(s)
 
-      s.scan(
-        %r{
-          (?<=\s|\A)
-          (?:[A-Za-z][A-Za-z0-9+_-]+)
-          (?:\/(?:[A-Za-z][A-Za-z0-9+_-]+)){0,2}
-        }x)
+      s
+        .scan(
+          %r{
+            (?<=\s|\A)
+            (?:[A-Za-z][A-Za-z0-9+_-]+)
+            (?:\/(?:[A-Za-z][A-Za-z0-9+_-]+)){0,2}
+          }x)
     end
 
     def find_olson_zone(str)
