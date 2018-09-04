@@ -103,7 +103,7 @@ module EtOrbi
 
       z ||= t.zone
         # pass the abbreviation anyway,
-        # it will be used in resulting the error message
+        # it will be used in the resulting error message
 
       EoTime.new(t, z)
     end
