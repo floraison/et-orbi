@@ -1,5 +1,11 @@
 
-# et-orbi CHANGELOG.md
+# CHANGELOG.md
+
+
+## et-orbi 1.1.6  released 2018-09-05
+
+- Ensure Olson timezone name regex covers all timezone names
+  https://github.com/floraison/fugit/issues/9
 
 
 ## et-orbi 1.1.5  released 2018-08-25

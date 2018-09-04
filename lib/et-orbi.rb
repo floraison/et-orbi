@@ -9,7 +9,7 @@ require 'et-orbi/zone_aliases'
 
 module EtOrbi
 
-  VERSION = '1.1.5'
+  VERSION = '1.1.6'
 
   #
   # module methods
