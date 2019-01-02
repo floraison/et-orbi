@@ -174,6 +174,28 @@ module EtOrbi
       "(secs:#{seconds},utc~:#{ts.inspect},ltz~:#{z.inspect})"
     end
 
+    def tzinfo_version
+
+      TZInfo::VERSION
+
+    rescue # older tzinfo
+
+      if defined?(Bundler)
+        begin
+          Bundler.load.specs.find { |s| s.name == 'tzinfo' }.version.to_s
+        rescue => err
+          err.to_s
+        end
+      else
+        '(no Bundler)'
+      end
+    end
+
+    def tzinfo_data_version
+
+      TZInfo::Data::VERSION rescue nil
+    end
+
     def platform_info
 
       etos = Proc.new { |k, v| "#{k}:#{v.inspect}" }
@@ -181,7 +203,8 @@ module EtOrbi
       h = {
         'etz' => ENV['TZ'],
         'tnz' => Time.now.zone,
-        'tzid' => defined?(TZInfo::Data),
+        'tziv' => tzinfo_version,
+        'tzidv' => tzinfo_data_version,
         'rv' => RUBY_VERSION,
         'rp' => RUBY_PLATFORM,
         'win' => Gem.win_platform?,
