@@ -176,24 +176,16 @@ module EtOrbi
 
     def tzinfo_version
 
-      TZInfo::VERSION
-
-    rescue # older tzinfo
-
-      if defined?(Bundler)
-        begin
-          Bundler.load.specs.find { |s| s.name == 'tzinfo' }.version.to_s
-        rescue => err
-          err.to_s
-        end
-      else
-        '(no Bundler)'
-      end
+      #TZInfo::VERSION
+      Gem.loaded_specs['tzinfo'].version.to_s
+    rescue => err
+      err.inspect
     end
 
     def tzinfo_data_version
 
-      TZInfo::Data::VERSION rescue nil
+      #TZInfo::Data::VERSION rescue nil
+      Gem.loaded_specs['tzinfo-data'].version.to_s rescue nil
     end
 
     def platform_info
