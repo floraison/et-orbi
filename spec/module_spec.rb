@@ -8,8 +8,8 @@
 # Fri Mar 24 04:55:25 JST 2017 圓さんの家
 #
 
-require 'chronic'
-Chro = ::Chronic
+#require 'chronic'
+#Chro = ::Chronic
 
 require 'spec_helper'
 
@@ -22,7 +22,7 @@ describe EtOrbi do
     Time._as_zone = nil
     EtOrbi._os_zone = nil
 
-    Object.send(:remove_const, :Chronic) rescue nil
+    #Object.send(:remove_const, :Chronic) rescue nil
   end
 
   describe '.list_iso8601_zones' do
@@ -197,55 +197,55 @@ describe EtOrbi do
       expect(t.to_zs).to eq('2019-01-01 12:10:00 Asia/Shanghai')
     end
 
-    it 'leverages Chronic if available' do
-
-      ::Chronic = ::Chro
-
-      n = Time.now + 24 * 3600
-      #z = EtOrbi.now.to_zs.split.last
-      z = EtOrbi.zone.name
-
-      t = EtOrbi.parse('tomorrow')
-
-      expect(t.class).to eq(EtOrbi::EoTime)
-      expect(t.to_zs).to eq("#{n.strftime('%Y-%m-%d')} 12:00:00 #{z}")
-    end
-
-    it 'leverages Chronic and Rails Time.zone (UTC) if available' do
-
-      ::Chronic = ::Chro
-
-      tz = ::TZInfo::Timezone.get('UTC')
-      Time._as_zone = SpecActiveSupportTimeZone.new(tz)
-
-      n = Time.now + 24 * 3600
-      t = EtOrbi.parse('tomorrow')
-#p t.to_s
-#p t.to_zs
-
-      expect(t.class).to eq(EtOrbi::EoTime)
-      expect(t.zone).to eq(tz)
-      expect(t.strftime('%Y-%m-%d')).to eq(n.strftime('%Y-%m-%d'))
-      expect(t.strftime('%H:%M:%S')).to eq('12:00:00')
-    end
-
-    it 'leverages Chronic and Rails Time.zone (Asia/Shanghai) if available' do
-
-      ::Chronic = ::Chro
-
-      tz = ::TZInfo::Timezone.get('Asia/Shanghai')
-      Time._as_zone = SpecActiveSupportTimeZone.new(tz)
-
-      n = Time.now + 24 * 3600
-      t = EtOrbi.parse('tomorrow')
-#p t.to_s
-#p t.to_zs
-
-      expect(t.class).to eq(EtOrbi::EoTime)
-      expect(t.zone).to eq(tz)
-      expect(t.strftime('%Y-%m-%d')).to eq(n.strftime('%Y-%m-%d'))
-      expect(t.strftime('%H:%M:%S')).to eq('12:00:00')
-    end
+#    it 'leverages Chronic if available' do
+#
+#      ::Chronic = ::Chro
+#
+#      n = Time.now + 24 * 3600
+#      #z = EtOrbi.now.to_zs.split.last
+#      z = EtOrbi.zone.name
+#
+#      t = EtOrbi.parse('tomorrow')
+#
+#      expect(t.class).to eq(EtOrbi::EoTime)
+#      expect(t.to_zs).to eq("#{n.strftime('%Y-%m-%d')} 12:00:00 #{z}")
+#    end
+#
+#    it 'leverages Chronic and Rails Time.zone (UTC) if available' do
+#
+#      ::Chronic = ::Chro
+#
+#      tz = ::TZInfo::Timezone.get('UTC')
+#      Time._as_zone = SpecActiveSupportTimeZone.new(tz)
+#
+#      n = Time.now + 24 * 3600
+#      t = EtOrbi.parse('tomorrow')
+##p t.to_s
+##p t.to_zs
+#
+#      expect(t.class).to eq(EtOrbi::EoTime)
+#      expect(t.zone).to eq(tz)
+#      expect(t.strftime('%Y-%m-%d')).to eq(n.strftime('%Y-%m-%d'))
+#      expect(t.strftime('%H:%M:%S')).to eq('12:00:00')
+#    end
+#
+#    it 'leverages Chronic and Rails Time.zone (Asia/Shanghai) if available' do
+#
+#      ::Chronic = ::Chro
+#
+#      tz = ::TZInfo::Timezone.get('Asia/Shanghai')
+#      Time._as_zone = SpecActiveSupportTimeZone.new(tz)
+#
+#      n = Time.now + 24 * 3600
+#      t = EtOrbi.parse('tomorrow')
+##p t.to_s
+##p t.to_zs
+#
+#      expect(t.class).to eq(EtOrbi::EoTime)
+#      expect(t.zone).to eq(tz)
+#      expect(t.strftime('%Y-%m-%d')).to eq(n.strftime('%Y-%m-%d'))
+#      expect(t.strftime('%H:%M:%S')).to eq('12:00:00')
+#    end
   end
 
   describe '.get_tzone' do
