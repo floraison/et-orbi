@@ -23,9 +23,9 @@ module EtOrbi
 
     def parse(str, opts={})
 
-      if defined?(::Chronic) && t = ::Chronic.parse(str, opts)
-        return EoTime.new(t, nil)
-      end
+#      if defined?(::Chronic) && t = ::Chronic.parse(str, opts)
+#        return EoTime.new(t, nil)
+#      end
 
       #rold = RUBY_VERSION < '1.9.0'
       #rold = RUBY_VERSION < '2.0.0'
