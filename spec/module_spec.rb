@@ -13,6 +13,12 @@ require 'spec_helper'
 
 describe EtOrbi do
 
+  after :each do
+    Time._zone = nil
+    Time._as_zone = nil
+    EtOrbi._os_zone = nil
+  end
+
   describe '.list_iso8601_zones' do
 
     [
@@ -158,6 +164,36 @@ describe EtOrbi do
         ArgumentError, 'No time information in "xxx"'
       )
     end
+
+    it 'parses in the Rails-provided Time.zone (UTC)' do
+
+      tz = ::TZInfo::Timezone.get('UTC')
+      Time._as_zone = SpecActiveSupportTimeZone.new(tz)
+
+      t = EtOrbi.parse('2019-01-01 12:10')
+
+      expect(t.class).to eq(EtOrbi::EoTime)
+      expect(t.zone).to eq(tz)
+      expect(t.to_s).to eq('2019-01-01 12:10:00 Z')
+      expect(t.to_zs).to eq('2019-01-01 12:10:00 UTC')
+    end
+
+    it 'parses in the Rails-provided Time.zone (Asia/Shanghai)' do
+
+      tz = ::TZInfo::Timezone.get('Asia/Shanghai')
+      Time._as_zone = SpecActiveSupportTimeZone.new(tz)
+
+      t = EtOrbi.parse('2019-01-01 12:10')
+
+      expect(t.class).to eq(EtOrbi::EoTime)
+      expect(t.zone).to eq(tz)
+      expect(t.to_s).to eq('2019-01-01 12:10:00 +0800')
+      expect(t.to_zs).to eq('2019-01-01 12:10:00 Asia/Shanghai')
+    end
+
+    it 'leverages Chronic if available'
+    it 'leverages Chronic and Rails Time.zone (UTC) if available'
+    it 'leverages Chronic and Rails Time.zone (Asia/Shanghai) if available'
   end
 
   describe '.get_tzone' do
@@ -309,12 +345,6 @@ describe EtOrbi do
   end
 
   describe '.determine_local_tzone' do
-
-    after :each do
-      Time._zone = nil
-      Time._as_zone = nil
-      EtOrbi._os_zone = nil
-    end
 
     it 'favours the local timezone' do
 
