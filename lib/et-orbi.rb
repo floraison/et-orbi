@@ -716,6 +716,7 @@ module EtOrbi
       get_tzone(n.zone) ||
       get_tzone(n.strftime('%Z%z'))
     end
+    alias zone determine_local_tzone
 
     attr_accessor :_os_zone # test tool
 

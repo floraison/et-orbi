@@ -202,11 +202,13 @@ describe EtOrbi do
       ::Chronic = ::Chro
 
       n = Time.now + 24 * 3600
+      #z = EtOrbi.now.to_zs.split.last
+      z = EtOrbi.zone.name
+
       t = EtOrbi.parse('tomorrow')
 
       expect(t.class).to eq(EtOrbi::EoTime)
-      expect(t.strftime('%Y-%m-%d')).to eq(n.strftime('%Y-%m-%d'))
-      expect(t.strftime('%H:%M:%S')).to eq('12:00:00')
+      expect(t.to_zs).to eq("#{n.strftime('%Y-%m-%d')} 12:00:00 #{z}")
     end
 
     it 'leverages Chronic and Rails Time.zone (UTC) if available' do
@@ -468,6 +470,24 @@ describe EtOrbi do
       in_zone('Asia/Tehran') do
         expect(EtOrbi.determine_local_tzone.class).to eq(::TZInfo::DataTimezone)
         expect(EtOrbi.determine_local_tzone.name).to eq('Asia/Tehran')
+      end
+    end
+  end
+
+  describe '.zone' do
+
+    it 'is an alias to .determine_local_tzone' do
+
+      in_zone(:no_env_tz) do
+
+        Time._zone = 'Cape Verde Standard Time'
+        EtOrbi._os_zone = '' # force #os_tz to return nil
+
+        expect(
+          EtOrbi.zone.name
+        ).to eq(
+          'Atlantic/Cape_Verde'
+        )
       end
     end
   end
