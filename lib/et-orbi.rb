@@ -738,6 +738,8 @@ module EtOrbi
       @os_tz ||= (debian_tz || centos_tz || osx_tz)
     end
 
+    # Dubious :-(
+    #
     def to_windows_tz(zone_name, time=Time.now)
 
       twin = Time.utc(time.year, 1, 1) # winter
