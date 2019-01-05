@@ -18,9 +18,11 @@ environment:
       TZONE: "Eastern Standard Time"
 
 install:
+  - tzutil /g
   - echo %RUBY_VERSION%
   - echo %TZONE%
   - tzutil /s "%TZONE%"
+  - tzutil /g
   - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
   - cp Gemfile.appveyor Gemfile
   - bundle install
@@ -38,7 +40,7 @@ test_script:
 notifications:
 - provider: Email
   to:
-    - jmettraux+flor@gmail.com
+    - jmettraux+appveyor@gmail.com
   on_build_success: false
   on_build_failure: true
   on_build_status_changed: true
