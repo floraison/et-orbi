@@ -694,22 +694,32 @@ module EtOrbi
 
     def determine_local_tzone
 
+      # ENV has the priority
+
       etz = ENV['TZ']
 
       tz = etz && (::TZInfo::Timezone.get(etz) rescue nil)
       return tz if tz
+
+      # then Rails/ActiveSupport has the priority
 
       if Time.respond_to?(:zone) && Time.zone.respond_to?(:tzinfo)
         tz = Time.zone.tzinfo
         return tz if tz
       end
 
+      # then the operating system is queried
+
       tz = ::TZInfo::Timezone.get(os_tz) rescue nil
       return tz if tz
+
+      # then Ruby's time zone abbs are looked at CST, JST, CEST, ... :-(
 
       tzs = determine_local_tzones
       tz = (etz && tzs.find { |z| z.name == etz }) || tzs.first
       return tz if tz
+
+      # then, fall back to GMT offest :-(
 
       n = Time.now
 

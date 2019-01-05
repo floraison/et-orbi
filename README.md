@@ -70,7 +70,7 @@ EtOrbi.platform_info
 
 ### Rails?
 
-If Rails is present, `Time.zone` is provided and EtOrbi will use it.
+If Rails is present, `Time.zone` is provided and EtOrbi will use it, unless `ENV['TZ']` is set to a valid timezone name. Setting `ENV['TZ']` to nil can give back precedence to `Time.zone`.
 
 Rails sets its timezone under `config/application.rb`.
 

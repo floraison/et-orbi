@@ -5,6 +5,8 @@
 # Sat Mar 18 16:17:38 JST 2017
 #
 
+ENV['_TZ'] = ENV['TZ'] # preserve original TZ if any
+
 require 'pp'
 #require 'ostruct'
 
@@ -94,10 +96,15 @@ class Time
 
     attr_accessor :_zone # instance zone (Vanilla Ruby)
 
-    def _as_zone=(z) # class zone (ActiveSupport mimicry)
+    def active_support_zone=(zone_or_zone_name)
+
+      ENV['TZ'] = nil # so that the active_support zone has the priority
+
+      z = zone_or_zone_name
+      z = ::TZInfo::Timezone.get(z) if z.is_a?(String)
 
       if z
-        @_as_zone = z
+        @_as_zone = SpecActiveSupportTimeZone.new(z)
         def zone; @_as_zone; end
       else
         undef zone rescue nil

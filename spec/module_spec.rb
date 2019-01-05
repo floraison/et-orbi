@@ -18,9 +18,10 @@ describe EtOrbi do
 
   after :each do
 
+    ENV['TZ'] = ENV['_TZ']
     Time._zone = nil
-    Time._as_zone = nil
     EtOrbi._os_zone = nil
+    Time.active_support_zone = nil
 
     #Object.send(:remove_const, :Chronic) rescue nil
   end
@@ -173,26 +174,24 @@ describe EtOrbi do
 
     it 'parses in the Rails-provided Time.zone (UTC)' do
 
-      tz = ::TZInfo::Timezone.get('UTC')
-      Time._as_zone = SpecActiveSupportTimeZone.new(tz)
+      Time.active_support_zone = 'UTC'
 
       t = EtOrbi.parse('2019-01-01 12:10')
 
       expect(t.class).to eq(EtOrbi::EoTime)
-      expect(t.zone).to eq(tz)
+      expect(t.zone).to eq(::TZInfo::Timezone.get('UTC'))
       expect(t.to_s).to eq('2019-01-01 12:10:00 Z')
       expect(t.to_zs).to eq('2019-01-01 12:10:00 UTC')
     end
 
     it 'parses in the Rails-provided Time.zone (Asia/Shanghai)' do
 
-      tz = ::TZInfo::Timezone.get('Asia/Shanghai')
-      Time._as_zone = SpecActiveSupportTimeZone.new(tz)
+      Time.active_support_zone = 'Asia/Shanghai'
 
       t = EtOrbi.parse('2019-01-01 12:10')
 
       expect(t.class).to eq(EtOrbi::EoTime)
-      expect(t.zone).to eq(tz)
+      expect(t.zone).to eq(::TZInfo::Timezone.get('Asia/Shanghai'))
       expect(t.to_s).to eq('2019-01-01 12:10:00 +0800')
       expect(t.to_zs).to eq('2019-01-01 12:10:00 Asia/Shanghai')
     end
@@ -215,8 +214,7 @@ describe EtOrbi do
 #
 #      ::Chronic = ::Chro
 #
-#      tz = ::TZInfo::Timezone.get('UTC')
-#      Time._as_zone = SpecActiveSupportTimeZone.new(tz)
+#      Time.active_support_zone = 'UTC'
 #
 #      n = Time.now + 24 * 3600
 #      t = EtOrbi.parse('tomorrow')
@@ -233,8 +231,7 @@ describe EtOrbi do
 #
 #      ::Chronic = ::Chro
 #
-#      tz = ::TZInfo::Timezone.get('Asia/Shanghai')
-#      Time._as_zone = SpecActiveSupportTimeZone.new(tz)
+#      Time.active_support_zone = 'Asia/Shanghai'
 #
 #      n = Time.now + 24 * 3600
 #      t = EtOrbi.parse('tomorrow')
@@ -460,8 +457,7 @@ describe EtOrbi do
 
       # http://api.rubyonrails.org/classes/ActiveSupport/TimeZone.html
 
-      Time._as_zone =
-        SpecActiveSupportTimeZone.new(::TZInfo::Timezone.get('Europe/Vilnius'))
+      Time.active_support_zone = 'Europe/Vilnius'
 
       in_zone(:no_env_tz) do
         expect(EtOrbi.determine_local_tzone.class).to eq(::TZInfo::DataTimezone)
