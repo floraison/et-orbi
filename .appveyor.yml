@@ -4,16 +4,16 @@ version: "{build}-{branch}"
 
 environment:
   matrix:
-    - RUBY_VERSION: 193
-      TZONE: "UTC"
+    #- RUBY_VERSION: 193
+    #  TZONE: "UTC"
+    #- RUBY_VERSION: 193
+    #  TZONE: "Tokyo Standard Time"
+    #- RUBY_VERSION: 193
+    #  TZONE: "Eastern Standard Time"
     - RUBY_VERSION: 24
       TZONE: "UTC"
-    - RUBY_VERSION: 193
-      TZONE: "Tokyo Standard Time"
     - RUBY_VERSION: 24
       TZONE: "Tokyo Standard Time"
-    - RUBY_VERSION: 193
-      TZONE: "Eastern Standard Time"
     - RUBY_VERSION: 24
       TZONE: "Eastern Standard Time"
 
