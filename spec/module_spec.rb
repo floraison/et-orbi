@@ -428,7 +428,7 @@ describe EtOrbi do
         EtOrbi._os_zone = '' # force #os_tz to return nil
 
         expect {
-          EtOrbi.determine_local_tzone.name
+          EtOrbi.determine_local_tzone
         }.not_to raise_error
       end
     end
