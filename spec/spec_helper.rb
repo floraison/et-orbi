@@ -43,7 +43,7 @@ def in_zone(zone_name, &block)
   elsif zone_name == nil
     ENV['TZ'] = EtOrbi.os_tz
   else
-    #zone_name = EtOrbi.to_windows_tz(zone_name) if Gem.win_platform?
+    zone_name = EtOrbi.to_windows_tz(zone_name) if Gem.win_platform?
     ENV['TZ'] = zone_name
   end
 
@@ -119,5 +119,25 @@ class SpecActiveSupportTimeZone
   def tzinfo; @z; end
 
   def self.make(s); self.new(::TZInfo::Timezone.get(s)); end
+end
+
+
+RSpec::Matchers.define :be_one_of do |arr|
+
+  match do |actual|
+
+    arr.include?(actual)
+  end
+
+  failure_message do |actual|
+
+    arr
+      .collect.with_index { |e, i|
+        i == 0 ?
+          "expected #{e.inspect}" :
+          "      or #{e.inspect}" }
+      .tap { |a| a << "     got #{actual.inspect}" }
+      .join("\n")
+  end
 end
 

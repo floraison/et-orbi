@@ -358,18 +358,26 @@ describe EtOrbi do
 
       [ 'Asia/Tokyo', 'Asia/Tokyo' ],
       [ 'Asia/Shanghai', 'Asia/Shanghai', 'Asia/Chongqing' ],
-      [ 'Europe/Zurich', 'Europe/Zurich', 'Africa/Ceuta' ],
-      [ 'Europe/London', 'Europe/London', 'Europe/Belfast' ]
+      [ 'Europe/Zurich', 'Europe/Zurich', 'Africa/Ceuta', 'windows:CET' ],
+      [ 'Europe/London', 'Europe/London', 'Europe/Belfast', 'windows:GMT' ]
 
-    ].each do |zone, target0, target1|
+    ].each do |zone, *targets|
 
       it "returns the current timezone for :current in #{zone}" do
 
         in_zone(zone) do
 
-          expect(EtOrbi.get_tzone(:local))
-            .to eq(EtOrbi.get_tzone(target0))
-            .or eq(EtOrbi.get_tzone(target1 || target0))
+          zones = targets
+            .inject([]) { |a, target|
+              if m = target.match(/\Awindows:(.+)\z/)
+                a << EtOrbi.get_tzone(m[1]) if Gem.win_platform?
+              else
+                a << EtOrbi.get_tzone(target)
+              end
+              a }
+            .compact
+
+          expect(EtOrbi.get_tzone(:local)).to be_one_of(zones)
         end
       end
     end
