@@ -470,6 +470,10 @@ module EtOrbi
     def monthdays
 
       date = to_time
+p self
+p self.to_zs
+p date
+p date.month
 
       pos = 1
       d = self.dup
