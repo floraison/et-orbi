@@ -427,11 +427,9 @@ describe EtOrbi::EoTime do
 
       it "returns the #{x.inspect} for #{d.inspect}" do
 
-p [ :z, Time.now, Time.now.zone ]
-        t = Time.local(*d).to_f
-p [ :t, Time.local(*d), t ]
+        t = EtOrbi.parse("#{d.join('-')} 12:00")
 
-        expect(EtOrbi::EoTime.new(t, nil).monthdays).to eq(x)
+        expect(t.monthdays).to eq(x)
       end
     end
   end
