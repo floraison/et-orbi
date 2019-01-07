@@ -28,41 +28,51 @@ puts '-' * 80
 #end
 
 
-def in_zone(zone_name, &block)
+module Helpers
 
-  EtOrbi.class_eval do
-    @local_tzone = nil
-    @local_tzone_tz = nil
-    @local_tzone_loaded_at = nil
+  def in_zone(zone_name, &block)
+
+    EtOrbi.class_eval do
+      @local_tzone = nil
+      @local_tzone_tz = nil
+      @local_tzone_loaded_at = nil
+    end
+
+    prev_tz = ENV['TZ']
+
+    if zone_name == :no_env_tz
+      ENV.delete('TZ')
+    elsif zone_name == nil
+      ENV['TZ'] = EtOrbi.os_tz
+    else
+      zone_name = EtOrbi.to_windows_tz(zone_name) if Gem.win_platform?
+      ENV['TZ'] = zone_name
+    end
+
+    block.call
+
+  ensure
+
+    ENV['TZ'] = prev_tz
   end
 
-  prev_tz = ENV['TZ']
+  def local(*args)
 
-  if zone_name == :no_env_tz
-    ENV.delete('TZ')
-  elsif zone_name == nil
-    ENV['TZ'] = EtOrbi.os_tz
-  else
-    zone_name = EtOrbi.to_windows_tz(zone_name) if Gem.win_platform?
-    ENV['TZ'] = zone_name
+    Time.local(*args)
   end
+  alias lo local
 
-  block.call
+  def ltz(tz, *args)
 
-ensure
-
-  ENV['TZ'] = prev_tz
+    in_zone(tz) { Time.local(*args) }
+  end
 end
 
-def local(*args)
+RSpec.configure do |c|
 
-  Time.local(*args)
-end
-alias lo local
-
-def ltz(tz, *args)
-
-  in_zone(tz) { Time.local(*args) }
+  c.alias_example_to(:they)
+  c.alias_example_to(:so)
+  c.include(Helpers)
 end
 
 class Time
