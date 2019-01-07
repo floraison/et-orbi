@@ -418,15 +418,19 @@ describe EtOrbi::EoTime do
 
   describe '#monthdays' do
 
-    def mds(t); EtOrbi::EoTime.new(t.to_f, nil).monthdays; end
+    [
+      [ [ 1970, 1, 1 ], %w[ 4#1 4#-5 ] ],
+      [ [ 1970, 1, 7 ], %w[ 3#1 3#-4 ] ],
+      [ [ 1970, 1, 14 ], %w[ 3#2 3#-3 ] ],
+      [ [ 2011, 3, 11 ], %w[ 5#2 5#-3 ] ]
+    ].each do |d, x|
 
-    it 'returns the appropriate "0#2"-like string' do
+      it "returns the #{x.inspect} for #{d.inspect}" do
 
-      expect(mds(local(1970, 1, 1))).to eq(%w[ 4#1 4#-5 ])
-      expect(mds(local(1970, 1, 7))).to eq(%w[ 3#1 3#-4 ])
-      expect(mds(local(1970, 1, 14))).to eq(%w[ 3#2 3#-3 ])
+        t = local(*d).to_f
 
-      expect(mds(local(2011, 3, 11))).to eq(%w[ 5#2 5#-3 ])
+        expect(EtOrbi::EoTime.new(t, nil).monthdays).to eq(x)
+      end
     end
   end
 
