@@ -79,7 +79,8 @@ module Helpers
 
   def ltz(tz, *args)
 
-    in_zone(tz) { Time.local(*args) }
+    #in_zone(tz) { Time.local(*args) }
+    time_in_zone(tz) { Time.local(*args) }
   end
 
   def select_zones(zs)
