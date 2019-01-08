@@ -457,6 +457,12 @@ describe EtOrbi do
         expect(EtOrbi.determine_local_tzone.class).to eq(::TZInfo::DataTimezone)
         expect(EtOrbi.determine_local_tzone.name).to eq('Europe/Vilnius')
       end
+    end
+
+    it "gives precedence to ENV['TZ'] over Rails Time.zone.tzinfo" do
+
+      Time.active_support_zone = 'Europe/Vilnius'
+
       in_zone('Asia/Tehran') do
 p ENV['TZ']
 p [ Time.now, Time.now.zone ]
