@@ -130,23 +130,26 @@ describe EtOrbi::EoTime do
 
     [
 
-      [ [ 2017, 3, 25 ], 'Europe/Lisbon',
+      [ [ 2017, 3, 25 ],
+        %w[ Europe/Lisbon windows:WET ],
         '2017-03-25T00:00:00+00:00' ],
-      [ [ 2017, 3, 25, 21, 23, 29 ], 'Europe/Lisbon',
+      [ [ 2017, 3, 25, 21, 23, 29 ],
+        %w[ Europe/Lisbon windows:WET ],
         '2017-03-25T21:23:29+00:00' ],
-      [ [ 2017, 3, 25, 21, 23, 29 ], 'Europe/Moscow',
+      [ [ 2017, 3, 25, 21, 23, 29 ],
+        %w[ Europe/Moscow ],
         '2017-03-25T21:23:29+03:00' ],
 
-    ].each do |a, z, s|
+    ].each do |a, zs, s|
 
-      it "accepts #{a.inspect} in #{z}" do
+      it "accepts #{a.inspect} in #{zs.first}" do
 
-        in_zone(z) do
+        in_zone(zs.first) do
 
           ot = EtOrbi::EoTime.local(*a)
 
           expect(ot.class).to eq(EtOrbi::EoTime)
-          expect(ot.zone.name).to eq(z)
+          expect(ot.zone).to be_one_of(select_zones(zs))
           expect(ot.iso8601).to eq(s)
         end
       end
