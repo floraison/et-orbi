@@ -720,7 +720,7 @@ p [ Time.now, Time.now.zone ]
     end
   end
 
-  describe '.windows_tz' do
+  describe '.windows_zone_name' do
 
     {
 
@@ -737,7 +737,7 @@ p [ Time.now, Time.now.zone ]
 
       it "returns #{v.inspect} for #{zone.inspect} at #{time}" do
 
-        expect(EtOrbi.windows_tz(zone, time)).to eq(v)
+        expect(EtOrbi.windows_zone_name(zone, time)).to eq(v)
       end
     end
   end

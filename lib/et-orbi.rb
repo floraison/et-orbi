@@ -740,7 +740,7 @@ module EtOrbi
 
     # Semi-helpful, since it requires the current time
     #
-    def windows_tz(zone_name, time)
+    def windows_zone_name(zone_name, time)
 
       twin = Time.utc(time.year, 1, 1) # winter
       tsum = Time.utc(time.year, 7, 1) # summer
