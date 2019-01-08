@@ -22,13 +22,12 @@ EtOrbi._make_info
 puts '-' * 80
 
 
-#def jruby?
-#
-#  !! RUBY_PLATFORM.match(/java/)
-#end
 
 
 module Helpers
+
+  def jruby?; !! RUBY_PLATFORM.match(/java/); end
+  def windows?; Gem.win_platform?; end
 
   def in_zone(zone_name, &block)
 
@@ -45,7 +44,7 @@ module Helpers
     elsif zone_name == nil
       ENV['TZ'] = EtOrbi.os_tz
     else
-      zone_name = EtOrbi.to_windows_tz(zone_name) if Gem.win_platform?
+      zone_name = EtOrbi.to_windows_tz(zone_name) if windows?
       ENV['TZ'] = zone_name
     end
 
@@ -65,6 +64,25 @@ module Helpers
   def ltz(tz, *args)
 
     in_zone(tz) { Time.local(*args) }
+  end
+
+  def select_zones(zs)
+
+    zs
+      .inject([]) { |a, z|
+        zo =
+          if m = z.match(/\Awin(?:dows)?:(.+)\z/)
+            windows? ? EtOrbi.get_tzone(m[1]) : nil
+          else
+            EtOrbi.get_tzone(z)
+          end
+        a << zo if zo
+        a }
+  end
+
+  def select_zone_names(zs)
+
+    select_zones(zs).collect(&:name)
   end
 end
 

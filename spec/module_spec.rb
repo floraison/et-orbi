@@ -367,20 +367,10 @@ describe EtOrbi do
 
         in_zone(zone) do
 
-          zones = targets
-            .inject([]) { |a, target|
-              if m = target.match(/\Awindows:(.+)\z/)
-                a << EtOrbi.get_tzone(m[1]) if windows?
-              else
-                a << EtOrbi.get_tzone(target)
-              end
-              a }
-            .compact
-
           expect(
             EtOrbi.get_tzone(:local)
           ).to be_one_of(
-            zones
+            select_zones(targets)
           )
         end
       end
@@ -426,13 +416,9 @@ describe EtOrbi do
 
       in_zone('Europe/Berlin') do
 
-        #expect(EtOrbi.determine_local_tzone.name)
-        #  .to eq('Europe/Berlin')
-        #  .or eq('Africa/Ceuta')
-
         expect(
-          EtOrbi.determine_local_tzone.name
-        ).to be_one_of(zones(%[
+          EtOrbi.determine_local_tzone
+        ).to be_one_of(select_zones(%w[
           Europe/Berlin Africa/Ceuta windows:CET
         ]))
       end
@@ -448,16 +434,6 @@ describe EtOrbi do
         expect {
           EtOrbi.determine_local_tzone
         }.not_to raise_error
-      end
-    end
-
-    it 'returns the local timezone' do
-
-      in_zone('Europe/Berlin') do
-
-        expect(EtOrbi.determine_local_tzone.name)
-          .to eq('Europe/Berlin')
-          .or eq('Africa/Ceuta')
       end
     end
 
