@@ -496,7 +496,7 @@ describe EtOrbi::EoTime do
         in_zone('America/Los_Angeles') {
 p ENV['TZ']
 p [ Time.now, Time.now.zone ]
-          Time.local(2017, 10, 30, 22, 00, 10) }
+          Time.parse('2017-10-30 22:00:10') }
 
       d = ot - t
 
