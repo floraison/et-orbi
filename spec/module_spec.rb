@@ -459,6 +459,7 @@ describe EtOrbi do
       end
       in_zone('Asia/Tehran') do
 p ENV['TZ']
+p [ Time.now, Time.now.zone ]
         expect(EtOrbi.determine_local_tzone.class).to eq(::TZInfo::DataTimezone)
         expect(EtOrbi.determine_local_tzone.name).to eq('Asia/Tehran')
       end
