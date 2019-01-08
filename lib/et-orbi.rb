@@ -738,9 +738,9 @@ module EtOrbi
       @os_tz ||= (debian_tz || centos_tz || osx_tz)
     end
 
-    # Dubious :-(
+    # Semi-helpful, since it requires the current time
     #
-    def to_windows_tz(zone_name, time=Time.now)
+    def windows_tz(zone_name, time)
 
       twin = Time.utc(time.year, 1, 1) # winter
       tsum = Time.utc(time.year, 7, 1) # summer

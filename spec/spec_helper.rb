@@ -29,7 +29,7 @@ module Helpers
   def jruby?; !! RUBY_PLATFORM.match(/java/); end
   def windows?; Gem.win_platform?; end
 
-  def in_zone(zone_name, &block)
+  def in_zone(zone_name, t=Time.now, &block)
 
     EtOrbi.class_eval do
       @local_tzone = nil
@@ -44,7 +44,8 @@ module Helpers
     elsif zone_name == nil
       ENV['TZ'] = EtOrbi.os_tz
     else
-      zone_name = EtOrbi.to_windows_tz(zone_name) if windows?
+      zone_name = EtOrbi.windows_zone_name(zone_name, t) if windows?
+        # warning: the windows zone name is computed for now
       ENV['TZ'] = zone_name
     end
 
@@ -53,6 +54,21 @@ module Helpers
   ensure
 
     ENV['TZ'] = prev_tz
+  end
+
+  # Returns a ::Time instance in the given time zone
+  #
+  def time_in_zone(zone_name, t=nil, &block)
+
+    determine_t = lambda {
+      case
+      when block then block.call
+      when t.is_a?(String) then Time.parse(t)
+      when t then t
+      else Time.now
+      end }
+
+    in_zone(zone_name, determine_t.call) { determine_t.call }
   end
 
   def local(*args)

@@ -492,14 +492,8 @@ describe EtOrbi::EoTime do
 
       ot =
         EtOrbi.make_time('2017-10-31 22:00:10 Europe/Paris')
-p ot.to_s
-p ot.to_zs
       t =
-        in_zone('America/Los_Angeles') {
-          Time.parse('2017-10-30 22:00:10')
-.tap { |x| p x }
-          }
-.tap { |x| p x }
+        time_in_zone('America/Los_Angeles', '2017-10-30 22:00:10')
 
       d = ot - t
 

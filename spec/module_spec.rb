@@ -720,7 +720,7 @@ p [ Time.now, Time.now.zone ]
     end
   end
 
-  describe '.to_windows_tz' do
+  describe '.windows_tz' do
 
     {
 
@@ -730,12 +730,14 @@ p [ Time.now, Time.now.zone ]
       [ 'Europe/Berlin', Time.local(2018, 7, 1) ] => 'CET-2CEST',
       [ 'America/New_York', Time.local(2018, 1, 1) ] => 'EST5EDT',
       [ 'America/New_York', Time.local(2018, 7, 1) ] => 'EST4EDT',
+      [ 'America/Los_Angeles', Time.local(2017, 10, 30) ] => 'PST7PDT',
+      [ 'America/Los_Angeles', Time.local(2019, 1, 1) ] => 'PST8PDT',
 
     }.each do |(zone, time), v|
 
       it "returns #{v.inspect} for #{zone.inspect} at #{time}" do
 
-        expect(EtOrbi.to_windows_tz(zone, time)).to eq(v)
+        expect(EtOrbi.windows_tz(zone, time)).to eq(v)
       end
     end
   end
