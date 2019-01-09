@@ -733,6 +733,7 @@ describe EtOrbi do
       [ 'Asia/Tehran', '2019-01-09' ] => '-3:30', #'IRT-3:30',
       [ 'Asia/Tehran', '2019-07-09' ] => '-4:30', #'IRT-4:30',
       [ 'Asia/Tbilisi', '2019-01-09' ] => '-4:00',
+      [ 'Asia/Samarkand', '2017-11-01' ] => '-5:00',
       [ 'Europe/Berlin', '2018-01-01' ] => 'CET-1CEST',
       [ 'Europe/Berlin', '2018-07-01' ] => 'CET-2CEST',
       [ 'America/New_York', '2018-01-01' ] => 'EST5EDT',
