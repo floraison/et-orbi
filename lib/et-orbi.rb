@@ -757,7 +757,11 @@ module EtOrbi
         tz.period_for_utc(tsum).abbreviation.to_s ]
           .uniq
 
-      [ abbs[0], tzop, tzoh, tzos, abbs[1] ].compact.join
+      if abbs[0].match(/\A[A-Z]/)
+        [ abbs[0], tzop, tzoh, tzos, abbs[1] ].compact.join
+      else
+        [ tzop, tzoh, tzos ].collect(&:to_s).join
+      end
     end
 
     #

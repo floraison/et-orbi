@@ -464,8 +464,6 @@ describe EtOrbi do
       Time.active_support_zone = 'Europe/Vilnius'
 
       in_zone('Asia/Tehran') do
-p ENV['TZ']
-p [ Time.now, Time.now.zone ]
         expect(EtOrbi.determine_local_tzone.class).to eq(::TZInfo::DataTimezone)
         expect(EtOrbi.determine_local_tzone.name).to eq('Asia/Tehran')
       end
@@ -732,6 +730,8 @@ p [ Time.now, Time.now.zone ]
 
       [ 'Asia/Tokyo', Time.local(2018, 5, 23) ] => 'JST-9',
       [ 'Asia/Kolkata', Time.local(2018, 7, 1) ] => 'IST-5:30',
+      [ 'Asia/Tehran', Time.local(2019, 1, 9) ] => '-3:30', #'IRT-3:30',
+      [ 'Asia/Tehran', Time.local(2019, 7, 9) ] => '-4:30', #'IRT-4:30',
       [ 'Europe/Berlin', Time.local(2018, 1, 1) ] => 'CET-1CEST',
       [ 'Europe/Berlin', Time.local(2018, 7, 1) ] => 'CET-2CEST',
       [ 'America/New_York', Time.local(2018, 1, 1) ] => 'EST5EDT',
