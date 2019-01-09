@@ -27,30 +27,23 @@ module EtOrbi
 #        return EoTime.new(t, nil)
 #      end
 
-      #rold = RUBY_VERSION < '1.9.0'
-      #rold = RUBY_VERSION < '2.0.0'
       begin
         DateTime.parse(str)
       rescue
         fail ArgumentError, "No time information in #{str.inspect}"
-      end #if rold
+      end
+      #end if RUBY_VERSION < '1.9.0'
+      #end if RUBY_VERSION < '2.0.0'
         #
         # is necessary since Time.parse('xxx') in Ruby < 1.9 yields `now`
 
       str_zone = get_tzone(list_iso8601_zones(str).last)
-#p [ :parse, str, str_zone ]
-#p ENV['TZ']
 
-#p [ :parse, :oz, opts[:zone] ]
-#p [ :parse, :sz, str_zone ]
-#p [ :parse, :foz, find_olson_zone(str) ]
-#p [ :parse, :ltz, local_tzone ]
       zone =
         opts[:zone] ||
         str_zone ||
         find_olson_zone(str) ||
         determine_local_tzone
-#p [ :parse, :zone, zone ]
 
       str = str.sub(zone.name, '') unless zone.name.match(/\A[-+]/)
         #
@@ -58,7 +51,6 @@ module EtOrbi
         # although where does rufus-scheduler have it from?
 
       local = Time.parse(str)
-#p [ :parse, :local, local, local.zone ]
 
       secs =
         if str_zone
@@ -66,20 +58,16 @@ module EtOrbi
         else
           zone.local_to_utc(local).to_f
         end
-#p [ :parse, :secs, secs ]
 
       EoTime.new(secs, zone)
     end
 
     def make_time(*a)
 
-#p [ :mt, a ]
       zone = a.length > 1 ? get_tzone(a.last) : nil
       a.pop if zone
-#p [ :mt, zone ]
 
       o = a.length > 1 ? a : a.first
-#p [ :mt, :o, o ]
 
       case o
       when Time then make_from_time(o, zone)
@@ -228,19 +216,6 @@ module EtOrbi
     protected
 
     def get_local_tzone(t)
-
-      #lt = local_tzone
-      #lp = lt.period_for_local(t)
-      #ab = lp.abbreviation.to_s
-      #
-      #return lt \
-      #  if ab == t.zone
-      #return lt \
-      #  if ab.match(/\A[-+]\d{2}(:?\d{2})?\z/) && lp.utc_offset == t.utc_offset
-      #
-      #nil
-        #
-        # keep that in the fridge for now
 
       l = Time.local(t.year, t.month, t.day, t.hour, t.min, t.sec, t.usec)
 
@@ -895,19 +870,5 @@ module EtOrbi
       { :debian => debian_tz, :centos => centos_tz, :osx => osx_tz }
     end
   end
-
-  #def in_zone(&block)
-  #
-  #  current_timezone = ENV['TZ']
-  #  ENV['TZ'] = @zone
-  #
-  #  block.call
-  #
-  #ensure
-  #
-  #  ENV['TZ'] = current_timezone
-  #end
-    #
-    # kept around as a (thread-unsafe) relic
 end
 
