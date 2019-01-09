@@ -728,22 +728,25 @@ describe EtOrbi do
 
     {
 
-      [ 'Asia/Tokyo', Time.local(2018, 5, 23) ] => 'JST-9',
-      [ 'Asia/Kolkata', Time.local(2018, 7, 1) ] => 'IST-5:30',
-      [ 'Asia/Tehran', Time.local(2019, 1, 9) ] => '-3:30', #'IRT-3:30',
-      [ 'Asia/Tehran', Time.local(2019, 7, 9) ] => '-4:30', #'IRT-4:30',
-      [ 'Europe/Berlin', Time.local(2018, 1, 1) ] => 'CET-1CEST',
-      [ 'Europe/Berlin', Time.local(2018, 7, 1) ] => 'CET-2CEST',
-      [ 'America/New_York', Time.local(2018, 1, 1) ] => 'EST5EDT',
-      [ 'America/New_York', Time.local(2018, 7, 1) ] => 'EST4EDT',
-      [ 'America/Los_Angeles', Time.local(2017, 10, 30) ] => 'PST7PDT',
-      [ 'America/Los_Angeles', Time.local(2019, 1, 1) ] => 'PST8PDT',
+      [ 'Asia/Tokyo', '2018-05-23' ] => 'JST-9',
+      [ 'Asia/Kolkata', '2018-07-01' ] => 'IST-5:30',
+      [ 'Asia/Tehran', '2019-01-09' ] => '-3:30', #'IRT-3:30',
+      [ 'Asia/Tehran', '2019-07-09' ] => '-4:30', #'IRT-4:30',
+      [ 'Asia/Tbilisi', '2019-01-09' ] => '-4:00',
+      [ 'Europe/Berlin', '2018-01-01' ] => 'CET-1CEST',
+      [ 'Europe/Berlin', '2018-07-01' ] => 'CET-2CEST',
+      [ 'America/New_York', '2018-01-01' ] => 'EST5EDT',
+      [ 'America/New_York', '2018-07-01' ] => 'EST4EDT',
+      [ 'America/Los_Angeles', '2017-10-30' ] => 'PST7PDT',
+      [ 'America/Los_Angeles', '2019-01-01' ] => 'PST8PDT',
 
     }.each do |(zone, time), v|
 
       it "returns #{v.inspect} for #{zone.inspect} at #{time}" do
 
-        expect(EtOrbi.windows_zone_name(zone, time)).to eq(v)
+        expect(
+          EtOrbi.windows_zone_name(zone, Time.parse(time))
+        ).to eq(v)
       end
     end
   end
