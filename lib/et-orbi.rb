@@ -258,8 +258,8 @@ module EtOrbi
 
       etz = ENV['TZ']
 
-      #tz = etz && (::TZInfo::Timezone.get(etz) rescue nil)
-      tz = etz && get_tzone(etz)
+      tz = etz && (::TZInfo::Timezone.get(etz) rescue nil)
+      #tz = etz && get_tzone(etz) # FIXME
       return tz if tz
 
       # then Rails/ActiveSupport has the priority
@@ -319,9 +319,11 @@ module EtOrbi
           .uniq
 
       if abbs[0].match(/\A[A-Z]/)
-        [ abbs[0], tzop, tzoh, tzos, abbs[1] ].compact.join
+        [ abbs[0], tzop, tzoh, tzos, abbs[1] ]
+          .compact.join
       else
-        [ tzop, tzoh, tzos || ':00' ].collect(&:to_s).join
+        [ windows_zone_code_x(zone_name), tzop, tzoh, tzos || ':00' ]
+          .collect(&:to_s).join
       end
     end
 
@@ -329,6 +331,15 @@ module EtOrbi
     # protected module methods
 
     protected
+
+    def windows_zone_code_x(zone_name)
+
+      a = [ '_' ]
+      a.concat(zone_name.split('/')[0, 2].collect { |s| s[0, 1].upcase })
+      a << '_' if a.size < 3
+
+      a.join
+    end
 
     def get_local_tzone(t)
 
