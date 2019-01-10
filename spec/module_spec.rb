@@ -265,8 +265,8 @@ describe EtOrbi do
       '+09:00' => '+09:00',
       '-01:30' => '-01:30',
 
-      '-3:30' => '-3:30',
-      '-3' => '-3',
+      '_AT-3:30Asia/Tehran' => 'Asia/Tehran',
+      '_AT-4Asia/Tbilisi' => 'Asia/Tbilisi',
 
       '+08:00' => '+08:00',
       '+0800' => '+0800', # no normalization to "+08:00"
@@ -741,10 +741,10 @@ describe EtOrbi do
 
       [ 'Asia/Tokyo', '2018-05-23' ] => 'JST-9',
       [ 'Asia/Kolkata', '2018-07-01' ] => 'IST-5:30',
-      [ 'Asia/Tehran', '2019-01-09' ] => '_AT-3:30', #'IRT-3:30',
-      [ 'Asia/Tehran', '2019-07-09' ] => '_AT-4:30', #'IRT-4:30',
-      [ 'Asia/Tbilisi', '2019-01-09' ] => '_AT-4:00',
-      [ 'Asia/Samarkand', '2017-11-01' ] => '_AS-5:00',
+      [ 'Asia/Tehran', '2019-01-09' ] => '_AT-3:30Asia/Tehran', #'IRT-3:30',
+      [ 'Asia/Tehran', '2019-07-09' ] => '_AT-4:30Asia/Tehran', #'IRT-4:30',
+      [ 'Asia/Tbilisi', '2019-01-09' ] => '_AT-4:00Asia/Tbilisi',
+      [ 'Asia/Samarkand', '2017-11-01' ] => '_AS-5:00Asia/Samarkand',
       [ 'Europe/Berlin', '2018-01-01' ] => 'CET-1CEST',
       [ 'Europe/Berlin', '2018-07-01' ] => 'CET-2CEST',
       [ 'America/New_York', '2018-01-01' ] => 'EST5EDT',

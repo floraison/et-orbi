@@ -146,6 +146,7 @@ module EtOrbi
       s = unalias(o)
 
       get_offset_tzone(s) ||
+      get_x_offset_tzone(s) ||
       (::TZInfo::Timezone.get(s) rescue nil)
     end
 
@@ -322,7 +323,7 @@ module EtOrbi
         [ abbs[0], tzop, tzoh, tzos, abbs[1] ]
           .compact.join
       else
-        [ windows_zone_code_x(zone_name), tzop, tzoh, tzos || ':00' ]
+        [ windows_zone_code_x(zone_name), tzop, tzoh, tzos || ':00', zone_name ]
           .collect(&:to_s).join
       end
     end
@@ -368,9 +369,9 @@ module EtOrbi
         '%s%02d:%02d' % [ sn, hr, mn ]
     end
 
+    # custom timezones, no DST, just an offset, like "+08:00" or "-01:30"
+    #
     def get_offset_tzone(str)
-
-      # custom timezones, no DST, just an offset, like "+08:00" or "-01:30"
 
       m = str.match(/\A([+-][0-1]?[0-9]):?([0-5][0-9])?\z/) rescue nil
         #
@@ -386,15 +387,13 @@ module EtOrbi
       hr = nil if mn > 59
       mn = -mn if hr && hr < 0
 
-      return (
-        (@custom_tz_cache ||= {})[str] =
-          create_offset_tzone(hr * 3600 + mn * 60, str)
-      ) if hr
+      return (custom_tzs[str] = create_offset_tzone(hr * 3600 + mn * 60, str)) \
+        if hr
 
       nil
     end
 
-    if defined? TZInfo::DataSources::ConstantOffsetDataTimezoneInfo
+    if defined?(TZInfo::DataSources::ConstantOffsetDataTimezoneInfo)
       # TZInfo >= 2.0.0
 
       def create_offset_tzone(utc_off, id)
@@ -415,6 +414,16 @@ module EtOrbi
       end
     end
 
+    def get_x_offset_tzone(str)
+
+      m = str.match(/\A_..-?[0-1]?\d:?(?:[0-5]\d)?(.+)\z/) rescue nil
+        #
+        # On Windows, the real encoding could be something other than UTF-8,
+        # and make the match fail (as in .get_offset_tzone above)
+
+      m ? ::TZInfo::Timezone.get(m[1]) : nil
+    end
+
     def determine_local_tzones
 
       tabbs = (-6..5)
@@ -431,10 +440,9 @@ module EtOrbi
       twin = Time.local(t.year, 1, 1) # winter
       tsum = Time.local(t.year, 7, 1) # summer
 
-      @tz_all ||= ::TZInfo::Timezone.all
       @tz_winter_summer ||= {}
 
-      @tz_winter_summer[tabbs] ||= @tz_all
+      @tz_winter_summer[tabbs] ||= tz_all
         .select { |tz|
           pw = tz.period_for_local(twin)
           ps = tz.period_for_local(tsum)
@@ -445,6 +453,9 @@ module EtOrbi
 
       @tz_winter_summer[tabbs]
     end
+
+    def custom_tzs; @custom_tzs ||= {}; end
+    def tz_all; @tz_all ||= ::TZInfo::Timezone.all; end
 
     #
     # system tz determination
