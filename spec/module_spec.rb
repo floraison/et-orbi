@@ -470,13 +470,8 @@ describe EtOrbi do
 
       in_zone('Asia/Tehran') do
 
-        expect(EtOrbi.determine_local_tzone.class)
-          .to eq(::TZInfo::DataTimezone)
-
-        expect(EtOrbi.determine_local_tzone.name)
-          .to eq('Asia/Tehran')
-          .or eq('-3:30')
-          .or eq('-4:30')
+        expect(EtOrbi.determine_local_tzone.class).to eq(::TZInfo::DataTimezone)
+        expect(EtOrbi.determine_local_tzone.name).to eq('Asia/Tehran')
       end
     end
   end
@@ -490,11 +485,7 @@ describe EtOrbi do
         Time._zone = 'Cape Verde Standard Time'
         EtOrbi._os_zone = '' # force #os_tz to return nil
 
-        expect(
-          EtOrbi.zone.name
-        ).to eq(
-          'Atlantic/Cape_Verde'
-        )
+        expect(EtOrbi.zone.name).to eq('Atlantic/Cape_Verde')
       end
     end
   end

@@ -259,8 +259,7 @@ module EtOrbi
 
       etz = ENV['TZ']
 
-      tz = etz && (::TZInfo::Timezone.get(etz) rescue nil)
-      #tz = etz && get_tzone(etz) # FIXME
+      tz = etz && get_tzone(etz)
       return tz if tz
 
       # then Rails/ActiveSupport has the priority
