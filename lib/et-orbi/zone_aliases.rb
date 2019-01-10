@@ -37,6 +37,10 @@ module EtOrbi
     nil
   end
 
+  # https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/default-time-zones
+  # https://support.microsoft.com/en-ca/help/973627/microsoft-time-zone-index-values
+  # https://ss64.com/nt/timezones.html
+
   ZONE_ALIASES = {
     'Coordinated Universal Time' => 'UTC',
     'Afghanistan Standard Time' => 'Asia/Kabul',
