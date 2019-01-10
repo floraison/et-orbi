@@ -258,7 +258,8 @@ module EtOrbi
 
       etz = ENV['TZ']
 
-      tz = etz && (::TZInfo::Timezone.get(etz) rescue nil)
+      #tz = etz && (::TZInfo::Timezone.get(etz) rescue nil)
+      tz = etz && get_tzone(etz)
       return tz if tz
 
       # then Rails/ActiveSupport has the priority
@@ -360,7 +361,7 @@ module EtOrbi
 
       # custom timezones, no DST, just an offset, like "+08:00" or "-01:30"
 
-      m = str.match(/\A([+-][0-1][0-9]):?([0-5][0-9])?\z/) rescue nil
+      m = str.match(/\A([+-][0-1]?[0-9]):?([0-5][0-9])?\z/) rescue nil
         #
         # On Windows, the real encoding could be something other than UTF-8,
         # and make the match fail

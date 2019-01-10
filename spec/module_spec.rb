@@ -265,6 +265,9 @@ describe EtOrbi do
       '+09:00' => '+09:00',
       '-01:30' => '-01:30',
 
+      '-3:30' => '-3:30',
+      '-3' => '-3',
+
       '+08:00' => '+08:00',
       '+0800' => '+0800', # no normalization to "+08:00"
 
@@ -461,11 +464,19 @@ describe EtOrbi do
 
     it "gives precedence to ENV['TZ'] over Rails Time.zone.tzinfo" do
 
+      # http://api.rubyonrails.org/classes/ActiveSupport/TimeZone.html
+
       Time.active_support_zone = 'Europe/Vilnius'
 
       in_zone('Asia/Tehran') do
-        expect(EtOrbi.determine_local_tzone.class).to eq(::TZInfo::DataTimezone)
-        expect(EtOrbi.determine_local_tzone.name).to eq('Asia/Tehran')
+
+        expect(EtOrbi.determine_local_tzone.class)
+          .to eq(::TZInfo::DataTimezone)
+
+        expect(EtOrbi.determine_local_tzone.name)
+          .to eq('Asia/Tehran')
+          .or eq('-3:30')
+          .or eq('-4:30')
       end
     end
   end
