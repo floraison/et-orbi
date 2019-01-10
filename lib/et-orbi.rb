@@ -81,6 +81,7 @@ module EtOrbi
         "Cannot turn #{o.inspect} to a ::EtOrbi::EoTime instance")
       end
     end
+    alias make make_time
 
     def make_from_time(t, zone)
 
@@ -203,8 +204,6 @@ module EtOrbi
 
       "(#{h.map(&etos).join(',')},#{gather_tzs.map(&etos).join(',')})"
     end
-
-    alias make make_time
 
     # For `make info`
     #
@@ -337,6 +336,10 @@ module EtOrbi
       (t.zone == l.zone) ? determine_local_tzone : nil
     end
 
+    # https://api.rubyonrails.org/classes/ActiveSupport/TimeWithZone.html
+    #
+    # If it responds to #time_zone, then return that time zone.
+    #
     def get_as_tzone(t)
 
       t.respond_to?(:time_zone) ? t.time_zone : nil
