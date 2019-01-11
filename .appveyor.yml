@@ -47,7 +47,7 @@ before_test:
   - gem -v
   - bundle -v
   - bundle list
-  - ruby -e "n = Time.now; p [ ENV['TZ'], n, n.zone, n.strftime('%z %Z') ]"
+  - ruby -e "n = Time.now; p [ ENV['TZ'], n, n.zone, n.strftime('%%z %%Z') ]"
   - bundle exec ruby -e "require 'et-orbi'; p EtOrbi.determine_local_tzone"
 
 test_script:
