@@ -66,8 +66,18 @@ module EtOrbi
 
     def initialize(s, zone)
 
+      z = zone
+      z = nil if zone.is_a?(String) && zone.strip == ''
+        #
+        # happens with JRuby (and offset tzones like +04:00)
+        #
+        # $ jruby -r time -e "p Time.parse('2012-1-1 12:00 +04:00').zone"
+        # # => ""
+        # ruby -r time -e "p Time.parse('2012-1-1 12:00 +04:00').zone"
+        # # => nil
+
       @seconds = s.to_f
-      @zone = self.class.get_tzone(zone || :local)
+      @zone = self.class.get_tzone(z || :local)
 
       fail ArgumentError.new(
         "Cannot determine timezone from #{zone.inspect}" +
