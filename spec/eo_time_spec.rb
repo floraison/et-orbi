@@ -499,10 +499,12 @@ describe EtOrbi::EoTime do
 
     it 'subtracts Time instances' do
 
-      ot =
-        EtOrbi.make_time('2017-10-31 22:00:10 Europe/Paris')
-      t =
-        time_in_zone('America/Los_Angeles', '2017-10-30 22:00:10')
+      ot = EtOrbi.make_time('2017-10-31 22:00:10 Europe/Paris')
+
+      #t = time_in_zone('America/Los_Angeles', '2017-10-30 22:00:10')
+#time_in_zone('PST7PDT', '2017-10-30 22:00:10')
+      t = Time.parse('2017-10-30 22:00:10 -0700')
+        # because of https://ci.appveyor.com/project/jmettraux/et-orbi/build/job/evp6dmqegfgxhcnm
 
       d = ot - t
 

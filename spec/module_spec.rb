@@ -538,7 +538,7 @@ describe EtOrbi do
 
       [ 'a local time',
         'Asia/Tbilisi',
-        lambda { Time.local(2016, 11, 01, 12, 30, 9) },
+        Time.parse('2016-11-01 12:30:09 +04:00'), # use custom tz :-(
         'ot 2016-11-01 12:30:09 +04:00 dst:false' ],
 
       [ 'an UTC time',
