@@ -60,13 +60,10 @@ describe EtOrbi::EoTime do
 
           t = Time.local(2007, 11, 1, 15, 25, 0)
           ot = EtOrbi::EoTime.new(t, 'America/Los_Angeles')
-p t
-p t.to_i
 
           expect(ot.seconds).to eq(t.to_i)
           expect(ot.seconds.to_i).to eq(1193912700)
           expect(ot.zone.name).to eq('America/Los_Angeles')
-#          expect(ot.iso8601).to eq('xxx')
         end
       end
 
