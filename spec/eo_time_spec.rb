@@ -56,18 +56,26 @@ describe EtOrbi::EoTime do
 
       it 'accepts a local ::Time instance' do
 
-        in_zone 'Asia/Samarkand' do
+        #in_zone 'Asia/Samarkand' do
+        #
+        #  t = Time.parse('2007-11-01 15:25')
+        #  ot = EtOrbi::EoTime.new(t, 'America/Los_Angeles')
+        #
+        #  expect(ot.seconds).to eq(t.to_i)
+        #  expect(ot.seconds.to_i).to eq(1193912700)
+        #  expect(ot.zone.name).to eq('America/Los_Angeles')
+        #end
+          #
+          # because of https://ci.appveyor.com/project/jmettraux/et-orbi/build/job/8birnr0k54jrihx8
 
-#ENV['TZ'] = "_AS-5:00Asia/Samarkand"
-p ENV['TZ']
-          t = Time.parse('2007-11-01 15:25')
-p t
-          ot = EtOrbi::EoTime.new(t, 'America/Los_Angeles')
+        t = Time.parse('2007-11-01 15:25 +05:00')
+          # use a local ::Time instance with a custom timezone :-(
 
-          expect(ot.seconds).to eq(t.to_i)
-          expect(ot.seconds.to_i).to eq(1193912700)
-          expect(ot.zone.name).to eq('America/Los_Angeles')
-        end
+        ot = EtOrbi::EoTime.new(t, 'America/Los_Angeles')
+
+        expect(ot.seconds).to eq(t.to_i)
+        expect(ot.seconds.to_i).to eq(1193912700)
+        expect(ot.zone.name).to eq('America/Los_Angeles')
       end
 
       it 'accepts a Local EtOrbi::EoTime instance' do
@@ -306,10 +314,10 @@ p t
 
     it 'goes out of DST' do
 
-      ot =
-        EtOrbi::EoTime.new(
-          ltz('Europe/Berlin', 2014, 10, 26, 01, 59, 59),
-          'Europe/Berlin')
+      ot = EtOrbi.parse('2014-10-26 01:59:59 Europe/Berlin')
+        #
+        # still in DST, DST ends (clock backward) at 03:00
+        # https://www.timeanddate.com/time/change/germany/berlin
 
       t0 = ot.dup
       ot.add(1)
