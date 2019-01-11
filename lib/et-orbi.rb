@@ -200,6 +200,7 @@ module EtOrbi
       if ltz = EtOrbi::EoTime.local_tzone
         h['eotnz'] = EtOrbi::EoTime.now.zone
         h['eotnfz'] = EtOrbi::EoTime.now.strftime('%z')
+        h['eotnfZ'] = EtOrbi::EoTime.now.strftime('%Z')
         h['eotlzn'] = ltz.name
       end
 
