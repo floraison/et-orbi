@@ -35,6 +35,7 @@ install:
   - echo %TZONE%
   - tzutil /s "%TZONE%"
   - tzutil /g
+  #- setx TZ "%TZ%"
   - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
   - cp "%GEMFILE%" Gemfile
   - bundle install
@@ -43,10 +44,11 @@ build: off
 
 before_test:
   - ruby -v
-  - ruby -e "p [ ENV['TZ'], Time.now, Time.now.zone ]"
   - gem -v
   - bundle -v
   - bundle list
+  - ruby -e "n = Time.now; p [ ENV['TZ'], n, n.zone, n.strftime('%z %Z') ]"
+  - ruby -e "require 'et-orbi'; p EtOrbi.determine_local_tzone"
 
 test_script:
   - bundle exec rspec
