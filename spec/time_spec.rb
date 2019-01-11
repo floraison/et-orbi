@@ -174,6 +174,7 @@ p t.to_i
         expect(ot.to_debug_s).to eq('ot 2007-10-31 23:25:00 -08:00 dst:true')
 
         expect(t.to_i).to eq(1193898300 - 7 * 3600) # /!\
+        expect(t.utc_offset).to eq(0)
 
         expect(t.to_debug_s).to eq('t 2007-10-31 23:25:00 +00:00 dst:false')
           # Time instance stuck to UTC...
@@ -194,7 +195,6 @@ p t.to_i
 
         expect(t.to_debug_s).to eq('t 2007-10-31 23:25:00 -07:00 dst:true')
       end
-
     end
   end
 

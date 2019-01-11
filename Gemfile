@@ -2,6 +2,8 @@
 source 'https://rubygems.org'
 
 #gem 'tzinfo-data'
+#gem 'tzinfo', '1.2.5'
+
 #gem 'chronic'
 
 gemspec
