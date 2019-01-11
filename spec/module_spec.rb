@@ -564,9 +564,20 @@ describe EtOrbi do
       [ 'a String',
         'America/Chicago',
         '2016-11-01 12:30:09',
-        lambda {
-          EtOrbi::EoTime.new(
-            Time.local(2016, 11, 01, 12, 30, 9).to_f, nil) } ],
+        'ot 2016-11-01 12:30:09 -05:00 dst:true' ],
+      [ 'a String',
+        'America/Chicago',
+        '2016-11-06 12:30:08',
+        'ot 2016-11-06 12:30:08 -06:00 dst:false' ],
+
+      [ 'a String',
+        'Europe/Paris',
+        '2016-1-1 12:30:07',
+        'ot 2016-01-01 12:30:07 +01:00 dst:false' ],
+      [ 'a String',
+        'Europe/Paris',
+        '2016-8-1 12:30:07',
+        'ot 2016-08-01 12:30:07 +02:00 dst:true' ],
 
       [ 'a Zulu String',
         nil,
@@ -647,12 +658,12 @@ describe EtOrbi do
               expected.call :
               expected
 
-#p [ :t, t ]
-#p [ :x, x ]
-#p [ :t, t.to_s ]
-#p [ :x, x.to_s ]
             [ t, x ]
           end
+#p eot.to_debug_s
+#p eot.utc_offset
+#p eot.send(:to_time).to_s
+#p eot.send(:to_time).utc_offset
 
         case exp
         when String then expect(eot.to_debug_s).to eq(exp)
