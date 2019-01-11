@@ -379,6 +379,9 @@ module EtOrbi
         #
       return nil unless m
 
+      tz = custom_tzs[str]
+      return tz if tz
+
       hr = m[1].to_i
       mn = m[2].to_i
 
@@ -386,10 +389,9 @@ module EtOrbi
       hr = nil if mn > 59
       mn = -mn if hr && hr < 0
 
-      return (custom_tzs[str] = create_offset_tzone(hr * 3600 + mn * 60, str)) \
-        if hr
-
-      nil
+      hr ?
+        custom_tzs[str] = create_offset_tzone(hr * 3600 + mn * 60, str) :
+        nil
     end
 
     if defined?(TZInfo::DataSources::ConstantOffsetDataTimezoneInfo)
