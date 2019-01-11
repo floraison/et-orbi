@@ -59,6 +59,7 @@ describe EtOrbi::EoTime do
         in_zone 'Asia/Samarkand' do
 
 #ENV['TZ'] = "_AS-5:00Asia/Samarkand"
+p ENV['TZ']
           t = Time.parse('2007-11-01 15:25')
 p t
           ot = EtOrbi::EoTime.new(t, 'America/Los_Angeles')
