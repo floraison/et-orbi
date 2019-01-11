@@ -10,22 +10,22 @@ environment:
     #  TZONE: "Tokyo Standard Time"
     #- RUBY_VERSION: 193
     #  TZONE: "Eastern Standard Time"
-    - RUBY_VERSION: 24
+    - RUBY_VERSION: 25
       TZONE: "UTC"
       GEMFILE: Gemfile.appveyor_tzi125
-    - RUBY_VERSION: 24
+    - RUBY_VERSION: 25
       TZONE: "Tokyo Standard Time"
       GEMFILE: Gemfile.appveyor_tzi125
-    - RUBY_VERSION: 24
+    - RUBY_VERSION: 25
       TZONE: "Eastern Standard Time"
       GEMFILE: Gemfile.appveyor_tzi125
-    - RUBY_VERSION: 24
+    - RUBY_VERSION: 25
       TZONE: "UTC"
       GEMFILE: Gemfile.appveyor
-    - RUBY_VERSION: 24
+    - RUBY_VERSION: 25
       TZONE: "Tokyo Standard Time"
       GEMFILE: Gemfile.appveyor
-    - RUBY_VERSION: 24
+    - RUBY_VERSION: 25
       TZONE: "Eastern Standard Time"
       GEMFILE: Gemfile.appveyor
 
