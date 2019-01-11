@@ -12,10 +12,22 @@ environment:
     #  TZONE: "Eastern Standard Time"
     - RUBY_VERSION: 24
       TZONE: "UTC"
+      GEMFILE: Gemfile.appveyor_tzi125
     - RUBY_VERSION: 24
       TZONE: "Tokyo Standard Time"
+      GEMFILE: Gemfile.appveyor_tzi125
     - RUBY_VERSION: 24
       TZONE: "Eastern Standard Time"
+      GEMFILE: Gemfile.appveyor_tzi125
+    - RUBY_VERSION: 24
+      TZONE: "UTC"
+      GEMFILE: Gemfile.appveyor
+    - RUBY_VERSION: 24
+      TZONE: "Tokyo Standard Time"
+      GEMFILE: Gemfile.appveyor
+    - RUBY_VERSION: 24
+      TZONE: "Eastern Standard Time"
+      GEMFILE: Gemfile.appveyor
 
 install:
   - tzutil /g
@@ -24,7 +36,7 @@ install:
   - tzutil /s "%TZONE%"
   - tzutil /g
   - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
-  - cp Gemfile.appveyor Gemfile
+  - cp "%GEMFILE%" Gemfile
   - bundle install
 
 build: off
@@ -33,6 +45,7 @@ before_test:
   - ruby -v
   - gem -v
   - bundle -v
+  - bundle list
 
 test_script:
   - bundle exec rspec
