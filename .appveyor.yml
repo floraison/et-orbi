@@ -43,6 +43,7 @@ build: off
 
 before_test:
   - ruby -v
+  - ruby -e "p [ ENV['TZ'], Time.now, Time.now.zone ]"
   - gem -v
   - bundle -v
   - bundle list
