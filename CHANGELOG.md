@@ -4,6 +4,8 @@
 
 ## et-orbi 1.1.7  not yet released
 
+- Adapt specs and EoTime#to_debug_s to Windows on Appveyor
+
 
 ## et-orbi 1.1.6  released 2018-09-05
 
