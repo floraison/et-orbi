@@ -597,7 +597,7 @@ describe EtOrbi do
       [ 'a String with an explicit time zone',
         nil,
         '2016-05-01 12:30:09 America/New_York',
-        'ot 2016-05-01 12:30:09 -05:00 dst:true' ],
+        'ot 2016-05-01 12:30:09 -04:00 dst:true' ],
 
       [ 'a Numeric',
         nil,
@@ -622,12 +622,12 @@ describe EtOrbi do
       [ 'a string and a zone as last arg',
         nil,
         [ '2016-05-01 12:30:09', 'America/Chicago' ],
-        'ot 2016-05-01 12:30:09 -06:00 dst:true' ],
+        'ot 2016-05-01 12:30:09 -05:00 dst:true' ],
 
       [ 'a string and an overriding zone as last arg',
         nil,
         [ '2016-05-01 11:30:09 America/New_York', 'America/Chicago' ],
-        'ot 2016-05-01 11:30:09 -06:00 dst:true' ],
+        'ot 2016-05-01 11:30:09 -05:00 dst:true' ],
 
       [ 'an array of args and a TZInfo zone as last arg',
         nil,

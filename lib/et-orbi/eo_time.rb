@@ -184,7 +184,7 @@ module EtOrbi
 
     def utc_offset
 
-      @zone.period_for_utc(utc).utc_offset
+      @zone.period_for_utc(utc).utc_total_offset
     end
 
     %w[

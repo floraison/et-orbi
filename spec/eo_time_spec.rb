@@ -171,7 +171,7 @@ p t.to_i
         ot = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
         t = ot.send(:to_time)
 
-        expect(ot.to_debug_s).to eq('ot 2007-10-31 23:25:00 -08:00 dst:true')
+        expect(ot.to_debug_s).to eq('ot 2007-10-31 23:25:00 -07:00 dst:true')
 
         expect(t.to_i).to eq(1193898300 - 7 * 3600) # /!\
         expect(t.utc_offset).to eq(0)
@@ -188,7 +188,7 @@ p t.to_i
         ot = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
         t = ot.send(:to_time)
 
-        expect(ot.to_debug_s).to eq('ot 2007-10-31 23:25:00 -08:00 dst:true')
+        expect(ot.to_debug_s).to eq('ot 2007-10-31 23:25:00 -07:00 dst:true')
 
         expect(t.to_i).to eq(1193898300)
         expect(t.utc_offset).to eq(-7 * 3600)
@@ -251,7 +251,7 @@ p t.to_i
 
       expect(ut.to_i).to eq(1193898300)
 
-      expect(ot.to_debug_s).to eq('ot 2007-10-31 23:25:00 -08:00 dst:true')
+      expect(ot.to_debug_s).to eq('ot 2007-10-31 23:25:00 -07:00 dst:true')
       expect(ut.to_debug_s).to eq('t 2007-11-01 06:25:00 +00:00 dst:false')
     end
   end
