@@ -49,6 +49,7 @@ Time zones for fugit and rufus-scheduler. Urbi et Orbi.
   #s.add_runtime_dependency 'raabro', '>= 1.1.3'
 
   s.add_development_dependency 'rspec', '~> 3.4'
+  s.add_development_dependency 'chronic', '~> 0.10'
 
   s.require_path = 'lib'
 end

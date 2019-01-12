@@ -8,9 +8,6 @@
 # Fri Mar 24 04:55:25 JST 2017 圓さんの家
 #
 
-#require 'chronic'
-#Chro = ::Chronic
-
 require 'spec_helper'
 
 
@@ -22,8 +19,6 @@ describe EtOrbi do
     Time._zone = nil
     EtOrbi._os_zone = nil
     Time.active_support_zone = nil
-
-    #Object.send(:remove_const, :Chronic) rescue nil
   end
 
   describe '.list_iso8601_zones' do
@@ -196,20 +191,43 @@ describe EtOrbi do
       expect(t.to_zs).to eq('2019-01-01 12:10:00 Asia/Shanghai')
     end
 
-#    it 'leverages Chronic if available' do
+    context 'when Chronic is defined' do
+
+      before :each do
+        require_chronic
+      end
+      after :each do
+        unrequire_chronic
+      end
+
+      it 'leverages it' do
+
+        t = EtOrbi.parse('tomorrow at 1pm')
+        t1 = Time.now + 24 * 3600
+
+        expect(t.class).to eq(EtOrbi::EoTime)
+
+        expect(
+          t.strftime('%F %T')
+        ).to eq(
+          (Time.now + 24 * 3600).strftime('%F 13:00:00')
+        )
+      end
+
+#      it 'leverages it in a specified time zone' do
 #
-#      ::Chronic = ::Chro
+#        t = EtOrbi.parse('tomorrow at 22:00 America/New_York')
 #
-#      n = Time.now + 24 * 3600
-#      #z = EtOrbi.now.to_zs.split.last
-#      z = EtOrbi.zone.name
+#        expect(t.class).to eq(EtOrbi::EoTime)
 #
-#      t = EtOrbi.parse('tomorrow')
-#
-#      expect(t.class).to eq(EtOrbi::EoTime)
-#      expect(t.to_zs).to eq("#{n.strftime('%Y-%m-%d')} 12:00:00 #{z}")
-#    end
-#
+#        expect(
+#          t.to_zs
+#        ).to eq(
+#          (Time.now + 24 * 3600).strftime('%F 22:00:00 America/New_York')
+#        )
+#      end
+    end
+
 #    it 'leverages Chronic and Rails Time.zone (UTC) if available' do
 #
 #      ::Chronic = ::Chro

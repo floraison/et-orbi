@@ -28,6 +28,13 @@ module EtOrbi
 #        return EoTime.new(t, nil)
 #      end
 
+      str_zone = get_tzone(list_iso8601_zones(str).last)
+
+      if defined?(::Chronic) && t = ::Chronic.parse(str, opts)
+
+        str = [ t.strftime('%F %T'), str_zone ].compact.join(' ')
+      end
+
       begin
         DateTime.parse(str)
       rescue
@@ -37,8 +44,6 @@ module EtOrbi
       #end if RUBY_VERSION < '2.0.0'
         #
         # is necessary since Time.parse('xxx') in Ruby < 1.9 yields `now`
-
-      str_zone = get_tzone(list_iso8601_zones(str).last)
 
       zone =
         opts[:zone] ||

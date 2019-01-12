@@ -8,7 +8,10 @@
 ENV['_TZ'] = ENV['TZ'] # preserve original TZ if any
 
 require 'pp'
-#require 'ostruct'
+
+require 'chronic'
+::Khronic = ::Chronic
+Object.send(:remove_const, :Chronic)
 
 require 'et-orbi'
 
@@ -100,6 +103,30 @@ module Helpers
   def select_zone_names(zs)
 
     select_zones(zs).collect(&:name)
+  end
+
+  # rufus-scheduler Chronic infra, as a reminder
+  #
+#  def with_chronic(&block)
+#    require 'chronic'
+#    Object.const_set(:Khronic, Chronic) unless defined?(Khronic)
+#    Object.const_set(:Chronic, Khronic) unless defined?(Chronic)
+#    block.call
+#  ensure
+#    Object.send(:remove_const, :Chronic)
+#  end
+#  def without_chronic(&block) # for quick counter-tests ;-)
+#    block.call
+#  end
+
+  def require_chronic
+
+    Object.const_set(:Chronic, Khronic)
+  end
+
+  def unrequire_chronic
+
+    Object.send(:remove_const, :Chronic)
   end
 end
 
