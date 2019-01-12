@@ -220,43 +220,53 @@ module EtOrbi
       puts platform_info
     end
 
+    ZONES_ISO8601 =
+      %r{
+        (?<=:\d\d)\s*
+        (?:
+          [-+]
+          (?:[0-1][0-9]|2[0-4])
+          (?:(?::)?(?:[0-5][0-9]|60))?
+          (?![-+])
+            |Z
+        )
+      }x
+
+    ZONES_OLSON =
+      %r{
+        (?<=\s|\A)
+        (?:[A-Z][A-Za-z0-9+_-]+)
+        (?:\/(?:[A-Z][A-Za-z0-9+_-]+)){0,2}
+      }x
+
     # https://en.wikipedia.org/wiki/ISO_8601
     # Postel's law applies
     #
     def list_iso8601_zones(s)
 
-      s
-        .scan(
-          %r{
-            (?<=:\d\d)
-            \s*
-            (?:
-              [-+]
-              (?:[0-1][0-9]|2[0-4])
-              (?:(?::)?(?:[0-5][0-9]|60))?
-              (?![-+])
-              |
-              Z
-            )
-          }x)
-        .collect(&:strip)
+      s.scan(ZONES_ISO8601).collect(&:strip)
     end
 
     def list_olson_zones(s)
 
-      s
-        .scan(
-          %r{
-            (?<=\s|\A)
-            (?:[A-Z][A-Za-z0-9+_-]+)
-            (?:\/(?:[A-Z][A-Za-z0-9+_-]+)){0,2}
-          }x)
+      s.scan(ZONES_OLSON)
     end
 
     def find_olson_zone(str)
 
       list_olson_zones(str).each { |s| z = get_tzone(s); return z if z }
       nil
+    end
+
+    def extract_zone(str)
+
+      zone = nil
+      f = lambda { |m| zone ||= m.strip; '' }
+
+      str.gsub!(ZONES_ISO8601, &f)
+      str.gsub!(ZONES_OLSON, &f)
+
+      [ str.strip, zone ]
     end
 
     def determine_local_tzone
