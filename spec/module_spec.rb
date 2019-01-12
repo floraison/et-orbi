@@ -62,7 +62,7 @@ describe EtOrbi do
       [ '2018-09-04 07:54:58 UTC+11',
         %w[ UTC+11 ] ],
       [ '2018-09-04 07:54:58 UTC+11 Etc/GMT-11',
-        %w[ UTC+11 Etc/GMT-11 ] ],
+        %w[ Etc/GMT-11 UTC+11 ] ],
           #
           # https://github.com/floraison/fugit/issues/9
 
@@ -101,6 +101,9 @@ describe EtOrbi do
         [ '2018-09-04 07:54:58', 'UTC+11' ] ],
       [ '2018-09-04 07:54:58 UTC+11 Etc/GMT-11',
         [ '2018-09-04 07:54:58', 'Etc/GMT-11' ] ],
+
+      [ 'Sun Nov 18 16:01:00 Asia/Singapore 2012',
+        [ 'Sun Nov 18 16:01:00  2012', 'Asia/Singapore' ] ],
 
       [ '2016-11-01 12:30:09', [ '2016-11-01 12:30:09', nil ] ],
       [ '2016-11-01 12:30:09-25', [ '2016-11-01 12:30:09-25', nil ] ],
@@ -256,18 +259,18 @@ describe EtOrbi do
         )
       end
 
-#      it 'leverages it in a specified time zone' do
-#
-#        t = EtOrbi.parse('tomorrow at 22:00 America/New_York')
-#
-#        expect(t.class).to eq(EtOrbi::EoTime)
-#
-#        expect(
-#          t.to_zs
-#        ).to eq(
-#          (Time.now + 24 * 3600).strftime('%F 22:00:00 America/New_York')
-#        )
-#      end
+      it 'leverages it in a specified time zone' do
+
+        t = EtOrbi.parse('tomorrow at 22:00 America/New_York')
+
+        expect(t.class).to eq(EtOrbi::EoTime)
+
+        expect(
+          t.to_zs
+        ).to eq(
+          (Time.now + 24 * 3600).strftime('%F 22:00:00 America/New_York')
+        )
+      end
     end
 
 #    it 'leverages Chronic and Rails Time.zone (UTC) if available' do

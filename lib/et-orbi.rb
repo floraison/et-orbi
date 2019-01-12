@@ -24,11 +24,7 @@ module EtOrbi
 
     def parse(str, opts={})
 
-#      if defined?(::Chronic) && t = ::Chronic.parse(str, opts)
-#        return EoTime.new(t, nil)
-#      end
-
-      str_zone = get_tzone(list_iso8601_zones(str).last)
+      str, str_zone = extract_zone(str)
 
       if defined?(::Chronic) && t = ::Chronic.parse(str, opts)
 
@@ -47,23 +43,11 @@ module EtOrbi
 
       zone =
         opts[:zone] ||
-        str_zone ||
-        find_olson_zone(str) ||
+        get_tzone(str_zone) ||
         determine_local_tzone
 
-      str = str.sub(zone.name, '') unless zone.name.match(/\A[-+]/)
-        #
-        # for 'Sun Nov 18 16:01:00 Asia/Singapore 2012',
-        # although where does rufus-scheduler have it from?
-
       local = Time.parse(str)
-
-      secs =
-        if str_zone
-          local.to_f
-        else
-          zone.local_to_utc(local).to_f
-        end
+      secs = zone.local_to_utc(local).to_f
 
       EoTime.new(secs, zone)
     end
@@ -232,13 +216,6 @@ module EtOrbi
         )
       }x
 
-    ZONES_OLSON =
-      %r{
-        (?<=\s|\A)
-        (?:[A-Z][A-Za-z0-9+_-]+)
-        (?:\/(?:[A-Z][A-Za-z0-9+_-]+)){0,2}
-      }x
-
     # https://en.wikipedia.org/wiki/ISO_8601
     # Postel's law applies
     #
@@ -247,9 +224,23 @@ module EtOrbi
       s.scan(ZONES_ISO8601).collect(&:strip)
     end
 
+    ZONES_OLSON = (
+      TZInfo::Timezone.all.collect { |z| z.name }.sort +
+      (0..12).collect { |i| [ "UTC-#{i}", "UTC+#{i}" ] })
+        .flatten
+        .sort_by(&:size)
+        .reverse
+
     def list_olson_zones(s)
 
-      s.scan(ZONES_OLSON)
+      s = s.dup
+
+      ZONES_OLSON
+        .inject([]) { |a, z|
+          i = s.index(z); next a unless i
+          s[i, z.length] = ''
+          a << z
+          a }
     end
 
     def find_olson_zone(str)
@@ -260,13 +251,20 @@ module EtOrbi
 
     def extract_zone(str)
 
-      zone = nil
-      f = lambda { |m| zone = m.strip; '' }
+      s = str.dup
 
-      str.gsub!(ZONES_ISO8601, &f)
-      str.gsub!(ZONES_OLSON, &f)
+      zs = ZONES_OLSON
+        .inject([]) { |a, z|
+          i = s.index(z); next a unless i
+          a << z
+          s[i, z.length] = ''
+          a }
 
-      [ str.strip, zone ]
+      s.gsub!(ZONES_ISO8601) { |m| zs << m.strip; '' } #if zs.empty?
+
+      zs = zs.sort_by { |z| str.index(z) }
+
+      [ s.strip, zs.last ]
     end
 
     def determine_local_tzone
