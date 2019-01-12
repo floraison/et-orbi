@@ -261,7 +261,7 @@ module EtOrbi
     def extract_zone(str)
 
       zone = nil
-      f = lambda { |m| zone ||= m.strip; '' }
+      f = lambda { |m| zone = m.strip; '' }
 
       str.gsub!(ZONES_ISO8601, &f)
       str.gsub!(ZONES_OLSON, &f)
