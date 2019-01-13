@@ -1,6 +1,7 @@
 
 # et-orbi credits
 
+* Wenhui Wang https://github.com/w11th .parse vs Chronic+ActiveSupport, fugit 11
 * Marcel https://github.com/MTRNord "Mitteleuropaeische Sommerzeit", gh-15
 * Stanisław Pitucha https://github.com/viraptor rubygems link to changelog, gh-14
 * Jamie Stackhouse https://github.com/itsjamie reported warnings, gh-13
