@@ -2,8 +2,9 @@
 # CHANGELOG.md
 
 
-## et-orbi 1.1.7  not yet released
+## et-orbi 1.1.7  released 2019-01-14
 
+- Rework Chronic integration, prevent conflict with ActiveSupport Time.zone
 - Implement EtOrbi.extract_zone(s) (returns s1 and zone name)
 - Adapt specs and EoTime#to_debug_s to Windows on Appveyor
 
