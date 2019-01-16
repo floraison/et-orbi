@@ -579,9 +579,9 @@ describe EtOrbi::EoTime do
     end
   end
 
-  describe '#translate(zone)' do
+  describe '#translate(zone=nil)' do
 
-    it 'is an alias to #localtime(zone)' do
+    it 'is an alias to #localtime(zone=nil)' do
 
       t = EtOrbi::EoTime.new(1193898300, 'Pacific/Apia')
 
@@ -590,6 +590,21 @@ describe EtOrbi::EoTime do
       t1 = t.translate('Europe/Paris')
 
       expect(t1.to_s).to eq('2007-11-01 07:25:00 +0100')
+      expect(t1.object_id).not_to eq(t.object_id)
+    end
+  end
+
+  describe '#in_time_zone(zone=nil)' do
+
+    it 'is an alias to #localtime(zone=nil)' do
+
+      t = EtOrbi::EoTime.new(1193898300, 'Pacific/Apia')
+
+      expect(t.to_s).to eq('2007-10-31 19:25:00 -1100')
+
+      t1 = t.in_time_zone('Europe/Moscow')
+
+      expect(t1.to_s).to eq('2007-11-01 09:25:00 +0300')
       expect(t1.object_id).not_to eq(t.object_id)
     end
   end

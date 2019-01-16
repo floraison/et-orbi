@@ -4,6 +4,8 @@
 
 ## et-orbi 1.1.8  not yet released
 
+- Alias EoTime#in_time_zone(zone) to #localtime(zone)
+
 
 ## et-orbi 1.1.7  released 2019-01-14
 

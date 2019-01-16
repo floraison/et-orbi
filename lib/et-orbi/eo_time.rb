@@ -308,6 +308,7 @@ module EtOrbi
     end
 
     alias translate localtime
+    alias in_time_zone localtime
 
     def wday_in_month
 
