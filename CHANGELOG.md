@@ -2,6 +2,9 @@
 # CHANGELOG.md
 
 
+## et-orbi 1.1.8  not yet released
+
+
 ## et-orbi 1.1.7  released 2019-01-14
 
 - Rework Chronic integration, prevent conflict with ActiveSupport Time.zone
