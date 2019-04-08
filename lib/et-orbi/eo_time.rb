@@ -198,7 +198,7 @@ module EtOrbi
     end
 
     %w[
-      year month day wday hour min sec usec asctime
+      year month day wday yday hour min sec usec asctime
     ].each do |m|
       define_method(m) { to_time.send(m) }
     end
@@ -223,7 +223,8 @@ module EtOrbi
     def +(t); inc(t, 1); end
     def -(t); inc(t, -1); end
 
-    WEEK_S = 7 * 24 * 3600
+    DAY_S = 24 * 3600
+    WEEK_S = 7 * DAY_S
 
     def monthdays
 
@@ -313,6 +314,18 @@ module EtOrbi
     def wday_in_month
 
       [ count_weeks(-1), - count_weeks(1) ]
+    end
+
+    def rweek
+
+      ((self - EtOrbi.make_time('2019-01-01 00:00:00', @zone)) / WEEK_S)
+        .floor + 1
+    end
+
+    def rday
+
+      ((self - EtOrbi.make_time('2019-01-01 00:00:00', @zone)) / DAY_S)
+        .floor + 1
     end
 
     def reach(points)

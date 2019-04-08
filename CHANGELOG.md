@@ -4,6 +4,7 @@
 
 ## et-orbi 1.1.8  not yet released
 
+- Implement EoTime#rweek and #rday (reference week, reference day)
 - Alias EoTime#in_time_zone(zone) to #localtime(zone)
 
 
