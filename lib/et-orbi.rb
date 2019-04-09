@@ -45,6 +45,7 @@ module EtOrbi
         opts[:zone] ||
         get_tzone(str_zone) ||
         determine_local_tzone
+###
 
       local = Time.parse(str)
       secs = zone.local_to_utc(local).to_f
@@ -134,6 +135,7 @@ module EtOrbi
 
       s = unalias(o)
 
+p [ :get_tzone, s ]
       get_offset_tzone(s) ||
       get_x_offset_tzone(s) ||
       (::TZInfo::Timezone.get(s) rescue nil)
