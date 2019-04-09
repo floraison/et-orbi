@@ -138,7 +138,9 @@ p [ :get_tzone, :o, o ]
 
       s = unalias(o)
 
-p [ :get_tzone, :s, s ]
+p [ :get_tzone, :s, s, 0, get_offset_tzone(s) ]
+p [ :get_tzone, :s, s, 1, get_x_offset_tzone(s) ]
+p [ :get_tzone, :s, s, 2, begin; ::TZInfo::Timezone.get(s); rescue => r; r.to_s; end ]
       get_offset_tzone(s) ||
       get_x_offset_tzone(s) ||
       (::TZInfo::Timezone.get(s) rescue nil)
