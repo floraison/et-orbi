@@ -140,10 +140,10 @@ describe EtOrbi::EoTime do
     [
 
       [ [ 2017, 3, 25 ],
-        %w[ Europe/Lisbon windows:WET ],
+        %w[ Europe/Lisbon windows:WET Atlantic/Canary ],
         '2017-03-25T00:00:00+00:00' ],
       [ [ 2017, 3, 25, 21, 23, 29 ],
-        %w[ Europe/Lisbon windows:WET ],
+        %w[ Europe/Lisbon windows:WET Atlantic/Canary ],
         '2017-03-25T21:23:29+00:00' ],
       [ [ 2017, 3, 25, 21, 23, 29 ],
         %w[ Europe/Moscow ],
