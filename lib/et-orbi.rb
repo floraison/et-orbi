@@ -123,6 +123,7 @@ module EtOrbi
 
     def get_tzone(o)
 
+p [ :get_tzone, :o, o ]
       return o if o.is_a?(::TZInfo::Timezone)
       return nil if o == nil
       return determine_local_tzone if o == :local
@@ -135,7 +136,7 @@ module EtOrbi
 
       s = unalias(o)
 
-p [ :get_tzone, s ]
+p [ :get_tzone, :s, s ]
       get_offset_tzone(s) ||
       get_x_offset_tzone(s) ||
       (::TZInfo::Timezone.get(s) rescue nil)
