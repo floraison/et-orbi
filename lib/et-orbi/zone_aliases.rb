@@ -1,45 +1,74 @@
 
 module EtOrbi
 
-  def self.unalias(name)
+  class << self
 
-    return name unless (name.match(/./) rescue nil)
+    def unalias(name)
 
-    ZONE_ALIASES[name.sub(/ Daylight /, ' Standard ')] ||
-    unzz(name) ||
-    name
-  end
+      return name unless (name.match(/./) rescue nil)
+        # to prevent invalid byte sequence in UTF-8..., gh-15
 
-  def self.unzz(name)
+      ianaize(name) ||
+      unzz(name) ||
+      name
+    end
 
-    m = name.match(/\A([A-Z]{3,4})([+-])(\d{1,2}):?(\d{2})?\z/)
-    return nil unless m
+    protected
 
-    abbs = [ m[1] ]; a = m[1]
-    abbs << "#{a}T" if a.size < 4
+    def ianaize(name)
 
-    off = (m[2] == '+' ? 1 : -1) * (m[3].to_i * 3600 + (m[4] || '0').to_i * 60)
+      ZONE_ALIASES[name.sub(/ Daylight /, ' Standard ')]
+    end
 
-    t = Time.now
-    twin = Time.utc(t.year, 1, 1) # winter
-    tsum = Time.utc(t.year, 7, 1) # summer
+    def unzz(name)
 
-    (@tz_all ||= ::TZInfo::Timezone.all)
-      .each { |tz|
-        abbs.each { |abb|
-          per = tz.period_for_utc(twin)
-          return tz.name \
-            if per.abbreviation.to_s == abb && per.utc_total_offset == off
-          per = tz.period_for_utc(tsum)
-          return tz.name \
-            if per.abbreviation.to_s == abb && per.utc_total_offset == off } }
+      m = name.match(/\A([A-Z]{3,4})([+-])(\d{1,2}):?(\d{2})?\z/)
+      return nil unless m
 
-    nil
+      abbs = [ m[1] ]; a = m[1]
+      abbs << "#{a}T" if a.size < 4
+
+      off =
+        (m[2] == '+' ? 1 : -1) *
+        (m[3].to_i * 3600 + (m[4] || '0').to_i * 60)
+
+      t = Time.now
+      twin = Time.utc(t.year, 1, 1) # winter
+      tsum = Time.utc(t.year, 7, 1) # summer
+
+      (@tz_all ||= ::TZInfo::Timezone.all)
+        .each { |tz|
+          abbs.each { |abb|
+            per = tz.period_for_utc(twin)
+            return tz.name \
+              if per.abbreviation.to_s == abb && per.utc_total_offset == off
+            per = tz.period_for_utc(tsum)
+            return tz.name \
+              if per.abbreviation.to_s == abb && per.utc_total_offset == off } }
+
+      nil
+    end
   end
 
   # https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/default-time-zones
   # https://support.microsoft.com/en-ca/help/973627/microsoft-time-zone-index-values
   # https://ss64.com/nt/timezones.html
+
+  #ZONE_ABBS =
+  #  if tzid_gem = Gem.loaded_specs['tzinfo-data']
+  #    Dir[
+  #      File.join(tzid_gem.full_gem_path, 'lib/tzinfo/data/definitions/*.rb')
+  #    ]
+  #      .inject([]) { |a, pa|
+  #        fn = File.basename(pa, '.rb')
+  #        a << fn.gsub(/__[mp]__/) { |m| m == '__m__' ? '-' : '+' } \
+  #          if fn.match(/\A[A-Z]{2,3}.*/)
+  #        a }
+  #  else
+  #    nil
+  #  end
+    #
+    # keep that in the fridge, may prove useful later on...
 
   ZONE_ALIASES = {
     'Coordinated Universal Time' => 'UTC',
