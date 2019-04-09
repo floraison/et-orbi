@@ -403,14 +403,14 @@ describe EtOrbi do
       )
     end
 
-    [ # for rufus-scheduler gh-228
+    { # for rufus-scheduler gh-228
 
-      [ 'Asia/Tokyo', 'Asia/Tokyo' ],
-      [ 'Asia/Shanghai', 'Asia/Shanghai', 'Asia/Chongqing' ],
-      [ 'Europe/Zurich', 'Europe/Zurich', 'Africa/Ceuta', 'windows:CET' ],
-      [ 'Europe/London', 'Europe/London', 'Europe/Belfast', 'windows:GMT' ]
+      'Asia/Tokyo' => %w[ Asia/Tokyo ],
+      'Asia/Shanghai' => %w[ Asia/Shanghai Asia/Chongqing ],
+      'Europe/Zurich' => %w[ Europe/Zurich Africa/Ceuta windows:CET ],
+      'Europe/London' => %w[ Europe/London Europe/Belfast windows:GMT ],
 
-    ].each do |zone, *targets|
+    }.each do |zone, targets|
 
       it "returns the current timezone for :current in #{zone}" do
 

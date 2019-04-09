@@ -125,7 +125,8 @@ p [ 2, determine_local_tzone ]
 
     def get_tzone(o)
 
-p [ :get_tzone, :o, o ]
+p [ '---', :get_tzone, :o, o ]
+puts caller.reject { |l| l.index('.gem') }.collect { |l| "  | #{l}" }
       return o if o.is_a?(::TZInfo::Timezone)
       return nil if o == nil
       return determine_local_tzone if o == :local
