@@ -9,9 +9,19 @@ module EtOrbi
         # to prevent invalid byte sequence in UTF-8..., gh-15
 
       normalize(name) ||
-      shorten(name) ||
       unzz(name) ||
       name
+    end
+
+    def abbreviate_zone_name(name)
+
+      return nil unless name.match(/\A[A-Z]{2,3}/)
+
+      ZONE_ABBREVIATIONS.each do |abbr, zone|
+        return zone if name[0, abbr.length] == abbr
+      end
+
+      nil
     end
 
     protected
@@ -19,15 +29,6 @@ module EtOrbi
     def normalize(name)
 
       ZONE_ALIASES[name.sub(/ Daylight /, ' Standard ')]
-    end
-
-    def shorten(name)
-
-      case name
-      when 'EST5' then 'EST5EDT'
-      when 'WET-1WEST' then 'WET'
-      else nil
-      end
     end
 
     def unzz(name)
@@ -46,7 +47,7 @@ module EtOrbi
       twin = Time.utc(t.year, 1, 1) # winter
       tsum = Time.utc(t.year, 7, 1) # summer
 
-      (@tz_all ||= ::TZInfo::Timezone.all)
+      tz_all
         .each { |tz|
           abbs.each { |abb|
             per = tz.period_for_utc(twin)
@@ -156,5 +157,31 @@ module EtOrbi
     'Tonga Standard Time' => 'Pacific/Tongatapu',
     'Turkey Standard Time' => 'Asia/Istanbul',
     'Montevideo Standard Time' => 'America/Montevideo' }
+
+  ZONE_ABBREVIATIONS =
+    begin
+
+      zone_abb_rex = /\A[A-Z]{2,3}/
+
+      t0 = Time.parse('2019-01-01')
+      t1 = Time.parse('2019-08-01')
+
+      TZInfo::Timezone.all
+        .inject([]) { |a, z|
+          zn = z.name
+          zn3 = zn[0, 3]
+          p0a = z.period_for(t0).abbreviation
+          p1a = z.period_for(t1).abbreviation
+          if zn.match(zone_abb_rex) && zn3 != 'US/' && zn3 != 'GMT'
+            a << [ p0a, zn ] if p0a != 'UTC' && p0a.match(zone_abb_rex)
+            a << [ p1a, zn ] if p1a != 'UTC' && p1a.match(zone_abb_rex)
+            a << [ zn, zn ] if zn.index('-') == nil
+          end
+          a }
+        .uniq
+        .sort_by { |a, _| - a.length }
+    end
+#pp ZONE_ABBREVIATIONS
+#exit 0
 end
 

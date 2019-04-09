@@ -128,7 +128,7 @@ module EtOrbi
 debug = ! caller.find { |l| l.index('select_zone') }
 if debug
 p [ '---', :get_tzone, :o, o ]
-puts caller.reject { |l| l.index('/gems/') || l.index('.gems') }.collect { |l| "  | #{l}" }
+puts caller.reject { |l| l.index('/gems/') || l.index('.gem') }.collect { |l| "  | #{l}" }
 end
       return o if o.is_a?(::TZInfo::Timezone)
       return nil if o == nil
@@ -149,7 +149,15 @@ p [ :get_tzone, :s, s, 2, begin; ::TZInfo::Timezone.get(s); rescue => r; r.to_s;
 end
       get_offset_tzone(s) ||
       get_x_offset_tzone(s) ||
-      (::TZInfo::Timezone.get(s) rescue nil)
+      get_tzinfo_tzone(s)
+    end
+
+    def get_tzinfo_tzone(name)
+
+      tz = (::TZInfo::Timezone.get(name) rescue nil)
+      return tz if tz
+
+      ::TZInfo::Timezone.get(abbreviate_zone_name(name)) rescue nil
     end
 
     def render_nozone_time(seconds)
@@ -238,12 +246,13 @@ end
     end
 
     ZONES_OLSON = (
-      TZInfo::Timezone.all.collect { |z| z.name }.sort +
-      (0..12).collect { |i| [ "UTC-#{i}", "UTC+#{i}" ] })
-        .flatten
-        .sort_by(&:size)
-        .reverse
-pp ZONES
+      ::TZInfo::Timezone.all
+        .collect { |z| z.name }.sort +
+      (0..12)
+        .collect { |i| [ "UTC-#{i}", "UTC+#{i}" ] })
+          .flatten
+          .sort_by(&:size)
+          .reverse
 
     def list_olson_zones(s)
 

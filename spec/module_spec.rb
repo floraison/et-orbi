@@ -333,6 +333,9 @@ describe EtOrbi do
       'CST+8' => 'Asia/Chongqing',
       'EDT-0400' => 'America/Detroit',
 
+      'WET-1WEST' => 'WET',
+      'CET-2CEST' => 'CET',
+
     }.each do |a, b|
 
       it "returns #{b.inspect} for #{a.inspect}" do
@@ -762,14 +765,15 @@ describe EtOrbi do
     it 'rejects a Time in a non-local ambiguous timezone' do
 
       t = Time.local(2016, 11, 01, 12, 30, 9)
-      class << t; def zone; 'CEST'; end; end
+      class << t; def zone; 'ECT'; end; end
 
       in_zone 'Asia/Tbilisi' do
 
         expect {
+          p EtOrbi.make_time(t)
           EtOrbi.make_time(t)
         }.to raise_error(
-          ArgumentError, /\ACannot determine timezone from "CEST"/
+          ArgumentError, /\ACannot determine timezone from "ECT"/
         )
       end
     end
@@ -820,8 +824,6 @@ describe EtOrbi do
 
     {
 
-      'WET-1WEST' => 'WET',
-      'EST5' => 'EST5EDT',
       'EST5EDT' => 'EST5EDT',
       'UTC+12' => 'Etc/GMT-12',
       'Korea Standard Time' => 'Asia/Seoul',
