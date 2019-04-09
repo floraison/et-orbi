@@ -163,15 +163,15 @@ module EtOrbi
 
       zone_abb_rex = /\A[A-Z]{2,3}/
 
-      t0 = Time.parse('2019-01-01')
-      t1 = Time.parse('2019-08-01')
+      t0 = Time.parse('2019-01-01').utc
+      t1 = Time.parse('2019-08-01').utc
 
       TZInfo::Timezone.all
         .inject([]) { |a, z|
           zn = z.name
           zn3 = zn[0, 3]
-          p0a = z.period_for(t0).abbreviation
-          p1a = z.period_for(t1).abbreviation
+          p0a = z.period_for_utc(t0).abbreviation
+          p1a = z.period_for_utc(t1).abbreviation
           if zn.match(zone_abb_rex) && zn3 != 'US/' && zn3 != 'GMT'
             a << [ p0a, zn ] if p0a != 'UTC' && p0a.match(zone_abb_rex)
             a << [ p1a, zn ] if p1a != 'UTC' && p1a.match(zone_abb_rex)
