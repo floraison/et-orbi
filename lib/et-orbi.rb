@@ -41,11 +41,13 @@ module EtOrbi
         #
         # is necessary since Time.parse('xxx') in Ruby < 1.9 yields `now`
 
+p [ 0, opts[:zone] ]
+p [ 1, get_tzone(str_zone) ]
+p [ 2, determine_local_tzone ]
       zone =
         opts[:zone] ||
         get_tzone(str_zone) ||
         determine_local_tzone
-###
 
       local = Time.parse(str)
       secs = zone.local_to_utc(local).to_f
@@ -275,8 +277,10 @@ p [ :get_tzone, :s, s ]
       # ENV has the priority
 
       etz = ENV['TZ']
+p [ :dlt, "env", 0, etz ]
 
       tz = etz && get_tzone(etz)
+p [ :dlt, "env", 1, tz ]
       return tz if tz
 
       # then Rails/ActiveSupport has the priority
@@ -289,18 +293,22 @@ p [ :get_tzone, :s, s ]
       # then the operating system is queried
 
       tz = ::TZInfo::Timezone.get(os_tz) rescue nil
+p [ :dlt, "os tz", tz ]
       return tz if tz
 
       # then Ruby's time zone abbs are looked at CST, JST, CEST, ... :-(
 
       tzs = determine_local_tzones
+p [ :dlt, "ruby tz abb", tzs ]
       tz = (etz && tzs.find { |z| z.name == etz }) || tzs.first
+p [ :dlt, "ruby tz abb", tz ]
       return tz if tz
 
       # then, fall back to GMT offest :-(
 
       n = Time.now
 
+p [ :dlt, "gmt offset", n.zone, n.strftime('%Z%z') ]
       get_tzone(n.zone) ||
       get_tzone(n.strftime('%Z%z'))
     end
