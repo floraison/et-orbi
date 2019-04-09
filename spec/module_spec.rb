@@ -496,7 +496,7 @@ describe EtOrbi do
         expect(EtOrbi.determine_local_tzone.name)
           .to eq('America/Jamaica')
           .or eq('America/Atikokan')
-          .or eq('EST5EDT')
+          .or eq('EST')
       end
     end
 
