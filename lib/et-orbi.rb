@@ -136,7 +136,7 @@ module EtOrbi
 
       return nil unless o.is_a?(String)
 
-      s = unalias(o)
+      s = tweak_zone_name(o)
 #tzis = (s.match(/\AWET/) rescue nil) ? 'WET' : s
 
 #p [ :get_tzone, :s, s, 0, get_offset_tzone(s) ]
@@ -145,20 +145,7 @@ module EtOrbi
 #p [ :get_tzone, :s, tzis, 2.1, begin; ::TZInfo::Timezone.get(tzis); rescue => r; r.to_s; end ]
       get_offset_tzone(s) ||
       get_x_offset_tzone(s) ||
-      get_tzinfo_tzone(s) ||
-      get_tzinfo_tzone(s, true)
-    end
-
-    def get_tzinfo_tzone(name, abbreviate=false)
-
-n = name
-p [ :get_tzinfo_tzone, 0, n ]
-      if abbreviate && m = (name.match(/\A([A-Z]+)/) rescue nil)
-        name = m[1]
-p [ :get_tzinfo_tzone, 1, n, name ]
-      end
-
-      ::TZInfo::Timezone.get(name) rescue nil
+      (::TZInfo::Timezone.get(s) rescue nil)
     end
 
     def render_nozone_time(seconds)

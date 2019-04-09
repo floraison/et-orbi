@@ -3,21 +3,31 @@ module EtOrbi
 
   class << self
 
-    def unalias(name)
+    def tweak_zone_name(name)
 
       return name unless (name.match(/./) rescue nil)
         # to prevent invalid byte sequence in UTF-8..., gh-15
 
-      ianaize(name) ||
+      normalize(name) ||
+      shorten(name) ||
       unzz(name) ||
       name
     end
 
     protected
 
-    def ianaize(name)
+    def normalize(name)
 
       ZONE_ALIASES[name.sub(/ Daylight /, ' Standard ')]
+    end
+
+    def shorten(name)
+
+      case name
+      when 'EST5' then 'EST5EDT'
+      when 'WET-1WEST' then 'WET'
+      else nil
+      end
     end
 
     def unzz(name)

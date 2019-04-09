@@ -814,5 +814,24 @@ describe EtOrbi do
       end
     end
   end
+
+  describe '.tweak_zone_name' do
+
+    {
+
+      'WET-1WEST' => 'WET',
+      'EST5' => 'EST5EDT',
+      'EST5EDT' => 'EST5EDT',
+      'UTC+12' => 'Etc/GMT-12',
+      'Korea Standard Time' => 'Asia/Seoul',
+
+    }.each do |n0, n1|
+
+      it "turns #{n0.inspect} into #{n1.inspect}" do
+
+        expect(EtOrbi.tweak_zone_name(n0)).to eq(n1)
+      end
+    end
+  end
 end
 
