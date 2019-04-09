@@ -151,8 +151,11 @@ module EtOrbi
 
     def get_tzinfo_tzone(name, abbreviate=false)
 
+n = name
+p [ :get_tzinfo_tzone, 0, n ]
       if abbreviate && m = (name.match(/\A([A-Z]+)/) rescue nil)
         name = m[1]
+p [ :get_tzinfo_tzone, 1, n, name ]
       end
 
       ::TZInfo::Timezone.get(name) rescue nil
