@@ -842,14 +842,21 @@ describe EtOrbi do
     {
 
       'EST5EDT' => 'EST5EDT',
-      'BST' => 'GB-Eire',
+      'BST' => %w[ GB-Eire GB ],
       'UTC+12' => nil,
 
     }.each do |n0, n1|
 
-      it "turns #{n0.inspect} into #{n1.inspect}" do
+      n1s = n1.inspect
+      n1s = n1.collect(&:inspect).join(' or ') if n1.is_a?(Array)
 
-        expect(EtOrbi.abbreviate_zone_name(n0)).to eq(n1)
+      it "turns #{n0.inspect} into #{n1s}" do
+
+        if n1.is_a?(Array)
+          expect(n1).to include(EtOrbi.abbreviate_zone_name(n0))
+        else
+          expect(EtOrbi.abbreviate_zone_name(n0)).to eq(n1)
+        end
       end
     end
   end
