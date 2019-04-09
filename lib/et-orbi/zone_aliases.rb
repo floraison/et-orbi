@@ -19,6 +19,7 @@ module EtOrbi
         # to prevent invalid byte sequence in UTF-8..., gh-15
 
       return nil unless name.match(/\A[A-Z]{2,3}/)
+      return nil if name.match(/\AUTC/)
 
       ZONE_ABBREVIATIONS.each do |abbr, zone|
         return zone if name[0, abbr.length] == abbr
@@ -175,6 +176,7 @@ module EtOrbi
           zn3 = zn[0, 3]
           p0a = z.period_for_utc(t0).abbreviation
           p1a = z.period_for_utc(t1).abbreviation
+#p [ zn, p0a, p1a ]
           if zn.match(zone_abb_rex) && zn3 != 'US/' && zn3 != 'GMT'
             a << [ p0a, zn ] if p0a != 'UTC' && p0a.match(zone_abb_rex)
             a << [ p1a, zn ] if p1a != 'UTC' && p1a.match(zone_abb_rex)

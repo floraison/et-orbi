@@ -836,5 +836,22 @@ describe EtOrbi do
       end
     end
   end
+
+  describe '.abbreviate_zone_name' do
+
+    {
+
+      'EST5EDT' => 'EST5EDT',
+      'BST' => 'GB-Eire',
+      'UTC+12' => nil,
+
+    }.each do |n0, n1|
+
+      it "turns #{n0.inspect} into #{n1.inspect}" do
+
+        expect(EtOrbi.abbreviate_zone_name(n0)).to eq(n1)
+      end
+    end
+  end
 end
 
