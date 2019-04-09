@@ -609,6 +609,10 @@ describe EtOrbi do
 
       [ 'a String',
         'America/Chicago',
+        '2016-08-01 12:30:10',
+        'ot 2016-08-01 12:30:10 -05:00 dst:true' ],
+      [ 'a String',
+        'America/Chicago',
         '2016-11-01 12:30:09',
         'ot 2016-11-01 12:30:09 -05:00 dst:true' ],
       [ 'a String',
