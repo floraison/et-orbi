@@ -128,7 +128,9 @@ module EtOrbi
 debug = ! caller.find { |l| l.index('select_zone') }
 if debug
 p [ '---', :get_tzone, :o, o ]
-puts caller.reject { |l| l.index('/gems/') || l.index('.gem') }.collect { |l| "  | #{l}" }
+lines = caller.reject { |l| l.index('/gems/') || l.index('.gem') }
+l = nil; while lines.any? && lines.last.index('spec'); l = lines.pop; end; lines << l if l
+puts lines.collect { |l| "  | #{l}" }
 end
       return o if o.is_a?(::TZInfo::Timezone)
       return nil if o == nil
@@ -145,7 +147,7 @@ end
 if debug
 p [ :get_tzone, :s, s, 0, get_offset_tzone(s) ]
 p [ :get_tzone, :s, s, 1, get_x_offset_tzone(s) ]
-p [ :get_tzone, :s, s, 2, begin; ::TZInfo::Timezone.get(s); rescue => r; r.to_s; end ]
+p [ :get_tzone, :s, s, 2, get_tzinfo_tzone(s) ]
 end
       get_offset_tzone(s) ||
       get_x_offset_tzone(s) ||
@@ -154,10 +156,16 @@ end
 
     def get_tzinfo_tzone(name)
 
+p [ :get_tzinfo_tzone, 0, name, begin; ::TZInfo::Timezone.get(name); rescue => r; r.to_s; end ]
       tz = (::TZInfo::Timezone.get(name) rescue nil)
       return tz if tz
 
-      ::TZInfo::Timezone.get(abbreviate_zone_name(name)) rescue nil
+      n = abbreviate_zone_name(name)
+p [ :get_tzinfo_tzone, 1, n ]
+      return nil unless n
+
+p [ :get_tzinfo_tzone, 1, n, begin; ::TZInfo::Timezone.get(n); rescue => r; r.to_s; end ]
+      ::TZInfo::Timezone.get(n) rescue nil
     end
 
     def render_nozone_time(seconds)

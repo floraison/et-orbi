@@ -15,6 +15,9 @@ module EtOrbi
 
     def abbreviate_zone_name(name)
 
+      return nil unless (name.match(/./) rescue nil)
+        # to prevent invalid byte sequence in UTF-8..., gh-15
+
       return nil unless name.match(/\A[A-Z]{2,3}/)
 
       ZONE_ABBREVIATIONS.each do |abbr, zone|
@@ -181,7 +184,6 @@ module EtOrbi
         .uniq
         .sort_by { |a, _| - a.length }
     end
-#pp ZONE_ABBREVIATIONS
-#exit 0
+#pp ZONE_ABBREVIATIONS; exit 0
 end
 
