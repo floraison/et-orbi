@@ -333,8 +333,8 @@ describe EtOrbi do
       'CST+8' => 'Asia/Chongqing',
       'EDT-0400' => 'America/Detroit',
 
-#      'WET-1WEST' => 'WET',
-#      'CET-2CEST' => 'CET',
+      'WET-1WEST' => 'WET',
+      'CET-2CEST' => 'CET',
 
     }.each do |a, b|
 
