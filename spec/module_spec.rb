@@ -46,37 +46,37 @@ describe EtOrbi do
     end
   end
 
-  describe '.list_olson_zones' do
-
-    [
-
-      [ '11/09/2002 America/New_York',
-        %w[ America/New_York ] ],
-      [ '11/09/2002 America/New_York Asia/Shanghai',
-        %w[ America/New_York Asia/Shanghai ] ],
-      [ 'America/New_York Asia/Shanghai',
-        %w[ America/New_York Asia/Shanghai ] ],
-      [ '2018-09-04 07:54:58 Etc/GMT-11',
-        %w[ Etc/GMT-11 ] ],
-
-      [ '2018-09-04 07:54:58 UTC+11',
-        %w[ UTC+11 ] ],
-      [ '2018-09-04 07:54:58 UTC+11 Etc/GMT-11',
-        %w[ Etc/GMT-11 UTC+11 ] ],
-          #
-          # https://github.com/floraison/fugit/issues/9
-
-      [ '11/09/2002 2utopiaNada?3Nada',
-        [] ]
-
-    ].each do |string, zones|
-
-      it "returns #{zones.inspect} for #{string.inspect}" do
-
-        expect(EtOrbi.list_olson_zones(string)).to eq(zones)
-      end
-    end
-  end
+#  describe '.list_olson_zones' do
+#
+#    [
+#
+#      [ '11/09/2002 America/New_York',
+#        %w[ America/New_York ] ],
+#      [ '11/09/2002 America/New_York Asia/Shanghai',
+#        %w[ America/New_York Asia/Shanghai ] ],
+#      [ 'America/New_York Asia/Shanghai',
+#        %w[ America/New_York Asia/Shanghai ] ],
+#      [ '2018-09-04 07:54:58 Etc/GMT-11',
+#        %w[ Etc/GMT-11 ] ],
+#
+#      [ '2018-09-04 07:54:58 UTC+11',
+#        %w[ UTC+11 ] ],
+#      [ '2018-09-04 07:54:58 UTC+11 Etc/GMT-11',
+#        %w[ Etc/GMT-11 UTC+11 ] ],
+#          #
+#          # https://github.com/floraison/fugit/issues/9
+#
+#      [ '11/09/2002 2utopiaNada?3Nada',
+#        [] ]
+#
+#    ].each do |string, zones|
+#
+#      it "returns #{zones.inspect} for #{string.inspect}" do
+#
+#        expect(EtOrbi.list_olson_zones(string)).to eq(zones)
+#      end
+#    end
+#  end
 
   describe '.extract_zone' do
 

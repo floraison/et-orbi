@@ -3,7 +3,7 @@ module EtOrbi
 
   class << self
 
-    ZONES_ISO8601 =
+    ZONES_ISO8601_REX =
       %r{
         (?<=:\d\d)\s*
         (?:
@@ -20,7 +20,7 @@ module EtOrbi
     #
     def list_iso8601_zones(s)
 
-      s.scan(ZONES_ISO8601).collect(&:strip)
+      s.scan(ZONES_ISO8601_REX).collect(&:strip)
     end
 
     ZONES_OLSON = (
@@ -32,23 +32,23 @@ module EtOrbi
           .sort_by(&:size)
           .reverse
 
-    def list_olson_zones(s)
-
-      s = s.dup
-
-      ZONES_OLSON
-        .inject([]) { |a, z|
-          i = s.index(z); next a unless i
-          s[i, z.length] = ''
-          a << z
-          a }
-    end
-
-    def find_olson_zone(str)
-
-      list_olson_zones(str).each { |s| z = get_tzone(s); return z if z }
-      nil
-    end
+#    def list_olson_zones(s)
+#
+#      s = s.dup
+#
+#      ZONES_OLSON
+#        .inject([]) { |a, z|
+#          i = s.index(z); next a unless i
+#          s[i, z.length] = ''
+#          a << z
+#          a }
+#    end
+#
+#    def find_olson_zone(str)
+#
+#      list_olson_zones(str).each { |s| z = get_tzone(s); return z if z }
+#      nil
+#    end
 
     def extract_zone(str)
 
@@ -61,7 +61,7 @@ module EtOrbi
           s[i, z.length] = ''
           a }
 
-      s.gsub!(ZONES_ISO8601) { |m| zs << m.strip; '' } #if zs.empty?
+      s.gsub!(ZONES_ISO8601_REX) { |m| zs << m.strip; '' } #if zs.empty?
 
       zs = zs.sort_by { |z| str.index(z) }
 
