@@ -108,15 +108,13 @@ end
 
     def get_tzinfo_tzone(name)
 
-      tz = (::TZInfo::Timezone.get(name) rescue nil)
-      return tz if tz
+      #return ::TZInfo::Timezone.get(name) rescue nil
 
-      n = name
-      while (n = n[0..-2]).size > 0
-        return ::TZInfo::Timezone.get(n) if ZONES_OLSON.include?(n)
+      loop do
+        return ::TZInfo::Timezone.get(name) if ZONES_OLSON.include?(name)
+        name = name[0..-2]
+        return nil if name.empty?
       end
-
-      nil
     end
 
     def windows_zone_code_x(zone_name)
