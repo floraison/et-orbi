@@ -26,9 +26,11 @@ p [ :get_tzone, 1, o ] if debug
       s = tweak_zone_name(o)
 p [ :get_tzone, 1, s ] if debug
 
+if debug
 p [ :get_tzone, 2, get_offset_tzone(s) ]
 p [ :get_tzone, 3, get_x_offset_tzone(s) ]
 p [ :get_tzone, 4, get_tzinfo_tzone(s) ]
+end
       get_offset_tzone(s) ||
       get_x_offset_tzone(s) ||
       get_tzinfo_tzone(s)
