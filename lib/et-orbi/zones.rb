@@ -369,7 +369,10 @@ module EtOrbi
     'Taipei Standard Time' => 'Asia/Taipei',
     'Tonga Standard Time' => 'Pacific/Tongatapu',
     'Turkey Standard Time' => 'Asia/Istanbul',
-    'Montevideo Standard Time' => 'America/Montevideo' }
+    'Montevideo Standard Time' => 'America/Montevideo',
+
+    'CST5CDT' => 'CST6CDT',
+  }
 
 #  ZONE_ABBREVIATIONS =
 #    begin

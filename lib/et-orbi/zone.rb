@@ -110,8 +110,6 @@ end
 
       #return ::TZInfo::Timezone.get(name) rescue nil
 
-name = 'CST6CDT' if name == 'CST5CDT'
-
       loop do
         return ::TZInfo::Timezone.get(name) if ZONES_OLSON.include?(name)
         name = name[0..-2]
