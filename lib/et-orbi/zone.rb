@@ -5,6 +5,13 @@ module EtOrbi
 
     def get_tzone(o)
 
+debug = ! caller.find { |l| l.index('select_zone') }
+if debug
+p [ '---', :get_tzone, 0, o ]
+lines = caller.reject { |l| l.index('/gems/') || l.index('.gem') }
+l = nil; while lines.any? && lines.last.index('spec'); l = lines.pop; end; lines << l if l
+puts lines.collect { |l| "  | #{l}" }
+end
       return o if o.is_a?(::TZInfo::Timezone)
       return nil if o == nil
       return determine_local_tzone if o == :local
@@ -12,11 +19,16 @@ module EtOrbi
       return o.tzinfo if o.respond_to?(:tzinfo)
 
       o = to_offset(o) if o.is_a?(Numeric)
+p [ :get_tzone, 1, o ] if debug
 
       return nil unless o.is_a?(String)
 
       s = tweak_zone_name(o)
+p [ :get_tzone, 1, s ] if debug
 
+p [ :get_tzone, 2, get_offset_tzone(s) ]
+p [ :get_tzone, 3, get_x_offset_tzone(s) ]
+p [ :get_tzone, 4, get_tzinfo_tzone(s) ]
       get_offset_tzone(s) ||
       get_x_offset_tzone(s) ||
       get_tzinfo_tzone(s)
