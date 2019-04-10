@@ -4,8 +4,8 @@ require 'time'
 
 require 'tzinfo'
 
-require 'et-orbi/eo_time'
-require 'et-orbi/zone_aliases'
+require 'et-orbi/time'
+require 'et-orbi/zones'
 
 
 module EtOrbi
