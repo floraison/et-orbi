@@ -32,24 +32,6 @@ module EtOrbi
           .sort_by(&:size)
           .reverse
 
-#    def list_olson_zones(s)
-#
-#      s = s.dup
-#
-#      ZONES_OLSON
-#        .inject([]) { |a, z|
-#          i = s.index(z); next a unless i
-#          s[i, z.length] = ''
-#          a << z
-#          a }
-#    end
-#
-#    def find_olson_zone(str)
-#
-#      list_olson_zones(str).each { |s| z = get_tzone(s); return z if z }
-#      nil
-#    end
-
     def extract_zone(str)
 
       s = str.dup
@@ -189,21 +171,6 @@ module EtOrbi
       name
     end
 
-#    def abbreviate_zone_name(name)
-#
-#      return nil unless (name.match(/./) rescue nil)
-#        # to prevent invalid byte sequence in UTF-8..., gh-15
-#
-#      return nil unless name.match(/\A[A-Z]{2,3}/)
-#      return nil if name.match(/\AUTC/)
-#
-#      ZONE_ABBREVIATIONS.each do |abbr, zone|
-#        return zone if name[0, abbr.length] == abbr
-#      end
-#
-#      nil
-#    end
-
     protected
 
     def normalize(name)
@@ -277,22 +244,6 @@ module EtOrbi
   # https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/default-time-zones
   # https://support.microsoft.com/en-ca/help/973627/microsoft-time-zone-index-values
   # https://ss64.com/nt/timezones.html
-
-  #ZONE_ABBS =
-  #  if tzid_gem = Gem.loaded_specs['tzinfo-data']
-  #    Dir[
-  #      File.join(tzid_gem.full_gem_path, 'lib/tzinfo/data/definitions/*.rb')
-  #    ]
-  #      .inject([]) { |a, pa|
-  #        fn = File.basename(pa, '.rb')
-  #        a << fn.gsub(/__[mp]__/) { |m| m == '__m__' ? '-' : '+' } \
-  #          if fn.match(/\A[A-Z]{2,3}.*/)
-  #        a }
-  #  else
-  #    nil
-  #  end
-    #
-    # keep that in the fridge, may prove useful later on...
 
   ZONE_ALIASES = {
     'Coordinated Universal Time' => 'UTC',
@@ -373,32 +324,5 @@ module EtOrbi
 
     'CST5CDT' => 'CST6CDT',
   }
-
-#  ZONE_ABBREVIATIONS =
-#    begin
-#
-#      zone_abb_rex = /\A[A-Z]{2,3}/
-#
-#      t0 = Time.parse('2019-01-01').utc
-#      t1 = Time.parse('2019-08-01').utc
-#
-#      TZInfo::Timezone.all
-#        .inject([]) { |a, z|
-#          zn = z.name
-#          zn3 = zn[0, 3]
-#          p0a = z.period_for_utc(t0).abbreviation
-#          p1a = z.period_for_utc(t1).abbreviation
-##p [ zn, p0a, p1a ]
-#          if zn.match(zone_abb_rex) && zn3 != 'US/' && zn3 != 'GMT'
-#            a << [ p0a, zn ] if p0a != 'UTC' && p0a.match(zone_abb_rex)
-#            a << [ p1a, zn ] if p1a != 'UTC' && p1a.match(zone_abb_rex)
-#            a << [ zn, zn ] if zn.index('-') == nil && zn != 'UTC'
-#          end
-#          a }
-#        .uniq
-#        .sort_by { |_, b| - b.length }
-#        .sort_by { |a, _| - a.length }
-#    end
-##pp ZONE_ABBREVIATIONS; exit 0
 end
 
