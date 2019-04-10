@@ -94,13 +94,14 @@ module EtOrbi
 
     def get_tzinfo_tzone(name)
 
-      tz = (::TZInfo::Timezone.get(name) rescue nil)
-      return tz if tz
-
-      n = abbreviate_zone_name(name)
-      return nil unless n
-
-      ::TZInfo::Timezone.get(n) rescue nil
+#      tz = (::TZInfo::Timezone.get(name) rescue nil)
+#      return tz if tz
+#
+#      n = abbreviate_zone_name(name)
+#      return nil unless n
+#
+#      ::TZInfo::Timezone.get(n) rescue nil
+      ::TZInfo::Timezone.get(name) rescue nil
     end
 
     def windows_zone_code_x(zone_name)

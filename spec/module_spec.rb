@@ -333,8 +333,8 @@ describe EtOrbi do
       'CST+8' => 'Asia/Chongqing',
       'EDT-0400' => 'America/Detroit',
 
-      'WET-1WEST' => 'WET',
-      'CET-2CEST' => 'CET',
+#      'WET-1WEST' => 'WET',
+#      'CET-2CEST' => 'CET',
 
     }.each do |a, b|
 
@@ -837,28 +837,28 @@ describe EtOrbi do
     end
   end
 
-  describe '.abbreviate_zone_name' do
-
-    {
-
-      'EST5EDT' => 'EST5EDT',
-      'BST' => %w[ GB-Eire GB ],
-      'UTC+12' => nil,
-
-    }.each do |n0, n1|
-
-      n1s = n1.inspect
-      n1s = n1.collect(&:inspect).join(' or ') if n1.is_a?(Array)
-
-      it "turns #{n0.inspect} into #{n1s}" do
-
-        if n1.is_a?(Array)
-          expect(n1).to include(EtOrbi.abbreviate_zone_name(n0))
-        else
-          expect(EtOrbi.abbreviate_zone_name(n0)).to eq(n1)
-        end
-      end
-    end
-  end
+#  describe '.abbreviate_zone_name' do
+#
+#    {
+#
+#      'EST5EDT' => 'EST5EDT',
+#      'BST' => %w[ GB-Eire GB ],
+#      'UTC+12' => nil,
+#
+#    }.each do |n0, n1|
+#
+#      n1s = n1.inspect
+#      n1s = n1.collect(&:inspect).join(' or ') if n1.is_a?(Array)
+#
+#      it "turns #{n0.inspect} into #{n1s}" do
+#
+#        if n1.is_a?(Array)
+#          expect(n1).to include(EtOrbi.abbreviate_zone_name(n0))
+#        else
+#          expect(EtOrbi.abbreviate_zone_name(n0)).to eq(n1)
+#        end
+#      end
+#    end
+#  end
 end
 
