@@ -180,10 +180,11 @@ module EtOrbi
           if zn.match(zone_abb_rex) && zn3 != 'US/' && zn3 != 'GMT'
             a << [ p0a, zn ] if p0a != 'UTC' && p0a.match(zone_abb_rex)
             a << [ p1a, zn ] if p1a != 'UTC' && p1a.match(zone_abb_rex)
-            a << [ zn, zn ] if zn.index('-') == nil
+            a << [ zn, zn ] if zn.index('-') == nil && zn != 'UTC'
           end
           a }
         .uniq
+        .sort_by { |_, b| - b.length }
         .sort_by { |a, _| - a.length }
     end
 #pp ZONE_ABBREVIATIONS; exit 0

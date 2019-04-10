@@ -41,9 +41,6 @@ module EtOrbi
         #
         # is necessary since Time.parse('xxx') in Ruby < 1.9 yields `now`
 
-#p [ 0, opts[:zone] ]
-#p [ 1, get_tzone(str_zone) ]
-#p [ 2, determine_local_tzone ]
       zone =
         opts[:zone] ||
         get_tzone(str_zone) ||
@@ -125,13 +122,6 @@ module EtOrbi
 
     def get_tzone(o)
 
-debug = ! caller.find { |l| l.index('select_zone') }
-if debug
-p [ '---', :get_tzone, :o, o ]
-lines = caller.reject { |l| l.index('/gems/') || l.index('.gem') }
-l = nil; while lines.any? && lines.last.index('spec'); l = lines.pop; end; lines << l if l
-puts lines.collect { |l| "  | #{l}" }
-end
       return o if o.is_a?(::TZInfo::Timezone)
       return nil if o == nil
       return determine_local_tzone if o == :local
@@ -144,11 +134,6 @@ end
 
       s = tweak_zone_name(o)
 
-if debug
-p [ :get_tzone, :s, s, 0, get_offset_tzone(s) ]
-p [ :get_tzone, :s, s, 1, get_x_offset_tzone(s) ]
-p [ :get_tzone, :s, s, 2, get_tzinfo_tzone(s) ]
-end
       get_offset_tzone(s) ||
       get_x_offset_tzone(s) ||
       get_tzinfo_tzone(s)
@@ -156,15 +141,12 @@ end
 
     def get_tzinfo_tzone(name)
 
-p [ :get_tzinfo_tzone, 0, name, begin; ::TZInfo::Timezone.get(name); rescue => r; r.to_s; end ]
       tz = (::TZInfo::Timezone.get(name) rescue nil)
       return tz if tz
 
       n = abbreviate_zone_name(name)
-p [ :get_tzinfo_tzone, 1, n ]
       return nil unless n
 
-p [ :get_tzinfo_tzone, 1, n, begin; ::TZInfo::Timezone.get(n); rescue => r; r.to_s; end ]
       ::TZInfo::Timezone.get(n) rescue nil
     end
 
@@ -303,10 +285,8 @@ p [ :get_tzinfo_tzone, 1, n, begin; ::TZInfo::Timezone.get(n); rescue => r; r.to
       # ENV has the priority
 
       etz = ENV['TZ']
-#p [ :dlt, "env", 0, etz ]
 
       tz = etz && get_tzone(etz)
-#p [ :dlt, "env", 1, tz ]
       return tz if tz
 
       # then Rails/ActiveSupport has the priority
@@ -319,22 +299,18 @@ p [ :get_tzinfo_tzone, 1, n, begin; ::TZInfo::Timezone.get(n); rescue => r; r.to
       # then the operating system is queried
 
       tz = ::TZInfo::Timezone.get(os_tz) rescue nil
-#p [ :dlt, "os tz", tz ]
       return tz if tz
 
       # then Ruby's time zone abbs are looked at CST, JST, CEST, ... :-(
 
       tzs = determine_local_tzones
-#p [ :dlt, "ruby tz abb", tzs ]
       tz = (etz && tzs.find { |z| z.name == etz }) || tzs.first
-#p [ :dlt, "ruby tz abb", tz ]
       return tz if tz
 
       # then, fall back to GMT offest :-(
 
       n = Time.now
 
-#p [ :dlt, "gmt offset", n.zone, n.strftime('%Z%z') ]
       get_tzone(n.zone) ||
       get_tzone(n.strftime('%Z%z'))
     end

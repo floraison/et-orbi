@@ -23,6 +23,9 @@ puts [ RUBY_VERSION, RUBY_PLATFORM ].join(' ')
 EtOrbi._make_info
   #
 puts '-' * 80
+puts "  EtOrbi::ZONE_ABBREVIATIONS -->"
+pp EtOrbi::ZONE_ABBREVIATIONS
+puts '-' * 80
 
 
 
