@@ -49,12 +49,12 @@ module EtOrbi
 
       def utc(*a)
 
-        EtOrbi.make_from_array(a, EtOrbi.get_tzone('UTC'))
+        EtOrbi.send(:make_from_array, a, EtOrbi.get_tzone('UTC'))
       end
 
       def local(*a)
 
-        EtOrbi.make_from_array(a, local_tzone)
+        EtOrbi.send(:make_from_array, a, local_tzone)
       end
     end
 
