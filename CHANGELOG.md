@@ -2,8 +2,9 @@
 # CHANGELOG.md
 
 
-## et-orbi 1.1.8  not yet released
+## et-orbi 1.1.8  released 2019-04-11
 
+- Work hard to make it work on Windows
 - Implement EoTime#rweek and #rday (reference week, reference day)
 - Alias EoTime#in_time_zone(zone) to #localtime(zone)
 
