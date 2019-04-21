@@ -2,11 +2,17 @@
 # CHANGELOG.md
 
 
+## et-orbi 1.2.0  not yet released
+
+- Stop fooling around and stick to https://semver.org
+
+
 ## et-orbi 1.1.8  released 2019-04-11
 
 - Work hard to make it work on Windows
 - Implement EoTime#rweek and #rday (reference week, reference day)
 - Alias EoTime#in_time_zone(zone) to #localtime(zone)
+- Stop fooling around and stick to https://semver.org
 
 
 ## et-orbi 1.1.7  released 2019-01-14
