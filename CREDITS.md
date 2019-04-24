@@ -1,6 +1,7 @@
 
 # et-orbi credits
 
+* Vais Salikhov (https://github.com/vais) missing US timezone aliases, gh-18
 * Wenhui Wang https://github.com/w11th .parse vs Chronic+ActiveSupport, fugit 11
 * Marcel https://github.com/MTRNord "Mitteleuropaeische Sommerzeit", gh-15
 * Stanisław Pitucha https://github.com/viraptor rubygems link to changelog, gh-14

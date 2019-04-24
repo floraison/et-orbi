@@ -4,6 +4,7 @@
 
 ## et-orbi 1.2.0  not yet released
 
+- Add missing US time zone aliases, Vais Salikhov, gh-18
 - Stop fooling around and stick to https://semver.org
 
 
