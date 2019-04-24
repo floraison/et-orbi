@@ -2,10 +2,10 @@
 # CHANGELOG.md
 
 
-## et-orbi 1.2.0  not yet released
+## et-orbi 1.2.0  released 2019-04-25
 
 - Add missing US time zone aliases, Vais Salikhov, gh-18
-- Stop fooling around and stick to https://semver.org
+- Stop fooling around and stick to https://semver.org, start with 1.2.0
 
 
 ## et-orbi 1.1.8  released 2019-04-11
