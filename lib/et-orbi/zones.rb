@@ -280,7 +280,7 @@ module EtOrbi
     'China Standard Time' => 'Asia/Shanghai',
     'Myanmar Standard Time' => 'Asia/Yangon',
     'E. Africa Standard Time' => 'Africa/Nairobi',
-    'Hawaiian Standard Time' => 'Pacific/Honololu',
+    'Hawaiian Standard Time' => 'Pacific/Honolulu',
     'E. Europe Standard Time' => 'Europe/Nicosia',
     'Tokyo Standard Time' => 'Asia/Tokyo',
     'Egypt Standard Time' => 'Africa/Cairo',
@@ -323,6 +323,10 @@ module EtOrbi
     'Montevideo Standard Time' => 'America/Montevideo',
 
     'CST5CDT' => 'CST6CDT',
+
+    'Alaskan Standard Time' => 'America/Anchorage',
+    'Mountain Standard Time' => 'America/Phoenix',
+    'Central Standard Time' => 'America/Chicago'
   }
 end
 
