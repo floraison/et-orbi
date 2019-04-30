@@ -325,8 +325,10 @@ module EtOrbi
     'CST5CDT' => 'CST6CDT',
 
     'Alaskan Standard Time' => 'America/Anchorage',
-    'Mountain Standard Time' => 'America/Phoenix',
-    'Central Standard Time' => 'America/Chicago'
+    'Central Standard Time' => 'America/Chicago',
+    'Mountain Standard Time' => 'America/Denver',
+    'US Eastern Standard Time' => 'America/Indiana/Indianapolis',
+    'US Mountain Standard Time' => 'America/Phoenix'
   }
 end
 
