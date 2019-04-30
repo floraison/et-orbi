@@ -2,6 +2,11 @@
 # CHANGELOG.md
 
 
+## et-orbi 1.2.1  released 2019-05-01
+
+- More US time zone corrections, Vais Salikhov, gh-19
+
+
 ## et-orbi 1.2.0  released 2019-04-25
 
 - Add missing US time zone aliases, Vais Salikhov, gh-18
