@@ -778,5 +778,52 @@ describe EtOrbi::EoTime do
       end
     end
   end
+
+  context '#<, #<=, #>, #>=, #<=>' do
+
+    [
+
+      [ EtOrbi.parse('2018-11-04 02:30:00 Europe/Berlin'),
+        :>,
+        EtOrbi.parse('2018-11-04 02:00:00 Europe/Berlin'),
+        true ],
+      [ EtOrbi.parse('2018-11-04 02:00:00 Europe/Berlin'),
+        :>,
+        EtOrbi.parse('2018-11-04 02:30:00 Europe/Berlin'),
+        false ],
+      [ EtOrbi.parse('2018-11-04 02:00:00 Europe/London'),
+        :>,
+        EtOrbi.parse('2018-11-04 02:00:00 Europe/Berlin'),
+        true ],
+      [ EtOrbi.parse('2018-11-04 02:00:00 Europe/Berlin'),
+        :>,
+        EtOrbi.parse('2018-11-04 02:00:00 Europe/London'),
+        false ],
+      [ EtOrbi.parse('2018-11-04 02:00:00 Europe/London'),
+        :>,
+        Time.at(EtOrbi.parse('2018-11-04 02:00:00 Europe/Berlin').to_i),
+        true ],
+      [ EtOrbi.parse('2018-11-04 02:00:00 Europe/Berlin'),
+        :>,
+        Time.at(EtOrbi.parse('2018-11-04 02:00:00 Europe/Berlin').to_i),
+        false ],
+
+    ].each do |t0, comparator, t1, expected|
+
+      to_s = lambda { |o|
+        case o
+        when EtOrbi::EoTime then "#{o.to_s} (EoTime)"
+        else "#{o.to_s} (#{o.class})"
+        end }
+
+      s0 = to_s[t0]
+      s1 = to_s[t1]
+
+      it "#{s0} #{comparator.to_s} #{s1} yields #{expected.inspect}" do
+
+        expect(t0.send(comparator, t1)).to eq(expected)
+      end
+    end
+  end
 end
 

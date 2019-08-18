@@ -427,7 +427,7 @@ module EtOrbi
 
       fail ArgumentError(
         "Comparison of EoTime with #{o.inspect} failed"
-      ) unless o.is_a?(EoTime) || o.is_a?(Time)
+      ) unless o.respond_to?(:to_f)
 
       o.to_f
     end
