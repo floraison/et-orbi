@@ -716,32 +716,67 @@ describe EtOrbi::EoTime do
 
   describe '#==' do
 
-    it "returns true if both are EoTime, have the same s and the same TZ" do
+    context 'EoTime == EoTime' do
 
-      eo0 = EtOrbi.parse('2018-11-04 01:30:00 -0400')
-      eo1 = EtOrbi.parse('2018-11-04 01:30:00 -0400')
+      it 'returns true if same s and same TZ' do
 
-      expect(eo0 == eo1).to eq(true)
+        eo0 = EtOrbi.parse('2018-11-04 01:30:00 -0400')
+        eo1 = EtOrbi.parse('2018-11-04 01:30:00 -0400')
+
+        expect(eo0 == eo1).to eq(true)
+      end
+
+      it 'returns false if not in the same timezone' do
+
+        eo0 = EtOrbi.parse('2018-11-04 02:30:00 Europe/Berlin')
+        eo1 = EtOrbi.parse('2018-11-04 01:30:00 Europe/London')
+
+        expect(eo0.to_i == eo1.to_i).to eq(true)
+        expect(eo0 == eo1).to eq(false)
+      end
     end
 
-    it "returns false if not in the same timezone" do
+    context 'EoTime == Time' do
 
-      eo0 = EtOrbi.parse('2018-11-04 02:30:00 Europe/Berlin')
-      eo1 = EtOrbi.parse('2018-11-04 01:30:00 Europe/London')
+      it 'returns true when same sec' do
 
-      expect(eo0.to_i == eo1.to_i).to eq(true)
-      expect(eo0 == eo1).to eq(false)
+        eo = EtOrbi.parse('2018-11-04 02:30:00 Europe/Berlin')
+        t = Time.at(eo.to_i)
+
+        expect(eo == t).to eq(true)
+        expect(eo).to eq(t)
+      end
+
+      it 'returns false else' do
+
+        eo = EtOrbi.parse('2018-11-04 02:30:00 Europe/Berlin')
+        t = Time.at(eo.to_i + 1)
+
+        expect(eo == t).to eq(false)
+        expect(eo).not_to eq(t)
+      end
     end
 
-    it "returns false if b is not an EoTime" do
+    context 'Time == EoTime' do # ehm, yeah, testing Ruby somehow...
 
-      eo0 = EtOrbi.parse('2018-11-04 02:30:00 Europe/Berlin')
+      it 'returns true when same sec' do
 
-      expect(eo0 == Time.now).to eq(false)
+        eo = EtOrbi.parse('2018-11-04 02:30:00 Europe/Berlin')
+        t = Time.at(eo.to_i)
+
+        expect(t == eo).to eq(true) # thanks Ruby!
+        expect(t).to eq(eo)
+      end
+
+      it 'returns false else' do
+
+        eo = EtOrbi.parse('2018-11-04 02:30:00 Europe/Berlin')
+        t = Time.at(eo.to_i + 1)
+
+        expect(t == eo).to eq(false)
+        expect(t).not_to eq(eo)
+      end
     end
   end
-
-  #describe '#eql?' do
-  #end
 end
 

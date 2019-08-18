@@ -205,11 +205,24 @@ module EtOrbi
 
     def ==(o)
 
-      o.is_a?(EoTime) &&
-      o.seconds == @seconds &&
-      (o.zone == @zone || o.zone.current_period == @zone.current_period)
+      if o.is_a?(EoTime)
+        o.seconds == @seconds &&
+        (o.zone == @zone || o.zone.current_period == @zone.current_period)
+      elsif o.is_a?(::Time)
+        (to_f * 1000).to_i == (o.to_f * 1000).to_i
+      else
+        false
+      end
     end
-    #alias eql? == # FIXME see Object#== (ri)
+
+    # Nota Bene:
+    #
+    # Unlike ==, the equal? method should never be overridden by subclasses
+    # as it is used to determine object identity (that is, a.equal?(b) if and
+    # only if a is the same object as b)
+    #
+    # The eql? method returns true if obj and other refer to the same hash key.
+    # This is used by Hash to test members for equality.
 
     def >(o); @seconds > _to_f(o); end
     def >=(o); @seconds >= _to_f(o); end
