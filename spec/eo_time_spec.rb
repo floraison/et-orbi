@@ -713,5 +713,35 @@ describe EtOrbi::EoTime do
       end
     end
   end
+
+  describe '#==' do
+
+    it "returns true if both are EoTime, have the same s and the same TZ" do
+
+      eo0 = EtOrbi.parse('2018-11-04 01:30:00 -0400')
+      eo1 = EtOrbi.parse('2018-11-04 01:30:00 -0400')
+
+      expect(eo0 == eo1).to eq(true)
+    end
+
+    it "returns false if not in the same timezone" do
+
+      eo0 = EtOrbi.parse('2018-11-04 02:30:00 Europe/Berlin')
+      eo1 = EtOrbi.parse('2018-11-04 01:30:00 Europe/London')
+
+      expect(eo0.to_i == eo1.to_i).to eq(true)
+      expect(eo0 == eo1).to eq(false)
+    end
+
+    it "returns false if b is not an EoTime" do
+
+      eo0 = EtOrbi.parse('2018-11-04 02:30:00 Europe/Berlin')
+
+      expect(eo0 == Time.now).to eq(false)
+    end
+  end
+
+  #describe '#eql?' do
+  #end
 end
 
