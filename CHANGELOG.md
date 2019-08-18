@@ -2,7 +2,7 @@
 # CHANGELOG.md
 
 
-## et-orbi 1.3.0  not yet released
+## et-orbi 1.2.2  not yet released
 
 
 ## et-orbi 1.2.1  released 2019-05-01
