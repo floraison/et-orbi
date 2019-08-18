@@ -205,7 +205,8 @@ module EtOrbi
 
     def ==(o)
 
-      o.is_a?(EoTime) &&
+      o = Rufus::Scheduler.parse(o)
+
       o.seconds == @seconds &&
       (o.zone == @zone || o.zone.current_period == @zone.current_period)
     end
