@@ -1,6 +1,7 @@
 
 # et-orbi credits
 
+* d-m-u (https://github.com/d-m-u) EoTime#==(Time), gh-20, gh-7
 * Vais Salikhov (https://github.com/vais) missing US timezone aliases, gh-18 gh-19
 * Wenhui Wang https://github.com/w11th .parse vs Chronic+ActiveSupport, fugit 11
 * Marcel https://github.com/MTRNord "Mitteleuropaeische Sommerzeit", gh-15
