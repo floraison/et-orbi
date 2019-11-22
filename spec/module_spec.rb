@@ -289,14 +289,19 @@ describe EtOrbi do
         expect(t.strftime('%H:%M:%S')).to eq('12:00:00')
       end
 
-      context 'when is Chronic disabled by an option' do
+      context 'when enable_chronic: false' do
+
         it 'handles days that have ambiguous daylight savings conversions' do
 
           Time.active_support_zone = 'America/Chicago'
 
-          t = EtOrbi.parse('2020-11-01 00:00:00', enable_chronic: false)
+          expect( # works
+            EtOrbi.parse('tomorrow').class
+          ).to eq(EtOrbi::EoTime)
 
-          expect(t.class).to eq(EtOrbi::EoTime)
+          expect { # doesn't work
+            EtOrbi.parse('tomorrow', enable_chronic: false)
+          }.to raise_error(ArgumentError, 'No time information in "tomorrow"')
         end
       end
     end
