@@ -12,7 +12,7 @@ module EtOrbi
 
       str, str_zone = extract_zone(str)
 
-      if defined?(::Chronic) && t = ::Chronic.parse(str, opts)
+      if defined?(::Chronic) && opts.fetch(:enable_chronic, true) && t = ::Chronic.parse(str, opts)
 
         str = [ t.strftime('%F %T'), str_zone ].compact.join(' ')
       end
