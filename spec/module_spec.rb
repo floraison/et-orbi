@@ -294,7 +294,7 @@ describe EtOrbi do
 
           Time.active_support_zone = 'America/Chicago'
 
-          t = EtOrbi.parse('2020-11-01 00:00:00', enable_chronic: false)
+          t = EtOrbi.parse('2020-11-01 00:00:00', enable_chronic: true)
 
           expect(t.class).to eq(EtOrbi::EoTime)
         end
