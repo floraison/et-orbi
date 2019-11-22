@@ -288,6 +288,17 @@ describe EtOrbi do
         expect(t.strftime('%Y-%m-%d')).to eq(t1.strftime('%Y-%m-%d'))
         expect(t.strftime('%H:%M:%S')).to eq('12:00:00')
       end
+
+      context 'when is Chronic disabled by an option' do
+        it 'handles days that have ambiguous daylight savings conversions' do
+
+          Time.active_support_zone = 'America/Chicago'
+
+          t = EtOrbi.parse('2020-11-01 00:00:00', enable_chronic: false)
+
+          expect(t.class).to eq(EtOrbi::EoTime)
+        end
+      end
     end
   end
 
