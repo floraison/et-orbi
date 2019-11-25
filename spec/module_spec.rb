@@ -289,9 +289,9 @@ describe EtOrbi do
         expect(t.strftime('%H:%M:%S')).to eq('12:00:00')
       end
 
-      context 'when enable_chronic: false' do
+      context 'when parse(x, enable_chronic: false)' do
 
-        it 'handles days that have ambiguous daylight savings conversions' do
+        it 'does not pre-parse with Chronic' do
 
           Time.active_support_zone = 'America/Chicago'
 
