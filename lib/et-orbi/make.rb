@@ -1,6 +1,15 @@
 
 module EtOrbi
 
+  @chronic_enabled = true
+    #
+  def self.chronic_enabled?
+    @chronic_enabled
+  end
+  def self.chronic_enabled=(b)
+    @chronic_enabled = b
+  end
+
   class << self
 
     def now(zone=nil)
@@ -62,7 +71,7 @@ module EtOrbi
     def chronic_parse(str, opts)
 
       return false unless defined?(::Chronic)
-      return false unless opts.fetch(:enable_chronic, true)
+      return false unless opts.fetch(:enable_chronic) { self.chronic_enabled? }
 
       os = opts
         .select { |k, _| Chronic::Parser::DEFAULT_OPTIONS.keys.include?(k) }

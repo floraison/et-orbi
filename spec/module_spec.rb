@@ -305,6 +305,33 @@ describe EtOrbi do
         end
       end
 
+      context 'and Et-Orbi.chronic_enabled? is false' do
+
+        before :each do
+
+          EtOrbi.chronic_enabled = false
+        end
+
+        after :each do
+
+          EtOrbi.chronic_enabled = true
+        end
+
+        it 'does not pre-parse with Chronic' do
+
+          expect {
+            EtOrbi.parse('tomorrow')
+          }.to raise_error(ArgumentError, 'No time information in "tomorrow"')
+        end
+
+        it 'pre-parses with Chronic when enable_chronic: true' do
+
+          expect {
+            EtOrbi.parse('tomorrow', enable_chronic: true)
+          }.not_to raise_error
+        end
+      end
+
       it 'filters options given to Chronic' do
 
         Time.active_support_zone = 'UTC'
@@ -869,6 +896,28 @@ describe EtOrbi do
 
         expect(EtOrbi.tweak_zone_name(n0)).to eq(n1)
       end
+    end
+  end
+
+  describe '.chronic_enabled?' do
+
+    it 'returns true by default' do
+
+      expect(EtOrbi.chronic_enabled?).to eq(true)
+    end
+  end
+
+  describe '.chronic_enabled=' do
+
+    after :each do
+      EtOrbi.chronic_enabled = true
+    end
+
+    it 'lets disable chronic parsing' do
+
+      EtOrbi.chronic_enabled = false
+
+      expect(EtOrbi.chronic_enabled?).to eq(false)
     end
   end
 
