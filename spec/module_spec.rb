@@ -307,12 +307,21 @@ describe EtOrbi do
 
       it 'filters options given to Chronic' do
 
-        expect {
-          EtOrbi.parse(
-            'tomorrow',
-            zone: ::TZInfo::Timezone.get('Asia/Shanghai'))
-        }.not_to raise_error
-        #}.not_to raise_error(ArgumentError, 'Unsupported option(s): zone')
+        Time.active_support_zone = 'UTC'
+
+        expect(::Khronic)
+          .to receive(:parse)
+          .with('tomorrow', { context: :future })
+          .and_call_original
+
+        t = EtOrbi.parse(
+          'tomorrow', zone: ::TZInfo::Timezone.get('UTC'), context: :future)
+        t1 = Time.now + 24 * 3600
+
+        expect(t.class).to eq(EtOrbi::EoTime)
+        expect(t.zone.name).to eq('UTC')
+        expect(t.strftime('%Y-%m-%d')).to eq(t1.strftime('%Y-%m-%d'))
+        expect(t.strftime('%H:%M:%S')).to eq('12:00:00')
       end
     end
   end
