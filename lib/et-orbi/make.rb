@@ -12,8 +12,7 @@ module EtOrbi
 
       str, str_zone = extract_zone(str)
 
-      if defined?(::Chronic) && opts.fetch(:enable_chronic, true) && t = ::Chronic.parse(str, chronic_opts(opts))
-
+      if t = chronic_parse(str, opts)
         str = [ t.strftime('%F %T'), str_zone ].compact.join(' ')
       end
 
@@ -60,9 +59,15 @@ module EtOrbi
 
     protected
 
-    def chronic_opts(opts)
+    def chronic_parse(str, opts)
 
-      opts.select { |k, _| Chronic::Parser::DEFAULT_OPTIONS.keys.include?(k) }
+      return false unless defined?(::Chronic)
+      return false unless opts.fetch(:enable_chronic, true)
+
+      os = opts
+        .select { |k, _| Chronic::Parser::DEFAULT_OPTIONS.keys.include?(k) }
+
+      ::Chronic.parse(str, os)
     end
 
     def make_from_time(t, zone)
