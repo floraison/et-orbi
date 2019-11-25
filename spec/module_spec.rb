@@ -304,6 +304,16 @@ describe EtOrbi do
           }.to raise_error(ArgumentError, 'No time information in "tomorrow"')
         end
       end
+
+      it 'filters options given to Chronic' do
+
+        expect {
+          EtOrbi.parse(
+            'tomorrow',
+            zone: ::TZInfo::Timezone.get('Asia/Shanghai'))
+        }.not_to raise_error
+        #}.not_to raise_error(ArgumentError, 'Unsupported option(s): zone')
+      end
     end
   end
 
