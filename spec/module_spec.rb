@@ -289,6 +289,21 @@ describe EtOrbi do
         expect(t.strftime('%H:%M:%S')).to eq('12:00:00')
       end
 
+      it 'filters out unwanted arguments' do
+
+        Time.active_support_zone = 'UTC'
+
+        expect(::Khronic).to receive(:parse).with('tomorrow', { context: :future }).and_call_original
+
+        t = EtOrbi.parse('tomorrow', zone: TZInfo::Timezone.new('UTC'), context: :future)
+        t1 = Time.now + 24 * 3600
+
+        expect(t.class).to eq(EtOrbi::EoTime)
+        expect(t.zone.name).to eq('UTC')
+        expect(t.strftime('%Y-%m-%d')).to eq(t1.strftime('%Y-%m-%d'))
+        expect(t.strftime('%H:%M:%S')).to eq('12:00:00')
+      end
+
       context 'when enable_chronic: false' do
 
         it 'handles days that have ambiguous daylight savings conversions' do

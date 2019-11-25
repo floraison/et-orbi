@@ -61,7 +61,7 @@ module EtOrbi
     protected
 
     def chronic_opts(opts)
-      opts.slice(*Chronic::Parser::DEFAULT_OPTIONS.keys)
+      opts.select { |key, _| Chronic::Parser::DEFAULT_OPTIONS.keys.include?(key) }
     end
 
     def make_from_time(t, zone)
