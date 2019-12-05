@@ -37,7 +37,7 @@ EtOrbi.parse('1970-01-01 03:00:00 Europe/Moscow')
 ```
 
 More about `EtOrbi::EoTime` instances:
-```
+```ruby
 eot = EtOrbi::EoTime.new(0, 'Europe/Moscow')
 
 eot.to_local_time.class  # => Time
@@ -67,6 +67,46 @@ EtOrbi.platform_info
     # eov: EtOrbi::VERSION
     # rorv: Rails::VERSION::STRING
     # astz: ActiveSupport provided Time.zone
+```
+
+### Chronic integration
+
+By default, et-orbi relies on [Chronic](https://github.com/mojombo/chronic) to parse strings like "tomorrow" or "friday 1pm", if `Chronic` is present.
+
+```ruby
+EtOrbi.parse('tomorrow')
+  # => #<EtOrbi::EoTime:0x007fbc6aa8a560 @seconds=1575687600.0, @zone=#<TZInfo::TimezoneProxy: Asia/Tokyo>, @time=nil>
+EtOrbi.parse('tomorrow').to_s
+  # => "2019-12-07 12:00:00 +0900"
+```
+
+This is a poor design choice I replicated from [rufus-scheduler](https://github.com/jmettraux/rufus-scheduler).
+
+Of course this leads to [issues](https://gitlab.com/gitlab-org/gitlab/issues/37014).
+
+It's probably better to have Chronic do its work outside of et-orbi, like in:
+```ruby
+EtOrbi.parse(Chronic.parse('tomorrow').to_s).to_s
+  # => "2019-12-07 12:00:00 +0900"
+```
+
+If one has Chronic present in his project but doesn't want it to interfere with et-orbi, it can be disabled at `parse` call:
+```ruby
+EtOrbi.parse('tomorrow')
+  # => #<EtOrbi::EoTime:0x007ffb5b2a2390 @seconds=1575687600.0, @zone=#<TZInfo::TimezoneProxy: Asia/Tokyo>, @time=nil>
+EtOrbi.parse('tomorrow', enable_chronic: false)
+  # ArgumentError: No time information in "tomorrow"
+  #   from /home/jmettraux/w/et-orbi/lib/et-orbi/make.rb:31:in `rescue in parse'
+```
+or at the et-orbi level:
+```ruby
+irb(main):007:0> EtOrbi.chronic_enabled = false
+  # => false
+irb(main):008:0> EtOrbi.chronic_enabled?
+  # => false
+EtOrbi.parse('tomorrow')
+  # ArgumentError: No time information in "tomorrow"
+  #   from /home/jmettraux/w/et-orbi/lib/et-orbi/make.rb:31:in `rescue in parse'
 ```
 
 ### Rails?
