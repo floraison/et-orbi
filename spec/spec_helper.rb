@@ -95,7 +95,8 @@ module Helpers
       .inject([]) { |a, z|
         zo =
           if m = z.match(/\Awin(?:dows)?:(.+)\z/)
-            windows? ? ::TZInfo::Timezone.get(m[1]) : nil
+            #windows? ? EtOrbi.get_tzone(m[1]) : nil
+            windows? ? ::TZInfo::Timezone.get(m[1]) : nil  # better
           else
             EtOrbi.get_tzone(z)
           end

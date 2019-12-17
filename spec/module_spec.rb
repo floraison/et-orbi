@@ -485,7 +485,6 @@ describe EtOrbi do
 
         in_zone(zone) do
 
-p select_zones(targets)
           expect(
             EtOrbi.get_tzone(:local)
           ).to be_one_of(
