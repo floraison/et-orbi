@@ -470,10 +470,14 @@ describe EtOrbi do
 
     { # for rufus-scheduler gh-228
 
-      'Asia/Tokyo' => %w[ Asia/Tokyo ],
-      'Asia/Shanghai' => %w[ Asia/Shanghai Asia/Chongqing ],
-      'Europe/Zurich' => %w[ Europe/Zurich Africa/Ceuta windows:CET ],
-      'Europe/London' => %w[ Europe/London Europe/Belfast windows:GMT ],
+      'Asia/Tokyo' => %w[
+        Asia/Tokyo ],
+      'Asia/Shanghai' => %w[
+        Asia/Shanghai Asia/Chongqing ],
+      'Europe/Zurich' => %w[
+        Europe/Zurich Africa/Ceuta windows:CET ],
+      'Europe/London' => %w[
+        Europe/London Europe/Belfast windows:GMT windows:GMT-0 ],
 
     }.each do |zone, targets|
 
