@@ -2,6 +2,9 @@
 # CHANGELOG.md
 
 
+## et-orbi 1.2.3  not yet released
+
+
 ## et-orbi 1.2.2  released 2019-08-19
 
 - Let EoTime#== accept EoTime or ::Time instances, gh-20, gh-7
