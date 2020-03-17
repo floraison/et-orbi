@@ -296,7 +296,7 @@ module EtOrbi
 
     def to_time_s
 
-      strftime("%H:%M:%S.#{'%06d' % usec}")
+      strftime('%H:%M:%S.%6N')
     end
 
     def inc(t, dir=1)
