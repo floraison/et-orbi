@@ -2,6 +2,9 @@
 # CHANGELOG.md
 
 
+## et-orbi 1.2.4  not yet released
+
+
 ## et-orbi 1.2.3  released 2020-03-06
 
 - Introduce EtOrbi.chronic_enabled = false and EtOrbi.chronic_enabled?, gh-26
