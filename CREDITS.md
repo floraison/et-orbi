@@ -1,6 +1,7 @@
 
 # et-orbi credits
 
+* adank92 (https://github.com/adank92) https://github.com/ondrejbartas/sidekiq-cron/issues/276 gh-28
 * Stan Hu (https://github.com/stanhu) Chronic toubles, gh-24, gh-26, etc
 * d-m-u (https://github.com/d-m-u) EoTime#==(Time), gh-20, gh-7
 * Vais Salikhov (https://github.com/vais) missing US timezone aliases, gh-18 gh-19

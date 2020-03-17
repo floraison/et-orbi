@@ -2,7 +2,10 @@
 # CHANGELOG.md
 
 
-## et-orbi 1.2.4  not yet released
+## et-orbi 1.2.4  released 2020-03-18
+
+- Do not call Chronic (even if enabled) from make_from_array, gh-28
+- Be modern, use strftime '%6N', join Ruby 2.x :-)
 
 
 ## et-orbi 1.2.3  released 2020-03-06
