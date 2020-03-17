@@ -105,7 +105,9 @@ module EtOrbi
 
     def make_from_array(a, zone)
 
-      make_from_string(Time.utc(*a).strftime('%Y-%m-%d %H:%M:%S.%6N'), zone)
+      parse(
+        Time.utc(*a).strftime('%Y-%m-%d %H:%M:%S.%6N'), # not a Chronic string
+        zone: zone, enable_chronic: false)
     end
 
     def make_from_string(s, zone)
