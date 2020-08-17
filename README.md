@@ -16,6 +16,8 @@ require 'et-orbi'
 
 EtOrbi.now
   # => #<EtOrbi::EoTime:0x007f94d94 ...>
+EtOrbi.now('Asia/Singapore')
+  # => #<EtOrbi::EoTime:0x39c96e48 @time=nil, @zone=#<TZInfo::DataTimezone: Asia/Singapore>...>
 EtOrbi.parse('2017-12-13 13:00:00 America/Jamaica')
   # => #<EtOrbi::EoTime:0x007f94d90 @zone=#<TZInfo::DataTimezone: America/Jamaica>...>
 EtOrbi.make_time(Time.now)
