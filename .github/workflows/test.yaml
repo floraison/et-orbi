@@ -60,10 +60,12 @@ jobs:
       #  with:
       #    ruby-version: ${{matrix.ruby}}
       #    bundler-cache: true
-      - run: data /t; tzutil /g
+      - run: data /t
+      - run: tzutil /g
       - run: tzutil /s "%TZONE%"
         shell: cmd
-      - run: date /t; tzutil /g
+      - run: data /t
+      - run: tzutil /g
       #- run: ruby --version
       #- run: gem --version
       #- run: bundle --version
