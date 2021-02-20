@@ -9,13 +9,26 @@ jobs:
 
     if: " ! (contains(github.event.head_commit.message, 'skip ci') || contains(github.event.head_commit.message, 'ci skip'))"
 
-    runs-on: ubuntu-latest
+    name: ${{matrix.ruby}} on ${{matrix.os}}${{matrix.name_suffix}}
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-2019 ]
+        ruby: [ '1.9.3', '2.1', '2.5', '2.6', '2.7', jruby-9.2 ]
+        architecture: [ default ]
+        name_suffix: [ '' ]
+        experimental: [ false ]
+      fail-fast: false
+    runs-on: ${{matrix.os}}
+    continue-on-error: ${{ matrix.experimental }}
 
     steps:
       - uses: actions/checkout@v2
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7
+          ruby-version: ${{matrix.ruby}}
+          architecture: ${{matrix.architecture}}
+          bundler-cache: true
       - run: ruby --version
       - run: gem --version
       - run: bundle --version
