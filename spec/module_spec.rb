@@ -236,6 +236,37 @@ describe EtOrbi do
       expect(t.to_zs).to eq('2019-01-01 12:10:00 Asia/Shanghai')
     end
 
+    # https://en.wikipedia.org/wiki/List_of_time_zone_abbreviations
+    # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+
+    [ # IN                | Time.parse            | EtOrbi.parse  | in timezone)
+
+      '2015/03/08 01:59:59 | 20150308 015959 +0300 | 20150308 015959 +0300 | Europe/Moscow',
+      #'2021-01-01 7AM PST | 20210101 070000 -0800 | 20210101 070000 +0000',
+
+    ].each do |l|
+
+      ss = l.split(/\s*\|\s*/)
+      l0 = ss.join(' | ')
+
+      h = OpenStruct.new(s: ss[0], ts: ss[1], eots: ss[2], inzone: ss[3])
+
+      f = '%Y%m%d %H%M%S %z'
+      title = "parses #{h.s.inspect}"
+      title = "#{title} in #{h.inzone}" if h.inzone
+
+      it(title) do
+
+        t, ot = in_zone(h.inzone) { [ Time.parse(h.s), EtOrbi.parse(h.s) ] }
+
+        l1 = [ h.s, t.strftime(f), ot.strftime(f), h.inzone ]
+          .compact
+          .join(' | ')
+
+        expect(l1).to eq(l0)
+      end
+    end
+
     context 'when Chronic is defined' do
 
       before :each do

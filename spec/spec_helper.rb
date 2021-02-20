@@ -8,12 +8,9 @@
 ENV['_TZ'] = ENV['TZ'] # preserve original TZ if any
 
 require 'pp'
+require 'ostruct'
 
 require 'chronic'
-  #
-p defined?(Chronic)
-p defined?(::Chronic)
-  #
 ::Khronic = ::Chronic
 Object.send(:remove_const, :Chronic)
 
