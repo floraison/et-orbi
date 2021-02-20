@@ -1,7 +1,12 @@
 
-source 'https://rubygems.org'
+Gemfile.appveyor:
+  source 'https://rubygems.org'
+  gem 'tzinfo-data'
+  gemspec
 
-gem 'tzinfo-data'
-
-gemspec
+Gemfile.appveyor_tzi125:
+  source 'https://rubygems.org'
+  gem 'tzinfo-data'
+  gem 'tzinfo', '1.2.5'
+  gemspec
 
