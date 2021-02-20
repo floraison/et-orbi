@@ -13,14 +13,16 @@ jobs:
 
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-2019 ]
-        ruby: [ '1.9.3', '2.1', '2.5', '2.6', '2.7', jruby-9.2 ]
+        #os: [ ubuntu-latest, windows-2019 ]
+        os: [ ubuntu-latest ]
+        #ruby: [ '1.9.3', '2.1', '2.5', '2.6', '2.7', jruby-9.2 ]
+        ruby: [ '2.3', '2.4', '2.5', '2.6', '2.7', jruby-9.2 ]
         architecture: [ default ]
         name_suffix: [ '' ]
         experimental: [ false ]
       fail-fast: false
     runs-on: ${{matrix.os}}
-    continue-on-error: ${{ matrix.experimental }}
+    continue-on-error: ${{matrix.experimental}}
 
     steps:
       - uses: actions/checkout@v2
