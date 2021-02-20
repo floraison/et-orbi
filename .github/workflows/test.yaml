@@ -47,7 +47,7 @@ jobs:
         os: [ windows-2019 ]
         ruby: [ '2.5', '2.6', '2.7', jruby-9.2 ]
         experimental: [ false ]
-        tz: [ '', 'UTC', 'Tokyo Standard Time', 'Eastern Standard Time' ]
+        tz: [ 'UTC', 'Tokyo Standard Time', 'Eastern Standard Time' ]
       fail-fast: false
     runs-on: ${{matrix.os}}
     continue-on-error: ${{matrix.experimental}}
@@ -60,10 +60,10 @@ jobs:
       #  with:
       #    ruby-version: ${{matrix.ruby}}
       #    bundler-cache: true
-      - run: tzutil /g
+      - run: data /t; tzutil /g
       - run: tzutil /s "%TZONE%"
         shell: cmd
-      - run: tzutil /g
+      - run: date /t; tzutil /g
       #- run: ruby --version
       #- run: gem --version
       #- run: bundle --version
