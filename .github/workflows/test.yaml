@@ -57,21 +57,18 @@ jobs:
       TZONE: ${{matrix.tz}}
     steps:
       - uses: actions/checkout@v2
-      #- uses: ruby/setup-ruby@v1
-      #  with:
-      #    ruby-version: ${{matrix.ruby}}
-      #    bundler-cache: true
-      - run: echo %date% %time%; tzutil /g
-        shell: cmd
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{matrix.ruby}}
+          bundler-cache: false
       - run: tzutil /s "%TZONE%"
         shell: cmd
       - run: echo %date% %time%; tzutil /g
         shell: cmd
-      - run: type Gemfile; type Gemfile.windows
-        shell: cmd
-      #- run: ruby --version
-      #- run: gem --version
-      #- run: bundle --version
-      #- run: bundle install
-      #- run: bundle exec rspec --force-color --format documentation
+      - run: ruby --version
+      - run: gem --version
+      - run: bundle --version
+      - run: cp Gemfile.windows Gemfile
+      - run: bundle install
+      - run: bundle exec rspec --force-color --format documentation
 
