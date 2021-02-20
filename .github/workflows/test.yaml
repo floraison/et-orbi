@@ -52,14 +52,14 @@ jobs:
     runs-on: ${{matrix.os}}
     continue-on-error: ${{matrix.experimental}}
 
+    env:
+      TZONE: ${{matrix.tz}}
     steps:
       - uses: actions/checkout@v2
       #- uses: ruby/setup-ruby@v1
       #  with:
       #    ruby-version: ${{matrix.ruby}}
       #    bundler-cache: true
-      - env:
-          TZONE: ${{matrix.tz}}
       - run: tzutil /g
       - run: tzutil /s "%TZONE%"
       - run: tzutil /g
