@@ -36,3 +36,33 @@ jobs:
         env:
           TZ: ${{matrix.tz}}
 
+  test-windows:
+
+    if: " ! (contains(github.event.head_commit.message, 'skip ci') || contains(github.event.head_commit.message, 'ci skip'))"
+
+    name: ${{matrix.ruby}} on ${{matrix.os}} in ${{matrix.tz}}
+
+    strategy:
+      matrix:
+        os: [ windows-2019 ]
+        ruby: [ '2.5', '2.6', '2.7', jruby-9.2 ]
+        experimental: [ false ]
+        tz: [ '', 'UTC', 'Tokyo Standard Time', 'Eastern Standard Time' ]
+      fail-fast: false
+    runs-on: ${{matrix.os}}
+    continue-on-error: ${{matrix.experimental}}
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{matrix.ruby}}
+          bundler-cache: true
+      - run: ruby --version
+      - run: gem --version
+      - run: bundle --version
+      - run: bundle install
+      - run: bundle exec rspec --force-color --format documentation
+        env:
+          TZONE: ${{matrix.tz}}
+
