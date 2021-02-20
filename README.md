@@ -2,7 +2,6 @@
 # et-orbi
 
 [![tests](https://github.com/jmettraux/scorn/workflows/test/badge.svg)](https://github.com/floraison/et-orbi/actions)
-[![Build status](https://ci.appveyor.com/api/projects/status/6tbo9lk9qdor8ipl?svg=true)](https://ci.appveyor.com/project/jmettraux/et-orbi)
 [![Gem Version](https://badge.fury.io/rb/et-orbi.svg)](http://badge.fury.io/rb/et-orbi)
 [![Join the chat at https://gitter.im/floraison/fugit](https://badges.gitter.im/floraison/fugit.svg)](https://gitter.im/floraison/fugit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
