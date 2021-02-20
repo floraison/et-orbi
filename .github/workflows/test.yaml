@@ -9,14 +9,13 @@ jobs:
 
     if: " ! (contains(github.event.head_commit.message, 'skip ci') || contains(github.event.head_commit.message, 'ci skip'))"
 
-    name: ${{matrix.ruby}} on ${{matrix.os}}
+    name: ${{matrix.ruby}} on ${{matrix.os}} in ${{matrix.tz}}
 
     strategy:
       matrix:
         #os: [ ubuntu-latest, windows-2019 ]
         os: [ ubuntu-latest ]
-        #ruby: [ '1.9.3', '2.1', '2.5', '2.6', '2.7', jruby-9.2 ]
-        ruby: [ '2.3', '2.4', '2.5', '2.6', '2.7', jruby-9.2 ]
+        ruby: [ '2.3', '2.5', '2.6', '2.7', jruby-9.2 ]
         experimental: [ false ]
         tz: [ '', 'UTC', 'Asia/Tokyo', 'America/Chicago' ]
       fail-fast: false
