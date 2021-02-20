@@ -67,9 +67,9 @@ jobs:
       - run: ruby --version
       - run: gem --version
       - run: bundle --version
-      - run: ruby -e "n = Time.now; p [ ENV['TZ'], n, n.zone ]"
-      - run: bundle exec ruby -e "require 'et-orbi'; p EtOrbi.determine_local_tzone"
       - run: cp Gemfile.windows Gemfile
       - run: bundle install
+      - run: ruby -e "n = Time.now; p [ ENV['TZ'], n, n.zone ]"
+      - run: bundle exec ruby -e "require 'et-orbi'; p EtOrbi.determine_local_tzone"
       - run: bundle exec rspec --force-color --format documentation
 
