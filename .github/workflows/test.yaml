@@ -45,7 +45,8 @@ jobs:
     strategy:
       matrix:
         os: [ windows-2019 ]
-        ruby: [ '2.5', '2.6', '2.7', jruby-9.2 ]
+        #ruby: [ '2.5', '2.6', '2.7', jruby-9.2 ]
+        ruby: [ '2.5' ]
         experimental: [ false ]
         tz: [ 'UTC', 'Tokyo Standard Time', 'Eastern Standard Time' ]
       fail-fast: false
@@ -66,11 +67,11 @@ jobs:
         shell: cmd
       - run: echo %date% %time%; tzutil /g
         shell: cmd
+      - run: type Gemfile; type Gemfile.windows
+        shell: cmd
       #- run: ruby --version
       #- run: gem --version
       #- run: bundle --version
       #- run: bundle install
       #- run: bundle exec rspec --force-color --format documentation
-      #  env:
-      #    TZONE: ${{matrix.tz}}
 
