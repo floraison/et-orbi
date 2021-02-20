@@ -5,11 +5,11 @@ on: [ push, pull_request ]
 
 jobs:
 
-  test:
+  test-ubuntu:
 
     if: " ! (contains(github.event.head_commit.message, 'skip ci') || contains(github.event.head_commit.message, 'ci skip'))"
 
-    name: ${{matrix.ruby}} on ${{matrix.os}}${{matrix.name_suffix}}
+    name: ${{matrix.ruby}} on ${{matrix.os}}
 
     strategy:
       matrix:
@@ -17,9 +17,8 @@ jobs:
         os: [ ubuntu-latest ]
         #ruby: [ '1.9.3', '2.1', '2.5', '2.6', '2.7', jruby-9.2 ]
         ruby: [ '2.3', '2.4', '2.5', '2.6', '2.7', jruby-9.2 ]
-        architecture: [ default ]
-        name_suffix: [ '' ]
         experimental: [ false ]
+        tz: [ '', 'UTC', 'Asia/Tokyo', 'America/Chicago' ]
       fail-fast: false
     runs-on: ${{matrix.os}}
     continue-on-error: ${{matrix.experimental}}
@@ -29,11 +28,12 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{matrix.ruby}}
-          architecture: ${{matrix.architecture}}
           bundler-cache: true
       - run: ruby --version
       - run: gem --version
       - run: bundle --version
       - run: bundle install
       - run: bundle exec rspec --force-color --format documentation
+        env:
+          TZ: ${{matrix.tz}}
 
