@@ -5,36 +5,35 @@ on: [ push, pull_request ]
 
 jobs:
 
-  #test-ubuntu:
+  test-ubuntu:
 
-  #  if: " ! (contains(github.event.head_commit.message, 'skip ci') || contains(github.event.head_commit.message, 'ci skip'))"
+    if: " ! (contains(github.event.head_commit.message, 'skip ci') || contains(github.event.head_commit.message, 'ci skip'))"
 
-  #  name: ${{matrix.ruby}} on ${{matrix.os}} in ${{matrix.tz}}
+    name: ${{matrix.ruby}} on ${{matrix.os}} in ${{matrix.tz}}
 
-  #  strategy:
-  #    matrix:
-  #      #os: [ ubuntu-latest, windows-2019 ]
-  #      os: [ ubuntu-latest ]
-  #      ruby: [ '2.3', '2.5', '2.6', '2.7', jruby-9.2 ]
-  #      experimental: [ false ]
-  #      tz: [ '', 'UTC', 'Asia/Tokyo', 'America/Chicago' ]
-  #    fail-fast: false
-  #  runs-on: ${{matrix.os}}
-  #  continue-on-error: ${{matrix.experimental}}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        ruby: [ '2.3', '2.5', '2.6', '2.7', jruby-9.2 ]
+        experimental: [ false ]
+        tz: [ '', 'UTC', 'Asia/Tokyo', 'America/Chicago' ]
+      fail-fast: false
+    runs-on: ${{matrix.os}}
+    continue-on-error: ${{matrix.experimental}}
 
-  #  steps:
-  #    - uses: actions/checkout@v2
-  #    - uses: ruby/setup-ruby@v1
-  #      with:
-  #        ruby-version: ${{matrix.ruby}}
-  #        bundler-cache: true
-  #    - run: ruby --version
-  #    - run: gem --version
-  #    - run: bundle --version
-  #    - run: bundle install
-  #    - run: bundle exec rspec --force-color --format documentation
-  #      env:
-  #        TZ: ${{matrix.tz}}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{matrix.ruby}}
+          bundler-cache: true
+      - run: ruby --version
+      - run: gem --version
+      - run: bundle --version
+      - run: bundle install
+      - run: bundle exec rspec --force-color --format documentation
+        env:
+          TZ: ${{matrix.tz}}
 
   test-windows:
 
