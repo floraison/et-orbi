@@ -1,0 +1,24 @@
+
+name: test
+
+on: [ push, pull_request ]
+
+jobs:
+
+  test:
+
+    if: " ! (contains(github.event.head_commit.message, 'skip ci') || contains(github.event.head_commit.message, 'ci skip'))"
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+      - run: ruby --version
+      - run: gem --version
+      - run: bundle --version
+      - run: bundle install
+      - run: bundle exec rspec --force-color --format documentation
+
