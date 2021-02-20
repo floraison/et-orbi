@@ -58,11 +58,13 @@ jobs:
         with:
           ruby-version: ${{matrix.ruby}}
           bundler-cache: true
+      - run: "tzutil \/g"
       - run: ruby --version
-      - run: gem --version
-      - run: bundle --version
-      - run: bundle install
-      - run: bundle exec rspec --force-color --format documentation
+        run: gem --version
+        run: bundle --version
+        run: bundle install
+        run: bundle exec rspec --force-color --format documentation
+        run: bundle exec rspec --force-color --format documentation
         env:
           TZONE: ${{matrix.tz}}
 
