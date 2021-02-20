@@ -76,7 +76,10 @@ By default, et-orbi relies on [Chronic](https://github.com/mojombo/chronic) to p
 
 ```ruby
 EtOrbi.parse('tomorrow')
-  # => #<EtOrbi::EoTime:0x007fbc6aa8a560 @seconds=1575687600.0, @zone=#<TZInfo::TimezoneProxy: Asia/Tokyo>, @time=nil>
+  # => #<EtOrbi::EoTime:0x007fbc6aa8a560
+  #      @seconds=1575687600.0,
+  #      @zone=#<TZInfo::TimezoneProxy: Asia/Tokyo>,
+  #      @time=nil>
 EtOrbi.parse('tomorrow').to_s
   # => "2019-12-07 12:00:00 +0900"
 ```
@@ -91,10 +94,13 @@ EtOrbi.parse(Chronic.parse('tomorrow').to_s).to_s
   # => "2019-12-07 12:00:00 +0900"
 ```
 
-If one has Chronic present in his project but doesn't want it to interfere with et-orbi, it can be disabled at `parse` call:
+If one has Chronic present in their project but doesn't want it to interfere with et-orbi, it can be disabled at `parse` call:
 ```ruby
 EtOrbi.parse('tomorrow')
-  # => #<EtOrbi::EoTime:0x007ffb5b2a2390 @seconds=1575687600.0, @zone=#<TZInfo::TimezoneProxy: Asia/Tokyo>, @time=nil>
+  # => #<EtOrbi::EoTime:0x007ffb5b2a2390
+  #      @seconds=1575687600.0,
+  #      @zone=#<TZInfo::TimezoneProxy: Asia/Tokyo>,
+  #      @time=nil>
 EtOrbi.parse('tomorrow', enable_chronic: false)
   # ArgumentError: No time information in "tomorrow"
   #   from /home/jmettraux/w/et-orbi/lib/et-orbi/make.rb:31:in `rescue in parse'
