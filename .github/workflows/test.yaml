@@ -45,8 +45,7 @@ jobs:
     strategy:
       matrix:
         os: [ windows-2019 ]
-        #ruby: [ '2.5', '2.6', '2.7', jruby-9.2 ]
-        ruby: [ '2.5' ]
+        ruby: [ '2.5', '2.6', '2.7', jruby-9.2 ]
         experimental: [ false ]
         tz: [ 'UTC', 'Tokyo Standard Time', 'Eastern Standard Time' ]
       fail-fast: false
@@ -68,6 +67,9 @@ jobs:
       - run: ruby --version
       - run: gem --version
       - run: bundle --version
+      - run: bundle list
+      - run: ruby -e "n = Time.now; p [ ENV['TZ'], n, n.zone ]"
+      - run: bundle exec ruby -e "require 'et-orbi'; p EtOrbi.determine_local_tzone"
       - run: cp Gemfile.windows Gemfile
       - run: bundle install
       - run: bundle exec rspec --force-color --format documentation
