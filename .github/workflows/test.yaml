@@ -60,11 +60,11 @@ jobs:
       #  with:
       #    ruby-version: ${{matrix.ruby}}
       #    bundler-cache: true
-      - run: date /t; tzutil /g
+      - run: echo %date% %time%; tzutil /g
         shell: cmd
       - run: tzutil /s "%TZONE%"
         shell: cmd
-      - run: date /t; tzutil /g
+      - run: echo %date% %time%; tzutil /g
         shell: cmd
       #- run: ruby --version
       #- run: gem --version
