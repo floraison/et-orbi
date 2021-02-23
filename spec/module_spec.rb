@@ -239,31 +239,32 @@ describe EtOrbi do
     # https://en.wikipedia.org/wiki/List_of_time_zone_abbreviations
     # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
-    [ # IN                | Time.parse            | EtOrbi.parse  | in timezone)
+    context 'TZ abbreviations' do
 
-      '2015/03/08 01:59:59 | 20150308 015959 +0300 | 20150308 015959 +0300 | Europe/Moscow',
-      #'2021-01-01 7AM PST | 20210101 070000 -0800 | 20210101 070000 +0000',
+      {
 
-    ].each do |l|
+        '2021-01-01 7AM America/Los_Angeles' => '2021-01-01 07:00:00 -0800',
+        '2021-07-01 7AM America/Los_Angeles' => '2021-07-01 07:00:00 -0700',
+        '2021-01-01 7AM PST' =>                 '2021-01-01 07:00:00 -0800',
+        '2021-07-01 7AM PDT' =>                 '2021-07-01 07:00:00 -0700',
+        '2021-01-01 7AM -07:00' =>              '2021-01-01 07:00:00 -0700',
+        '2021-07-01 7AM -07:00' =>              '2021-07-01 07:00:00 -0700',
+        '2021-01-01 7AM GMT-7' =>               '2021-01-01 07:00:00 -0700',
+        '2021-07-01 7AM GMT-7' =>               '2021-07-01 07:00:00 -0700',
+        '2021-01-01 7AM UTC-7' =>               '2021-01-01 07:00:00 -0700',
+        '2021-07-01 7AM UTC-7' =>               '2021-07-01 07:00:00 -0700',
+        '2021-01-01 7AM Etc/GMT-7' =>           '2021-01-01 07:00:00 -0700',
+        '2021-07-01 7AM Etc/GMT-7' =>           '2021-07-01 07:00:00 -0700',
 
-      ss = l.split(/\s*\|\s*/)
-      l0 = ss.join(' | ')
+      }.each do |k, v|
 
-      h = OpenStruct.new(s: ss[0], ts: ss[1], eots: ss[2], inzone: ss[3])
+        it "parses #{k} to #{v}" do
 
-      f = '%Y%m%d %H%M%S %z'
-      title = "parses #{h.s.inspect}"
-      title = "#{title} in #{h.inzone}" if h.inzone
+          ot = EtOrbi.parse(k)
+  #p [ k, v, ot ]
 
-      it(title) do
-
-        t, ot = in_zone(h.inzone) { [ Time.parse(h.s), EtOrbi.parse(h.s) ] }
-
-        l1 = [ h.s, t.strftime(f), ot.strftime(f), h.inzone ]
-          .compact
-          .join(' | ')
-
-        expect(l1).to eq(l0)
+          expect(ot.to_s).to eq(v)
+        end
       end
     end
 
