@@ -264,6 +264,12 @@ describe EtOrbi do
         it "parses #{k} to #{v}" do
 
           ot = EtOrbi.parse(k)
+t = Time.parse(k)
+p [ k ]
+p [ Date._parse(k) ]
+p [ t.to_s, t.zone, :t ]
+p [ ot.to_s, ot.zone, :ot ]
+p [ v ]
   #p [ k, v, ot ]
 
           expect(ot.to_s).to eq(v)
