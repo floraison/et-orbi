@@ -236,46 +236,46 @@ describe EtOrbi do
       expect(t.to_zs).to eq('2019-01-01 12:10:00 Asia/Shanghai')
     end
 
-    # https://en.wikipedia.org/wiki/List_of_time_zone_abbreviations
-    # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-
-    context 'TZ abbreviations' do
-
-      {
-
-        '2021-01-01 7AM America/Los_Angeles' => '2021-01-01 07:00:00 -0800',
-        '2021-07-01 7AM America/Los_Angeles' => '2021-07-01 07:00:00 -0700',
-        '2021-01-01 7AM PST' =>                 '2021-01-01 07:00:00 -0800',
-        '2021-07-01 7AM PDT' =>                 '2021-07-01 07:00:00 -0700',
-        '2021-01-01 7AM -07:00' =>              '2021-01-01 07:00:00 -0700',
-        '2021-07-01 7AM -07:00' =>              '2021-07-01 07:00:00 -0700',
-        '2021-01-01 7AM GMT-7' =>               '2021-01-01 07:00:00 -0700',
-        '2021-07-01 7AM GMT-7' =>               '2021-07-01 07:00:00 -0700',
-        '2021-01-01 7AM UTC-7' =>               '2021-01-01 07:00:00 -0700',
-        '2021-07-01 7AM UTC-7' =>               '2021-07-01 07:00:00 -0700',
-        '2021-01-01 7AM Etc/GMT-7' =>           '2021-01-01 07:00:00 -0700',
-        '2021-07-01 7AM Etc/GMT-7' =>           '2021-07-01 07:00:00 -0700',
-
-        '2021-01-01 7AM ACDT' => '2021-01-01 07:00:00 +0930',
-        '2021-07-01 7AM ACST' => '2021-01-01 07:00:00 +1030',
-
-      }.each do |k, v|
-
-        it "parses #{k} to #{v}" do
-
-          ot = EtOrbi.parse(k)
-t = Time.parse(k)
-p [ k ]
-p [ Date._parse(k) ]
-p [ t.to_s, t.zone, :t ]
-p [ ot.to_s, ot.zone, :ot ]
-p [ v ]
-  #p [ k, v, ot ]
-
-          expect(ot.to_s).to eq(v)
-        end
-      end
-    end
+#    # https://en.wikipedia.org/wiki/List_of_time_zone_abbreviations
+#    # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+#
+#    context 'TZ abbreviations' do
+#
+#      {
+#
+#        '2021-01-01 7AM America/Los_Angeles' => '2021-01-01 07:00:00 -0800',
+#        '2021-07-01 7AM America/Los_Angeles' => '2021-07-01 07:00:00 -0700',
+#        '2021-01-01 7AM PST' =>                 '2021-01-01 07:00:00 -0800',
+#        '2021-07-01 7AM PDT' =>                 '2021-07-01 07:00:00 -0700',
+#        '2021-01-01 7AM -07:00' =>              '2021-01-01 07:00:00 -0700',
+#        '2021-07-01 7AM -07:00' =>              '2021-07-01 07:00:00 -0700',
+#        '2021-01-01 7AM GMT-7' =>               '2021-01-01 07:00:00 -0700',
+#        '2021-07-01 7AM GMT-7' =>               '2021-07-01 07:00:00 -0700',
+#        '2021-01-01 7AM UTC-7' =>               '2021-01-01 07:00:00 -0700',
+#        '2021-07-01 7AM UTC-7' =>               '2021-07-01 07:00:00 -0700',
+#        '2021-01-01 7AM Etc/GMT-7' =>           '2021-01-01 07:00:00 -0700',
+#        '2021-07-01 7AM Etc/GMT-7' =>           '2021-07-01 07:00:00 -0700',
+#
+#        '2021-01-01 7AM ACDT' => '2021-01-01 07:00:00 +0930',
+#        '2021-07-01 7AM ACST' => '2021-01-01 07:00:00 +1030',
+#
+#      }.each do |k, v|
+#
+#        it "parses #{k} to #{v}" do
+#
+#          ot = EtOrbi.parse(k)
+#t = Time.parse(k)
+#p [ k ]
+#p [ Date._parse(k) ]
+#p [ t.to_s, t.zone, :t ]
+#p [ ot.to_s, ot.zone, :ot ]
+#p [ v ]
+#  #p [ k, v, ot ]
+#
+#          expect(ot.to_s).to eq(v)
+#        end
+#      end
+#    end
 
     context 'when Chronic is defined' do
 
