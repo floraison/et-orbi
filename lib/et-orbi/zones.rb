@@ -13,7 +13,7 @@ module EtOrbi
           (?![-+])
             |Z
         )
-      }x
+      }x.freeze
 
     # https://en.wikipedia.org/wiki/ISO_8601
     # Postel's law applies
@@ -34,6 +34,7 @@ module EtOrbi
 
     def extract_zone(str)
 
+p str
       s = str.dup
 
       zs = ZONES_OLSON
@@ -47,7 +48,12 @@ module EtOrbi
 
       zs = zs.sort_by { |z| str.index(z) }
 
+      if ! zs
+p Date._parse(str)
+      end
+
       [ s.strip, zs.last ]
+.tap { |x| pp x }
     end
 
     def determine_local_tzone
