@@ -2,6 +2,11 @@
 # CHANGELOG.md
 
 
+## et-orbi 1.2.5  not yet released
+
+- Re-use the DateTime.parse result
+
+
 ## et-orbi 1.2.4  released 2020-03-18
 
 - Do not call Chronic (even if enabled) from make_from_array, gh-28
