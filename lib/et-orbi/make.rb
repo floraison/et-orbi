@@ -25,23 +25,25 @@ module EtOrbi
         str = [ t.strftime('%F %T'), str_zone ].compact.join(' ')
       end
 
-      begin
-        DateTime.parse(str)
-      rescue
-        fail ArgumentError, "No time information in #{str.inspect}"
-      end
-      #end if RUBY_VERSION < '1.9.0'
-      #end if RUBY_VERSION < '2.0.0'
-        #
-        # is necessary since Time.parse('xxx') in Ruby < 1.9 yields `now`
+      dt =
+        begin
+          DateTime.parse(str)
+        rescue
+          fail ArgumentError, "No time information in #{str.inspect}"
+        end
+        #end if RUBY_VERSION < '1.9.0'
+        #end if RUBY_VERSION < '2.0.0'
+          #
+          # is necessary since Time.parse('xxx') in Ruby < 1.9 yields `now`
 
       zone =
         opts[:zone] ||
         get_tzone(str_zone) ||
         determine_local_tzone
 
-      local = Time.parse(str)
-      secs = zone.local_to_utc(local).to_f
+      #local = Time.parse(str)
+      #secs = zone.local_to_utc(local).to_f
+      secs = zone.local_to_utc(dt).to_time.to_f
 
       EoTime.new(secs, zone)
     end
