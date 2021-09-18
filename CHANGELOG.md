@@ -2,7 +2,7 @@
 # CHANGELOG.md
 
 
-## et-orbi 1.2.5  not yet released
+## et-orbi 1.2.5  released 2021-09-18
 
 - Re-use the DateTime.parse result
 
