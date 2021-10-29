@@ -30,11 +30,13 @@ EtOrbi._make_info
 
 
 
+def windows?; Gem.win_platform?; end
+
 
 module Helpers
 
   def jruby?; !! RUBY_PLATFORM.match(/java/); end
-  def windows?; Gem.win_platform?; end
+  #def windows?; Gem.win_platform?; end
 
   def in_zone(zone_name, t=Time.now, &block)
 

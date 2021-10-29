@@ -803,13 +803,13 @@ describe EtOrbi do
       [ 'a string',
         'America/Chicago',
         lambda { [ Time.parse('2021-03-11') ] },
-        windows? 'CST6CDT' : 'America - Chicago',
+        windows? ? 'CST6CDT' : 'America - Chicago',
         lambda { |t| t.zone.to_s } ],
 
       [ 'a string',
         'America/New_York',
         lambda { [ Time.parse('2021-03-11') ] },
-        windows? 'EST' : 'America - New York',
+        windows? ? 'EST' : 'America - New York',
         lambda { |t| t.zone.to_s } ],
 
     ].each do |name, zone, args, expected, transformer|
