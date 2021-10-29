@@ -800,7 +800,19 @@ describe EtOrbi do
         [ '2017-01-31 12:30', EtOrbi.get_tzone('Europe/Oslo') ],
         'ot 2017-01-31 12:30:00 +01:00 dst:false' ],
 
-    ].each do |name, zone, args, expected|
+      [ 'a string',
+        'America/Chicago',
+        lambda { [ Time.parse('2021-03-11') ] },
+        'America - Chicago',
+        lambda { |t| t.zone.to_s } ],
+
+      [ 'a string',
+        'America/New_York',
+        lambda { [ Time.parse('2021-03-11') ] },
+        'America - New York',
+        lambda { |t| t.zone.to_s } ],
+
+    ].each do |name, zone, args, expected, transformer|
 
       title = "turns #{name} into an EoTime instance"
       title += " in #{zone}" if zone
@@ -819,6 +831,8 @@ describe EtOrbi do
               expected.call :
               expected
 
+            t = transformer.is_a?(Proc) ? transformer[t] : t
+
             [ t, x ]
           end
 #p eot.to_debug_s
@@ -827,9 +841,15 @@ describe EtOrbi do
 #p eot.send(:to_time).utc_offset
 
         case exp
-        when String then expect(eot.to_debug_s).to eq(exp)
-        when Array then expect(eot).to be_between(*exp)
-        else expect(eot).to eq(exp)
+        when String
+          expect(eot.respond_to?(:to_debug_s) ? eot.to_debug_s : eot
+            ).to eq(exp)
+        when Array
+          expect(eot
+            ).to be_between(*exp)
+        else
+          expect(eot
+            ).to eq(exp)
         end
       end
     end

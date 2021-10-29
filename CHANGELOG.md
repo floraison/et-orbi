@@ -4,6 +4,8 @@
 
 ## et-orbi 1.2.6  not yet released
 
+- Favour IANA timezone name in EtOrbi.make_time
+
 
 ## et-orbi 1.2.5  released 2021-09-18
 

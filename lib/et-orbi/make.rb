@@ -86,8 +86,8 @@ module EtOrbi
       z =
         zone ||
         get_as_tzone(t) ||
-        get_tzone(t.zone) ||
-        get_local_tzone(t)
+        get_local_tzone(t) ||
+        get_tzone(t.zone)
 
       z ||= t.zone
         # pass the abbreviation anyway,
