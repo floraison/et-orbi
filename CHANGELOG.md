@@ -2,7 +2,7 @@
 # CHANGELOG.md
 
 
-## et-orbi 1.2.6  not yet released
+## et-orbi 1.2.6  released 2021-10-30
 
 - Favour IANA timezone name in EtOrbi.make_time
 
