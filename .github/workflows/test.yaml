@@ -54,6 +54,7 @@ jobs:
       TZONE: ${{matrix.tz}}
     steps:
       - uses: actions/checkout@v2
+      - run: cp Gemfile.windows Gemfile
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{matrix.ruby}}
@@ -65,7 +66,6 @@ jobs:
       - run: ruby --version
       - run: gem --version
       - run: bundle --version
-      - run: cp Gemfile.windows Gemfile
       - run: ruby -e "n = Time.now; p [ ENV['TZ'], n, n.zone ]"
       - run: bundle exec ruby -e "require 'et-orbi'; p EtOrbi.determine_local_tzone"
       - run: bundle exec rspec --force-color --format documentation
