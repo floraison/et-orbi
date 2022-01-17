@@ -809,7 +809,7 @@ describe EtOrbi do
       [ 'a string',
         'America/New_York',
         lambda { [ Time.parse('2021-03-11') ] },
-        windows? ? 'EST' : 'America - New York',
+        windows? ? 'EST5EDT' : 'America - New York',
         lambda { |t| t.zone.to_s } ],
 
     ].each do |name, zone, args, expected, transformer|
