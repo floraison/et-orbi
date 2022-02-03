@@ -1,6 +1,7 @@
 
 # et-orbi credits
 
+* Peter Goldstein, https://github.com/petergoldstein GHA 3.3 j9.3, gh-32
 * harsha-flipp (https://github.com/harsha-flipp) https://github.com/floraison/fugit/issues/63
 * adank92 (https://github.com/adank92) https://github.com/ondrejbartas/sidekiq-cron/issues/276 gh-28
 * Stan Hu (https://github.com/stanhu) Chronic toubles, gh-24, gh-26, etc
