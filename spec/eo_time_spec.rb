@@ -525,15 +525,25 @@ describe EtOrbi::EoTime do
 
   describe '#wday_in_month' do
 
-    it 'computes the wday in month interval' do
+    {
 
-      t = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
+      [ 1193898300, 'Europe/Paris' ] => [ 1, -5 ],
+      '2017-06-21 Europe/Paris' => [ 3, -2 ],
+      '2022-03-29 UTC' => [ 5, -1 ],
+      '2022-03-29 Europe/Paris' => [ 5, -1 ],
 
-      expect(t.wday_in_month).to eq([ 1, -5 ])
+    }.each do |k, v|
 
-      t = EtOrbi.make_time('2017-06-21 Europe/Paris')
+      it "computes the wday in month interval for #{k.inspect}" do
 
-      expect(t.wday_in_month).to eq([ 3, -2 ])
+        t =
+          case k
+          when String then EtOrbi.make_time(k)
+          else EtOrbi::EoTime.new(*k)
+          end
+
+        expect(t.wday_in_month).to eq(v)
+      end
     end
   end
 
