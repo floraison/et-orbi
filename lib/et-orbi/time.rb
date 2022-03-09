@@ -326,7 +326,8 @@ module EtOrbi
 
     def wday_in_month
 
-      [ count_weeks(-1), - count_weeks(1) ]
+      [ count_weeks(EtOrbi.make_time(strftime('%F 12:00:00 %/Z')), -1),
+        - count_weeks(EtOrbi.make_time(strftime('%F 12:00:00 %/Z')) , 1) ]
     end
 
     def rweek
@@ -385,10 +386,11 @@ module EtOrbi
       @time ||= @zone.utc_to_local(utc)
     end
 
-    def count_weeks(dir)
+    def count_weeks(start, dir)
 
       c = 0
-      t = self
+      t = start
+
       until t.month != self.month
         c += 1
         t += dir * (7 * 24 * 3600)
