@@ -2,7 +2,7 @@
 # CHANGELOG.md
 
 
-## et-orbi 1.2.7  not yet released
+## et-orbi 1.2.7  released 2022-03-09
 
 - Fix the wday_in_month computation for floraison/fugit#67
 

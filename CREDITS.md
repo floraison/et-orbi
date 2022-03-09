@@ -1,6 +1,7 @@
 
 # et-orbi credits
 
+* phibid, for https://github.com/floraison/fugit/issues/67
 * Peter Goldstein, https://github.com/petergoldstein GHA 3.3 j9.3, gh-32
 * harsha-flipp (https://github.com/harsha-flipp) https://github.com/floraison/fugit/issues/63
 * adank92 (https://github.com/adank92) https://github.com/ondrejbartas/sidekiq-cron/issues/276 gh-28
