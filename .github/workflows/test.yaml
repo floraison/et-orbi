@@ -44,7 +44,7 @@ jobs:
     strategy:
       matrix:
         os: [ windows-2019 ]
-        ruby: [ '2.5', '2.6', '2.7', '3.0', jruby-9.2 ]
+        ruby: [ '2.5', '2.6', '2.7', '3.0', jruby-9.3 ]
         experimental: [ false ]
         tz: [ 'UTC', 'Tokyo Standard Time', 'Eastern Standard Time' ]
       fail-fast: false
