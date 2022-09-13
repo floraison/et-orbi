@@ -330,12 +330,16 @@ module EtOrbi
         - count_weeks(EtOrbi.make_time(strftime('%F 12:00:00 %/Z')) , 1) ]
     end
 
+    # "reference week", used in fugit for cron modulo notation
+    #
     def rweek
 
       ((self - EtOrbi.make_time('2019-01-01 00:00:00', @zone)) / WEEK_S)
         .floor + 1
     end
 
+    # "reference week", used in fugit for cron modulo notation
+    #
     def rday
 
       ((self - EtOrbi.make_time('2019-01-01 00:00:00', @zone)) / DAY_S)
