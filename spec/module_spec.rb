@@ -846,8 +846,11 @@ describe EtOrbi do
           expect(eot.respond_to?(:to_debug_s) ? eot.to_debug_s : eot
             ).to eq(exp)
         when Array
-          expect(eot
-            ).to be_between(*exp)
+          if exp.collect(&:class).uniq == [ String ]
+            expect(exp.include?(eot)).to eq(true)
+          else
+            expect(eot).to be_between(*exp)
+          end
         else
           expect(eot
             ).to eq(exp)
