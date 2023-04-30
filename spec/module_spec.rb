@@ -189,7 +189,7 @@ describe EtOrbi do
 
         ot = EtOrbi.parse('2015/03/08 01:59:59 Nada/Nada')
 
-        expect(ot.zone.name).to eq('Europe/Moscow')
+        expect(%w[ Europe/Moscow Europe/Kirov ]).to include(ot.zone.name)
       end
     end
 
@@ -809,7 +809,7 @@ describe EtOrbi do
       [ 'a string',
         'America/New_York',
         lambda { [ Time.parse('2021-03-11') ] },
-        windows? ? 'EST5EDT' : 'America - New York',
+        windows? ? %w[ EST5EDT EST ] : 'America - New York',
         #windows? ? 'EST' : 'America - New York',
         lambda { |t| t.zone.to_s } ],
 

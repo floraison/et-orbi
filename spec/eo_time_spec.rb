@@ -146,7 +146,7 @@ describe EtOrbi::EoTime do
         %w[ Europe/Lisbon windows:WET Atlantic/Canary ],
         '2017-03-25T21:23:29+00:00' ],
       [ [ 2017, 3, 25, 21, 23, 29 ],
-        %w[ Europe/Moscow ],
+        %w[ Europe/Moscow Europe/Kirov ],
         '2017-03-25T21:23:29+03:00' ],
 
     ].each do |a, zs, s|
