@@ -4,6 +4,8 @@
 
 ## et-orbi 1.2.8  not yet released
 
+- Cache the @ref time used in the #rweek and #rday computation
+
 
 ## et-orbi 1.2.7  released 2022-03-09
 
