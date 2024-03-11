@@ -303,6 +303,8 @@ module EtOrbi
 
     def inc(t, dir=1)
 
+      @time = nil
+
       case t
       when Numeric
         nt = self.dup
