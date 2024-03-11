@@ -2,7 +2,7 @@
 # CHANGELOG.md
 
 
-## et-orbi 1.2.8  not yet released
+## et-orbi 1.2.8  released 2024-03-11  (13 years)
 
 - Cache the @ref time used in the #rweek and #rday computation
 
