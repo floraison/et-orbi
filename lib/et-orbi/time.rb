@@ -88,22 +88,34 @@ module EtOrbi
         (defined?(TZInfo::Data) ? '' : "\nand adding gem 'tzinfo-data'")
       ) unless @zone
 
+      touch
+    end
+
+    # Nullify the "caches" used by #to_time, #rweek, and others
+    #
+    def touch
+
       @time = nil
-        # cache for #to_time result
+      @ref = nil
     end
 
     def seconds=(f)
 
-      @time = nil
       @seconds = f
+
+      touch
+
+      f
     end
 
     def zone=(z)
 
-      @time = nil
-      @ref = nil
 
       @zone = self.class.get_tzone(zone || :current)
+
+      touch
+
+      @zone
     end
 
     # Returns true if this EoTime instance corresponds to 2 different UTC
@@ -232,8 +244,8 @@ module EtOrbi
     def <=(o); @seconds <= _to_f(o); end
     def <=>(o); @seconds <=> _to_f(o); end
 
-    def add(t); @time = nil; @seconds += t.to_f; self; end
-    def subtract(t); @time = nil; @seconds -= t.to_f; self; end
+    def add(t); @seconds += t.to_f; touch; self; end
+    def subtract(t); @seconds -= t.to_f; touch; self; end
 
     def +(t); inc(t, 1); end
     def -(t); inc(t, -1); end
@@ -303,21 +315,24 @@ module EtOrbi
 
     def inc(t, dir=1)
 
-      @time = nil
+      r =
+        case t
+        when Numeric
+          nt = self.dup
+          nt.seconds += dir * t.to_f
+          nt
+        when ::Time, ::EtOrbi::EoTime
+          fail ArgumentError.new(
+            "Cannot add #{t.class} to EoTime") if dir > 0
+          @seconds + dir * t.to_f
+        else
+          fail ArgumentError.new(
+            "Cannot call add or subtract #{t.class} to EoTime instance")
+        end
 
-      case t
-      when Numeric
-        nt = self.dup
-        nt.seconds += dir * t.to_f
-        nt
-      when ::Time, ::EtOrbi::EoTime
-        fail ArgumentError.new(
-          "Cannot add #{t.class} to EoTime") if dir > 0
-        @seconds + dir * t.to_f
-      else
-        fail ArgumentError.new(
-          "Cannot call add or subtract #{t.class} to EoTime instance")
-      end
+      touch
+
+      r
     end
 
     def localtime(zone=nil)
