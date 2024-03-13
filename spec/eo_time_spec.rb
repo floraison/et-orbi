@@ -547,14 +547,18 @@ describe EtOrbi::EoTime do
     end
   end
 
+  WDAYS = %w[ sun mon tue wed thu fri sat sun ]
+
   describe '#rweek, #rday' do
 
     {
 
-      '2008-12-31 12:00 Europe/Lisbon' => [ 3, 366, -521, -3652 ],
-      '2018-12-31 12:00 Europe/London' => [ 1, 365, 0, 0 ],
-      '2019-01-01 12:00 Europe/Paris' => [ 2, 1, 1, 1 ],
-      '2019-04-02 12:00 Europe/Berlin' => [ 2, 92, 14, 92 ],
+      '2008-12-31 12:00 Europe/Lisbon' => [ 'wed', 366, -521, -3652 ],
+      '2018-12-31 12:00 Europe/London' => [ 'mon', 365, 0, 0 ],
+      '2019-01-01 12:00 Europe/Paris' => [ 'tue', 1, 1, 1 ],
+      '2019-04-02 12:00 Europe/Berlin' => [ 'tue', 92, 13, 92 ],
+      '2020-01-01 America/Sao_Paulo' => [ 'wed', 1, 53, 366 ],
+      '2020-01-01 America/Santarem' => [ 'wed', 1, 53, 366 ],
 
     }.each do |t, (wday, yday, rweek, rday)|
 
@@ -562,7 +566,7 @@ describe EtOrbi::EoTime do
 
         t = EtOrbi.make_time(t)
 
-        expect([ t.wday, t.yday, t.rweek, t.rday ])
+        expect([ WDAYS[t.wday], t.yday, t.rweek, t.rday ])
           .to eq([ wday, yday, rweek, rday ])
       end
     end

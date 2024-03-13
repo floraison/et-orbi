@@ -353,7 +353,7 @@ module EtOrbi
     #
     def rweek
 
-      @ref ||= EtOrbi.make_time('2019-01-01 00:00:00', @zone)
+      @ref ||= EtOrbi.make_time('2019-01-01 12:00:00', @zone)
 
       ((self - @ref) / WEEK_S).floor + 1
     end
@@ -397,6 +397,11 @@ module EtOrbi
       end
 
       t
+    end
+
+    def clone
+
+      EtOrbi::EoTime.new(@seconds, @zone)
     end
 
     protected
