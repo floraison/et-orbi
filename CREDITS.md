@@ -1,15 +1,15 @@
 
 # et-orbi credits
 
-* Benjami Darcet @bdarcet https://github.com/floraison/fugit/issues/67 gh-38
-* @franckduche https://github.com/floraison/fugit/issues/67 gh-38
+* Benjami Darcet https://github.com/bdarcet https://github.com/floraison/fugit/issues/67 gh-38
+* https://github.com/franckduche https://github.com/floraison/fugit/issues/67 gh-38
 * Igor Viktor https://github.com/gogainda gh-34
 * phibid, for https://github.com/floraison/fugit/issues/67
 * Peter Goldstein, https://github.com/petergoldstein GHA 3.3 j9.3, gh-32
-* harsha-flipp (https://github.com/harsha-flipp) https://github.com/floraison/fugit/issues/63
-* adank92 (https://github.com/adank92) https://github.com/ondrejbartas/sidekiq-cron/issues/276 gh-28
-* Stan Hu (https://github.com/stanhu) Chronic toubles, gh-24, gh-26, etc
-* d-m-u (https://github.com/d-m-u) EoTime#==(Time), gh-20, gh-7
+* harsha-flipp https://github.com/harsha-flipp https://github.com/floraison/fugit/issues/63
+* adank92 https://github.com/adank92 https://github.com/ondrejbartas/sidekiq-cron/issues/276 gh-28
+* Stan Hu https://github.com/stanhu Chronic toubles, gh-24, gh-26, etc
+* d-m-u https://github.com/d-m-u EoTime#==(Time), gh-20, gh-7
 * Vais Salikhov (https://github.com/vais) missing US timezone aliases, gh-18 gh-19
 * Wenhui Wang https://github.com/w11th .parse vs Chronic+ActiveSupport, fugit 11
 * Marcel https://github.com/MTRNord "Mitteleuropaeische Sommerzeit", gh-15
