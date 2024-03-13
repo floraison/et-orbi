@@ -1,6 +1,8 @@
 
 # et-orbi credits
 
+* Benjami Darcet @bdarcet https://github.com/floraison/fugit/issues/67 gh-38
+* @franckduche https://github.com/floraison/fugit/issues/67 gh-38
 * Igor Viktor https://github.com/gogainda gh-34
 * phibid, for https://github.com/floraison/fugit/issues/67
 * Peter Goldstein, https://github.com/petergoldstein GHA 3.3 j9.3, gh-32
