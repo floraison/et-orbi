@@ -354,17 +354,19 @@ module EtOrbi
     def rweek
 
       @ref ||= EtOrbi.make_time('2019-01-01 12:00:00', @zone)
+      noon = EtOrbi.make_time(strftime('%F 12:00:00'), @zone)
 
-      ((self - @ref) / WEEK_S).floor + 1
+      ((noon - @ref) / WEEK_S).floor + 1
     end
 
     # "reference week", used in fugit for cron modulo notation
     #
     def rday
 
-      @ref ||= EtOrbi.make_time('2019-01-01 00:00:00', @zone)
+      @ref ||= EtOrbi.make_time('2019-01-01 12:00:00', @zone)
+      noon = EtOrbi.make_time(strftime('%F 12:00:00'), @zone)
 
-      ((self - @ref) / DAY_S).floor + 1
+      ((noon - @ref) / DAY_S).floor + 1
     end
 
     def reach(points)

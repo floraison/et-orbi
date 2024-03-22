@@ -556,9 +556,14 @@ describe EtOrbi::EoTime do
       '2008-12-31 12:00 Europe/Lisbon' => [ 'wed', 366, -521, -3652 ],
       '2018-12-31 12:00 Europe/London' => [ 'mon', 365, 0, 0 ],
       '2019-01-01 12:00 Europe/Paris' => [ 'tue', 1, 1, 1 ],
-      '2019-04-02 12:00 Europe/Berlin' => [ 'tue', 92, 13, 92 ],
+      '2019-04-02 12:00 Europe/Berlin' => [ 'tue', 92, 13, 91 ],
       '2020-01-01 America/Sao_Paulo' => [ 'wed', 1, 53, 366 ],
       '2020-01-01 America/Santarem' => [ 'wed', 1, 53, 366 ],
+
+      # https://github.com/floraison/fugit/issues/96
+      #
+      '2024-03-12 12:59:59 Etc/UTC' => [ 'tue', 72, 272, 1898 ],
+      '2024-03-12 11:59:59 Etc/UTC' => [ 'tue', 72, 272, 1898 ],
 
     }.each do |t, (wday, yday, rweek, rday)|
 
