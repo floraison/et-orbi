@@ -96,7 +96,8 @@ module EtOrbi
     def touch
 
       @time = nil
-      @ref = nil
+      @rday = nil
+      @rweek = nil
     end
 
     def seconds=(f)
@@ -353,20 +354,24 @@ module EtOrbi
     #
     def rweek
 
-      @ref ||= EtOrbi.make_time('2019-01-01 12:00:00', @zone)
-      noon = EtOrbi.make_time(strftime('%F 12:00:00'), @zone)
-
-      ((noon - @ref) / WEEK_S).floor + 1
+      @rweek ||=
+        begin
+          ref = EtOrbi.make_time('2019-01-01 12:00:00', @zone)
+          noon = EtOrbi.make_time(strftime('%F 12:00:00'), @zone)
+          ((noon - ref) / WEEK_S).floor + 1
+        end
     end
 
     # "reference week", used in fugit for cron modulo notation
     #
     def rday
 
-      @ref ||= EtOrbi.make_time('2019-01-01 12:00:00', @zone)
-      noon = EtOrbi.make_time(strftime('%F 12:00:00'), @zone)
-
-      ((noon - @ref) / DAY_S).floor + 1
+      @rday ||=
+        begin
+          ref = EtOrbi.make_time('2019-01-01 12:00:00', @zone)
+          noon = EtOrbi.make_time(strftime('%F 12:00:00'), @zone)
+          ((noon - ref) / DAY_S).floor + 1
+        end
     end
 
     def reach(points)

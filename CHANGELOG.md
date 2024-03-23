@@ -4,6 +4,8 @@
 
 ## et-orbi 1.2.11  not yet released
 
+- Cache @rweek and @rday, not @ref, gh-38
+
 
 ## et-orbi 1.2.10  released 2024-03-22
 
