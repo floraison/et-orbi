@@ -2,6 +2,9 @@
 # CHANGELOG.md
 
 
+## et-orbi 1.2.11  not yet released
+
+
 ## et-orbi 1.2.10  released 2024-03-22
 
 - Refine #rweek computation, aim more at noon instead of midnight, gh-38
