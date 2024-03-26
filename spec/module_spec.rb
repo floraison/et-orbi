@@ -112,6 +112,13 @@ describe EtOrbi do
       [ '11/09/2002 2utopiaNada?3Nada',
         [ '11/09/2002 2utopiaNada?3Nada', nil ] ],
 
+      [ '2012-10-28 03:00:00 EET',
+        [ '2012-10-28 03:00:00', 'EET' ] ],
+      #[ '2012-10-28 03:00:00 EEST',
+      #  [ '2012-10-28 03:00:00', 'EEST' ] ],
+      [ '2012-10-28 03:00:00 Europe/Tallinn',
+        [ '2012-10-28 03:00:00', 'Europe/Tallinn' ] ],
+
     ].each { |str0, (str1, zone)|
 
       it "returns #{[ str1, zone ].inspect} for #{str0.inspect}" do
@@ -924,9 +931,7 @@ describe EtOrbi do
 
   describe '.windows_zone_name' do
 
-    {
-
-      [ 'Asia/Tokyo', '2018-05-23' ] => 'JST-9',
+    { [ 'Asia/Tokyo', '2018-05-23' ] => 'JST-9',
       [ 'Asia/Kolkata', '2018-07-01' ] => 'IST-5:30',
       [ 'Asia/Tehran', '2019-01-09' ] => '_AT-3:30Asia/Tehran', #'IRT-3:30',
       [ 'Asia/Tehran', '2019-07-09' ] => '_AT-4:30Asia/Tehran', #'IRT-4:30',
@@ -939,22 +944,44 @@ describe EtOrbi do
       [ 'America/Los_Angeles', '2017-10-30' ] => 'PST7PDT',
       [ 'America/Los_Angeles', '2019-01-01' ] => 'PST8PDT',
 
+      [ 'Europe/Tallinn', '2012-07-28' ] => 'EET-3EEST',
+      [ 'Europe/Tallinn', '2012-10-28' ] => 'EET-3EEST',
+      [ 'Europe/Tallinn', '2012-12-28' ] => 'EET-2EEST',
+
     }.each do |(zone, time), v|
 
       it "returns #{v.inspect} for #{zone.inspect} at #{time}" do
 
-        expect(
-          EtOrbi.windows_zone_name(zone, Time.parse(time))
-        ).to eq(v)
+        expect(EtOrbi.windows_zone_name(zone, Time.parse(time))).to eq(v)
+      end
+    end
+  end
+
+  describe '.zone_name_abbreviation' do
+
+    { [ 'Europe/Tallinn', '2012-07-28' ] => 'EEST',
+      [ 'Europe/Tallinn', '2012-10-28' ] => 'EEST',
+      [ 'Europe/Tallinn', '2012-12-28' ] => 'EET',
+      [ 'Europe/Tallinn', '2012-10-28 00:00' ] => 'EEST',
+      [ 'Europe/Tallinn', '2012-10-28 02:59' ] => 'EEST',
+      [ 'Europe/Tallinn', '2012-10-28 03:00' ] => 'EET',
+      [ 'Europe/Tallinn', '2012-10-28 03:30' ] => 'EET',
+      [ 'Europe/Tallinn', '2012-10-28 04:30' ] => 'EET',
+
+      # note, it favours non-DST...
+
+    }.each do |(zone, time), v|
+
+      it "returns #{v.inspect} for #{zone.inspect} at #{time}" do
+
+        expect(EtOrbi.zone_name_abbreviation(zone, Time.parse(time))).to eq(v)
       end
     end
   end
 
   describe '.tweak_zone_name' do
 
-    {
-
-      'EST5EDT' => 'EST5EDT',
+    { 'EST5EDT' => 'EST5EDT',
       'UTC+12' => 'Etc/GMT-12',
       'Korea Standard Time' => 'Asia/Seoul',
 

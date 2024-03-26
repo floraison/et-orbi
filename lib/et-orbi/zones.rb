@@ -161,6 +161,14 @@ module EtOrbi
       end
     end
 
+    def zone_name_abbreviation(zone_name, time, dst=false)
+
+      tz = ::TZInfo::Timezone.get(zone_name)
+
+      #tz.period_for_local(time, tz.dst?).abbreviation.to_s
+      tz.period_for_local(time, dst).abbreviation.to_s
+    end
+
     def tweak_zone_name(name)
 
       return name unless (name.match(/./) rescue nil)
