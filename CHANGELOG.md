@@ -4,7 +4,7 @@
 
 ## et-orbi 1.3.0  not yet released
 
-- Introduce EtOrbi.zone_name_abbreviation(zone_name, time, dst=false)
+- Introduce EtOrbi.zone_abbreviation(zone_name, time)
 
 
 ## et-orbi 1.2.11  released 2024-03-23

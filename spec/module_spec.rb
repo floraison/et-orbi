@@ -957,7 +957,7 @@ describe EtOrbi do
     end
   end
 
-  describe '.zone_name_abbreviation' do
+  describe '.zone_abbreviation' do
 
     { [ 'Europe/Tallinn', '2012-07-28' ] => 'EEST',
       [ 'Europe/Tallinn', '2012-10-28' ] => 'EEST',
@@ -974,7 +974,7 @@ describe EtOrbi do
 
       it "returns #{v.inspect} for #{zone.inspect} at #{time}" do
 
-        expect(EtOrbi.zone_name_abbreviation(zone, Time.parse(time))).to eq(v)
+        expect(EtOrbi.zone_abbreviation(zone, Time.parse(time))).to eq(v)
       end
     end
   end
