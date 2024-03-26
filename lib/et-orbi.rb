@@ -13,6 +13,6 @@ require 'et-orbi/zone'
 
 module EtOrbi
 
-  VERSION = '1.2.11'
+  VERSION = '1.3.0'
 end
 
