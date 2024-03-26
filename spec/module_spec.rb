@@ -901,7 +901,6 @@ describe EtOrbi do
       in_zone 'Asia/Tbilisi' do
 
         expect {
-          p EtOrbi.make_time(t)
           EtOrbi.make_time(t)
         }.to raise_error(
           ArgumentError, /\ACannot determine timezone from "ECT"/
