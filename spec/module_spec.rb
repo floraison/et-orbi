@@ -962,13 +962,19 @@ describe EtOrbi do
     { [ 'Europe/Tallinn', '2012-07-28' ] => 'EEST',
       [ 'Europe/Tallinn', '2012-10-28' ] => 'EEST',
       [ 'Europe/Tallinn', '2012-12-28' ] => 'EET',
+
+      [ 'Europe/Tallinn', '2012-03-25 02:00' ] => 'EET',
+      [ 'Europe/Tallinn', '2012-03-25 03:00' ] => 'EEST',
+      [ 'Europe/Tallinn', '2012-03-25 04:00' ] => 'EEST',
+      [ 'Europe/Tallinn', '2012-03-25 05:00' ] => 'EEST',
+
       [ 'Europe/Tallinn', '2012-10-28 00:00' ] => 'EEST',
       [ 'Europe/Tallinn', '2012-10-28 02:59' ] => 'EEST',
       [ 'Europe/Tallinn', '2012-10-28 03:00' ] => 'EET',
       [ 'Europe/Tallinn', '2012-10-28 03:30' ] => 'EET',
       [ 'Europe/Tallinn', '2012-10-28 04:30' ] => 'EET',
 
-      # note, it favours non-DST...
+      # in case of ambiguity, .zone_abbreviation goes 2 hours forward...
 
     }.each do |(zone, time), v|
 

@@ -165,13 +165,12 @@ module EtOrbi
 
       tz = ::TZInfo::Timezone.get(zone_name)
 
-      a = [
-        tz.period_for_local(time, false).abbreviation.to_s,
-        tz.period_for_local(time, true).abbreviation.to_s
-          ].uniq
-      a.reverse! if time.month < 6
+      ts = tz.period_for_local(time, true) rescue -1
+      tw = tz.period_for_local(time, false) rescue -2
 
-      a.first
+      return ts.abbreviation.to_s if ts == tw
+
+      tz.period_for_local(time + 2 * 3600).abbreviation.to_s
     end
 
     def tweak_zone_name(name)
