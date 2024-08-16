@@ -26,6 +26,7 @@ Time zones for fugit and rufus-scheduler. Urbi et Orbi.
     'homepage_uri' =>  s.homepage,
     'source_code_uri' => s.homepage,
     #'wiki_uri' => s.homepage + '/wiki',
+    'rubygems_mfa_required' => 'true',
   }
 
   #s.files = `git ls-files`.split("\n")
