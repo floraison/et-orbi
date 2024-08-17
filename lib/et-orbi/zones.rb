@@ -77,7 +77,7 @@ module EtOrbi
       tz = (etz && tzs.find { |z| z.name == etz }) || tzs.first
       return tz if tz
 
-      # then, fall back to GMT offest :-(
+      # then, fall back to GMT offset :-(
 
       n = Time.now
 

@@ -43,7 +43,7 @@ eot = EtOrbi::EoTime.new(0, 'Europe/Moscow')
 eot.to_local_time.class  # => Time
 eot.to_local_time.to_s   # => "1970-01-01 09:00:00 +0900" (at least on my system)
 
-# For the rest, EtOrbi::EoTime mimicks ::Time
+# For the rest, EtOrbi::EoTime mimics ::Time
 ```
 
 Helper methods:

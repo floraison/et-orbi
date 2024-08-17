@@ -915,7 +915,7 @@ describe EtOrbi do
       end
     end
 
-    it 'rejects unparseable input' do
+    it 'rejects unparsable input' do
 
       expect {
         EtOrbi.make_time('xxx')
