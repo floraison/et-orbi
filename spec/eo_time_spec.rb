@@ -292,6 +292,15 @@ describe EtOrbi::EoTime do
       expect(ot.seconds).to eq(1193898300 + 111)
     end
 
+    it 'adds anything that has a #to_i and is not a String, gh-40' do
+
+      ot =
+        EtOrbi::EoTime.new(1193898300, 'Asia/Vladivostok') +
+        SpecActiveSupportDuration.new(3600) # 1.hour
+
+      expect(ot.seconds).to eq(1193898300 + 3600)
+    end
+
     it 'goes into DST' do
 
       ot =
@@ -364,6 +373,15 @@ describe EtOrbi::EoTime do
       ot.subtract(111)
 
       expect(ot.seconds).to eq(1193898300 - 111)
+    end
+
+    it 'subtracts anything that has a #to_i and is not a String, gh-40' do
+
+      ot =
+        EtOrbi::EoTime.new(1193898300, 'Asia/Vladivostok') -
+        SpecActiveSupportDuration.new(3600) # 1.hour
+
+      expect(ot.seconds).to eq(1193898300 - 3600)
     end
 
     it 'returns self' do
@@ -468,7 +486,7 @@ describe EtOrbi::EoTime do
       expect {
         ot + t
       }.to raise_error(
-        ArgumentError, 'Cannot add Time to EoTime'
+        ArgumentError, 'Cannot add Time to EoTime instance'
       )
     end
 
@@ -480,7 +498,7 @@ describe EtOrbi::EoTime do
       expect {
         ot + ot1
       }.to raise_error(
-        ArgumentError, 'Cannot add EtOrbi::EoTime to EoTime'
+        ArgumentError, 'Cannot add EtOrbi::EoTime to EoTime instance'
       )
     end
   end

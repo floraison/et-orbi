@@ -200,6 +200,12 @@ class SpecActiveSupportTimeZone
   def self.make(s); self.new(::TZInfo::Timezone.get(s)); end
 end
 
+class SpecActiveSupportDuration
+
+  def initialize(i); @i = i; end
+  def to_i; @i; end
+end
+
 
 RSpec::Matchers.define :be_one_of do |arr|
 

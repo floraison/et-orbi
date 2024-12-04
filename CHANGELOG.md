@@ -4,6 +4,7 @@
 
 ## et-orbi 1.3.0  not yet released
 
+- Let EtOrbi #+ and #- accept instances with #to_i or #to_f (not strs), gh-40
 - Introduce EtOrbi.zone_abbreviation(zone_name, time)
 
 
