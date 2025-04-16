@@ -12,5 +12,7 @@ source 'https://rubygems.org'
   #
   # when counter testing gh-26
 
+#gem 'probatio', path: '/home/jmettraux/w/probatio'
+
 gemspec
 

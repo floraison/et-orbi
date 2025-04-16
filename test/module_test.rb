@@ -366,8 +366,7 @@ group EtOrbi do
 
         test 'pre-parses with Chronic when enable_chronic: true' do
 
-          #assert_not_error(
-          #  lambda { EtOrbi.parse('tomorrow', enable_chronic: true) })
+          assert_not_error { EtOrbi.parse('tomorrow', enable_chronic: true) }
         end
       end
 
@@ -564,7 +563,7 @@ group EtOrbi do
         Time._zone = "Mitteleurop\xE4ische Sommerzeit"
         EtOrbi._os_zone = '' # force #os_tz to return nil
 
-        #assert_not_error(lambda { EtOrbi.determine_local_tzone })
+        assert_not_error { EtOrbi.determine_local_tzone }
       end
     end
 
