@@ -1,6 +1,6 @@
 
 #
-# Specifying et-orbi
+# Testing et-orbi
 #
 # Sat Mar 18 16:17:38 JST 2017
 #
@@ -29,14 +29,78 @@ EtOrbi._make_info
 #puts '-' * 80
 
 
+class Time
 
-def windows?; Gem.win_platform?; end
+  def to_debug_s
+
+    uo = self.utc_offset
+    uos = uo < 0 ? '-' : '+'
+    uo = uo.abs
+    uoh, uom = [ uo / 3600, uo % 3600 ]
+
+    [
+      't',
+      self.strftime('%Y-%m-%d %H:%M:%S'),
+      "%s%02d:%02d" % [ uos, uoh, uom ],
+      "dst:#{self.isdst}"
+    ].join(' ')
+  end
+
+  #
+  # tools to "inject" a zone string at will
+
+  alias _original_zone zone
+
+  def zone
+
+    self.class._zone || _original_zone
+  end
+
+  class << self
+
+    attr_accessor :_zone # instance zone (Vanilla Ruby)
+
+    def active_support_zone=(zone_or_zone_name)
+
+      ENV['TZ'] = nil # so that the active_support zone has the priority
+
+      z = zone_or_zone_name
+      z = ::TZInfo::Timezone.get(z) if z.is_a?(String)
+
+      if z
+        @_as_zone = TestActiveSupportTimeZone.new(z)
+        def zone; @_as_zone; end
+      else
+        undef zone rescue nil
+      end
+    end
+  end
+end
+
+class TestActiveSupportTimeZone
+
+  def initialize(z); @z = z; end
+  def tzinfo; @z; end
+
+  def self.make(s); self.new(::TZInfo::Timezone.get(s)); end
+end
+
+class TestActiveSupportDuration
+
+  def initialize(i); @i = i; end
+  def to_i; @i; end
+end
 
 
-module Helpers
+class Probatio::Group
 
+  def windows?; Gem.win_platform?; end
+end
+
+class Probatio::Context
+
+  def windows?; Gem.win_platform?; end
   def jruby?; !! RUBY_PLATFORM.match(/java/); end
-  #def windows?; Gem.win_platform?; end
 
   def in_zone(zone_name, t=Time.now, &block)
 
@@ -114,17 +178,18 @@ module Helpers
 
   # rufus-scheduler Chronic infra, as a reminder
   #
-#  def with_chronic(&block)
-#    require 'chronic'
-#    Object.const_set(:Khronic, Chronic) unless defined?(Khronic)
-#    Object.const_set(:Chronic, Khronic) unless defined?(Chronic)
-#    block.call
-#  ensure
-#    Object.send(:remove_const, :Chronic)
-#  end
-#  def without_chronic(&block) # for quick counter-tests ;-)
-#    block.call
-#  end
+    #
+  #def with_chronic(&block)
+  #  require 'chronic'
+  #  Object.const_set(:Khronic, Chronic) unless defined?(Khronic)
+  #  Object.const_set(:Chronic, Khronic) unless defined?(Chronic)
+  #  block.call
+  #ensure
+  #  Object.send(:remove_const, :Chronic)
+  #end
+  #def without_chronic(&block) # for quick counter-tests ;-)
+  #  block.call
+  #end
 
   def require_chronic
 
@@ -134,95 +199,6 @@ module Helpers
   def unrequire_chronic
 
     Object.send(:remove_const, :Chronic)
-  end
-end
-
-RSpec.configure do |c|
-
-  c.alias_example_to(:they)
-  c.alias_example_to(:so)
-  c.include(Helpers)
-end
-
-class Time
-
-  def to_debug_s
-
-    uo = self.utc_offset
-    uos = uo < 0 ? '-' : '+'
-    uo = uo.abs
-    uoh, uom = [ uo / 3600, uo % 3600 ]
-
-    [
-      't',
-      self.strftime('%Y-%m-%d %H:%M:%S'),
-      "%s%02d:%02d" % [ uos, uoh, uom ],
-      "dst:#{self.isdst}"
-    ].join(' ')
-  end
-
-  #
-  # tools to "inject" a zone string at will
-
-  alias _original_zone zone
-
-  def zone
-
-    self.class._zone || _original_zone
-  end
-
-  class << self
-
-    attr_accessor :_zone # instance zone (Vanilla Ruby)
-
-    def active_support_zone=(zone_or_zone_name)
-
-      ENV['TZ'] = nil # so that the active_support zone has the priority
-
-      z = zone_or_zone_name
-      z = ::TZInfo::Timezone.get(z) if z.is_a?(String)
-
-      if z
-        @_as_zone = SpecActiveSupportTimeZone.new(z)
-        def zone; @_as_zone; end
-      else
-        undef zone rescue nil
-      end
-    end
-  end
-end
-
-class SpecActiveSupportTimeZone
-
-  def initialize(z); @z = z; end
-  def tzinfo; @z; end
-
-  def self.make(s); self.new(::TZInfo::Timezone.get(s)); end
-end
-
-class SpecActiveSupportDuration
-
-  def initialize(i); @i = i; end
-  def to_i; @i; end
-end
-
-
-RSpec::Matchers.define :be_one_of do |arr|
-
-  match do |actual|
-
-    arr.include?(actual)
-  end
-
-  failure_message do |actual|
-
-    arr
-      .collect.with_index { |e, i|
-        i == 0 ?
-          "expected #{e.inspect}" :
-          "      or #{e.inspect}" }
-      .tap { |a| a << "     got #{actual.inspect}" }
-      .join("\n")
   end
 end
 

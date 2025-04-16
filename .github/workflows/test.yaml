@@ -74,5 +74,5 @@ jobs:
       - run: bundle install # since the Gemfile changed...
       - run: ruby -e "n = Time.now; p [ ENV['TZ'], n, n.zone ]"
       - run: bundle exec ruby -e "require 'et-orbi'; p EtOrbi.determine_local_tzone"
-      - run: bundle exec rspec --force-color --format documentation
+      - run: bundle exec proba --no-color
 

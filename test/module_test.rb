@@ -1,19 +1,17 @@
 # encoding: UTF-8
 
 #
-# Specifying EtOrbi
+# Testing EtOrbi
 #
 # Wed Mar 11 21:17:36 JST 2015, quatre ans... (rufus-scheduler)
 # Sun Mar 19 05:16:28 JST 2017
 # Fri Mar 24 04:55:25 JST 2017 圓さんの家
 #
 
-require 'spec_helper'
 
+group EtOrbi do
 
-describe EtOrbi do
-
-  after :each do
+  before do
 
     ENV['TZ'] = ENV['_TZ']
     Time._zone = nil
@@ -21,7 +19,7 @@ describe EtOrbi do
     Time.active_support_zone = nil
   end
 
-  describe '.list_iso8601_zones' do
+  group '.list_iso8601_zones' do
 
     [
 
@@ -39,14 +37,14 @@ describe EtOrbi do
 
     ].each do |string, zones|
 
-      it "returns #{zones.inspect} for #{string.inspect}" do
+      test "returns #{zones.inspect} for #{string.inspect}" do
 
-        expect(EtOrbi.list_iso8601_zones(string)).to eq(zones)
+        assert EtOrbi.list_iso8601_zones(string), zones
       end
     end
   end
 
-#  describe '.list_olson_zones' do
+#  group '.list_olson_zones' do
 #
 #    [
 #
@@ -71,14 +69,14 @@ describe EtOrbi do
 #
 #    ].each do |string, zones|
 #
-#      it "returns #{zones.inspect} for #{string.inspect}" do
+#      test "returns #{zones.inspect} for #{string.inspect}" do
 #
-#        expect(EtOrbi.list_olson_zones(string)).to eq(zones)
+#        assert EtOrbi.list_olson_zones(string), zones)
 #      end
 #    end
 #  end
 
-  describe '.extract_zone' do
+  group '.extract_zone' do
 
     [
 
@@ -121,126 +119,123 @@ describe EtOrbi do
 
     ].each { |str0, (str1, zone)|
 
-      it "returns #{[ str1, zone ].inspect} for #{str0.inspect}" do
+      test "returns #{[ str1, zone ].inspect} for #{str0.inspect}" do
 
         s1, z = EtOrbi.extract_zone(str0)
 
-        expect([ s1, z ]).to eq([ str1, zone ])
+        assert [ s1, z ], [ str1, zone ]
       end
     }
   end
 
-  describe '.parse' do
+  group '.parse' do
 
-    it 'parses a time string without a timezone' do
+    test 'parses a time string without a timezone' do
 
       ot = in_zone('Europe/Moscow') { EtOrbi.parse('2015/03/08 01:59:59') }
 
       t = ot
       u = ot.utc
 
-      expect(t.to_i).to eq(1425769199)
-      expect(u.to_i).to eq(1425769199)
+      assert t.to_i, 1425769199
+      assert u.to_i, 1425769199
 
-      expect(t.strftime('%Y/%m/%d %H:%M:%S %Z %z') + " #{t.isdst}"
-        ).to eq('2015/03/08 01:59:59 MSK +0300 false')
+      assert(
+        t.strftime('%Y/%m/%d %H:%M:%S %Z %z') + " #{t.isdst}",
+        '2015/03/08 01:59:59 MSK +0300 false')
 
-      expect(u.to_debug_s).to eq('t 2015-03-07 22:59:59 +00:00 dst:false')
+      assert u.to_debug_s, 't 2015-03-07 22:59:59 +00:00 dst:false'
     end
 
-    it 'parses a time string with a full name timezone' do
+    test 'parses a time string with a full name timezone' do
 
       ot = EtOrbi.parse('2015/03/08 01:59:59 America/Los_Angeles')
 
       t = ot
       u = ot.utc
 
-      expect(t.to_i).to eq(1425808799)
-      expect(u.to_i).to eq(1425808799)
+      assert t.to_i, 1425808799
+      assert u.to_i, 1425808799
 
-      expect(t.to_debug_s).to eq('ot 2015-03-08 01:59:59 -08:00 dst:false')
-      expect(u.to_debug_s).to eq('t 2015-03-08 09:59:59 +00:00 dst:false')
+      assert t.to_debug_s, 'ot 2015-03-08 01:59:59 -08:00 dst:false'
+      assert u.to_debug_s, 't 2015-03-08 09:59:59 +00:00 dst:false'
     end
 
-    it 'parses a time string with a delta timezone' do
+    test 'parses a time string with a delta timezone' do
 
       ot = in_zone('Europe/Berlin') { EtOrbi.parse('2015-12-13 12:30 -0200') }
 
       t = ot
       u = ot.utc
 
-      expect(t.to_i).to eq(1450017000)
-      expect(u.to_i).to eq(1450017000)
+      assert t.to_i, 1450017000
+      assert u.to_i, 1450017000
 
-      expect(t.to_debug_s).to eq('ot 2015-12-13 12:30:00 -02:00 dst:false')
-      expect(u.to_debug_s).to eq('t 2015-12-13 14:30:00 +00:00 dst:false')
+      assert t.to_debug_s, 'ot 2015-12-13 12:30:00 -02:00 dst:false'
+      assert u.to_debug_s, 't 2015-12-13 14:30:00 +00:00 dst:false'
     end
 
-    it 'parses a time string with a delta (:) timezone' do
+    test 'parses a time string with a delta (:) timezone' do
 
       ot = in_zone('Europe/Berlin') { EtOrbi.parse('2015-12-13 12:30 -02:00') }
 
       t = ot
       u = ot.utc
 
-      expect(t.to_i).to eq(1450017000)
-      expect(u.to_i).to eq(1450017000)
+      assert t.to_i, 1450017000
+      assert u.to_i, 1450017000
 
-      expect(t.to_debug_s).to eq('ot 2015-12-13 12:30:00 -02:00 dst:false')
-      expect(u.to_debug_s).to eq('t 2015-12-13 14:30:00 +00:00 dst:false')
+      assert t.to_debug_s, 'ot 2015-12-13 12:30:00 -02:00 dst:false'
+      assert u.to_debug_s, 't 2015-12-13 14:30:00 +00:00 dst:false'
     end
 
-    it 'takes the local TZ when it does not know the timezone' do
+    test 'takes the local TZ when test does not know the timezone' do
 
       in_zone 'Europe/Moscow' do
 
         ot = EtOrbi.parse('2015/03/08 01:59:59 Nada/Nada')
 
-        expect(%w[ Europe/Moscow Europe/Kirov ]).to include(ot.zone.name)
+        assert_include ot.zone.name, %w[ Europe/Moscow Europe/Kirov ]
       end
     end
 
-    it 'parses even when the tz is out of place' do
+    test 'parses even when the tz is out of place' do
 
-      expect(
+      assert(
         EtOrbi.parse('Sun Nov 18 16:01:00 Asia/Singapore 2012')
-          .to_debug_s
-      ).to eq(
-        "ot 2012-11-18 16:01:00 +08:00 dst:false"
-      )
+          .to_debug_s,
+        "ot 2012-11-18 16:01:00 +08:00 dst:false")
     end
 
-    it 'fails on invalid strings' do
+    test 'fails on invalid strings' do
 
-      expect {
-        EtOrbi.parse('xxx')
-      }.to raise_error(
-        ArgumentError, 'No time information in "xxx"'
-      )
+      assert_error(
+        lambda { EtOrbi.parse('xxx') },
+        ArgumentError, 'No time information in "xxx"')
     end
 
-    it 'parses in the Rails-provided Time.zone (UTC)' do
+    test 'parses in the Rails-provided Time.zone (UTC)' do
 
       Time.active_support_zone = 'UTC'
 
       t = EtOrbi.parse('2019-01-01 12:10')
 
-      expect(t.class).to eq(EtOrbi::EoTime)
-      expect(t.zone).to eq(::TZInfo::Timezone.get('UTC'))
-      expect(t.to_s).to eq('2019-01-01 12:10:00 Z')
-      expect(t.to_zs).to eq('2019-01-01 12:10:00 UTC')
+      assert t.class, EtOrbi::EoTime
+      assert t.zone, ::TZInfo::Timezone.get('UTC')
+      assert t.to_s, '2019-01-01 12:10:00 Z'
+      assert t.to_zs, '2019-01-01 12:10:00 UTC'
     end
 
-    it 'parses in the Rails-provided Time.zone (Asia/Shanghai)' do
+    test 'parses in the Rails-provided Time.zone (Asia/Shanghai)' do
 
       Time.active_support_zone = 'Asia/Shanghai'
 
       t = EtOrbi.parse('2019-01-01 12:10')
 
-      expect(t.class).to eq(EtOrbi::EoTime)
-      expect(t.zone).to eq(::TZInfo::Timezone.get('Asia/Shanghai'))
-      expect(t.to_s).to eq('2019-01-01 12:10:00 +0800')
-      expect(t.to_zs).to eq('2019-01-01 12:10:00 Asia/Shanghai')
+      assert t.class, EtOrbi::EoTime
+      assert t.zone, ::TZInfo::Timezone.get('Asia/Shanghai')
+      assert t.to_s, '2019-01-01 12:10:00 +0800'
+      assert t.to_zs, '2019-01-01 12:10:00 Asia/Shanghai'
     end
 
 #    # https://en.wikipedia.org/wiki/List_of_time_zone_abbreviations
@@ -268,7 +263,7 @@ describe EtOrbi do
 #
 #      }.each do |k, v|
 #
-#        it "parses #{k} to #{v}" do
+#        test "parses #{k} to #{v}" do
 #
 #          ot = EtOrbi.parse(k)
 #t = Time.parse(k)
@@ -279,129 +274,125 @@ describe EtOrbi do
 #p [ v ]
 #  #p [ k, v, ot ]
 #
-#          expect(ot.to_s).to eq(v)
+#          assert ot.to_s, v)
 #        end
 #      end
 #    end
 
-    context 'when Chronic is defined' do
+    group 'when Chronic is defined' do
 
-      before :each do
+      before do
         require_chronic
       end
-      after :each do
+      after do
         unrequire_chronic
       end
 
-      it 'leverages it' do
+      test 'leverages it' do
 
         t = EtOrbi.parse('tomorrow at 1pm')
         t1 = Time.now + 24 * 3600
 
-        expect(t.class).to eq(EtOrbi::EoTime)
-        expect(t.strftime('%F %T')).to eq(t1.strftime('%F 13:00:00'))
+        assert t.class, EtOrbi::EoTime
+        assert t.strftime('%F %T'), t1.strftime('%F 13:00:00')
       end
 
-      it 'leverages it in a specified time zone' do
+      test 'leverages test in a specified time zone' do
 
         t = EtOrbi.parse('tomorrow at 22:00 America/New_York')
         t1 = Time.now + 24 * 3600
 
-        expect(t.class).to eq(EtOrbi::EoTime)
-        expect(t.to_zs).to eq(t1.strftime('%F 22:00:00 America/New_York'))
+        assert t.class, EtOrbi::EoTime
+        assert t.to_zs, t1.strftime('%F 22:00:00 America/New_York')
       end
 
-      it 'picks the Rails Time.zone (UTC) if available' do
+      test 'picks the Rails Time.zone (UTC) if available' do
 
         Time.active_support_zone = 'UTC'
 
         t = EtOrbi.parse('tomorrow')
         t1 = Time.now + 24 * 3600
 
-        expect(t.class).to eq(EtOrbi::EoTime)
-        expect(t.zone.name).to eq('UTC')
-        expect(t.strftime('%Y-%m-%d')).to eq(t1.strftime('%Y-%m-%d'))
-        expect(t.strftime('%H:%M:%S')).to eq('12:00:00')
+        assert t.class, EtOrbi::EoTime
+        assert t.zone.name, 'UTC'
+        assert t.strftime('%Y-%m-%d'), t1.strftime('%Y-%m-%d')
+        assert t.strftime('%H:%M:%S'), '12:00:00'
       end
 
-      it 'picks the Rails Time.zone (Asia/Shanghai) if available' do
+      test 'picks the Rails Time.zone (Asia/Shanghai) if available' do
 
         Time.active_support_zone = 'Asia/Shanghai'
 
         t = EtOrbi.parse('tomorrow')
         t1 = Time.now + 24 * 3600
 
-        expect(t.class).to eq(EtOrbi::EoTime)
-        expect(t.zone.name).to eq('Asia/Shanghai')
-        expect(t.strftime('%Y-%m-%d')).to eq(t1.strftime('%Y-%m-%d'))
-        expect(t.strftime('%H:%M:%S')).to eq('12:00:00')
+        assert t.class, EtOrbi::EoTime
+        assert t.zone.name, 'Asia/Shanghai'
+        assert t.strftime('%Y-%m-%d'), t1.strftime('%Y-%m-%d')
+        assert t.strftime('%H:%M:%S'), '12:00:00'
       end
 
-      context 'when parse(x, enable_chronic: false)' do
+      group 'when parse(x, enable_chronic: false)' do
 
-        it 'does not pre-parse with Chronic' do
+        test 'does not pre-parse with Chronic' do
 
           Time.active_support_zone = 'America/Chicago'
 
-          expect( # works
-            EtOrbi.parse('tomorrow').class
-          ).to eq(EtOrbi::EoTime)
+          assert( # works
+            EtOrbi.parse('tomorrow').class,
+            EtOrbi::EoTime)
 
-          expect { # doesn't work
-            EtOrbi.parse('tomorrow', enable_chronic: false)
-          }.to raise_error(ArgumentError, 'No time information in "tomorrow"')
+          assert_error( # doesn't work
+            lambda { EtOrbi.parse('tomorrow', enable_chronic: false) },
+            ArgumentError, 'No time information in "tomorrow"')
         end
       end
 
-      context 'and Et-Orbi.chronic_enabled? is false' do
+      group 'and Et-Orbi.chronic_enabled? is false' do
 
-        before :each do
-
+        before do
           EtOrbi.chronic_enabled = false
         end
-
-        after :each do
-
+        after do
           EtOrbi.chronic_enabled = true
         end
 
-        it 'does not pre-parse with Chronic' do
+        test 'does not pre-parse with Chronic' do
 
-          expect {
-            EtOrbi.parse('tomorrow')
-          }.to raise_error(ArgumentError, 'No time information in "tomorrow"')
+          assert_error(
+            lambda { EtOrbi.parse('tomorrow') },
+            ArgumentError, 'No time information in "tomorrow"')
         end
 
-        it 'pre-parses with Chronic when enable_chronic: true' do
+        test 'pre-parses with Chronic when enable_chronic: true' do
 
-          expect {
-            EtOrbi.parse('tomorrow', enable_chronic: true)
-          }.not_to raise_error
+          #assert_not_error(
+          #  lambda { EtOrbi.parse('tomorrow', enable_chronic: true) })
         end
       end
 
-      it 'filters options given to Chronic' do
+      test 'filters options given to Chronic' do
 
         Time.active_support_zone = 'UTC'
 
-        expect(::Khronic)
-          .to receive(:parse)
-          .with('tomorrow', { context: :future })
-          .and_call_original
+        #assert ::Khronic)
+        #  .to receive(:parse)
+        #  .with('tomorrow', { context: :future })
+        #  .and_call_original
 
         t = EtOrbi.parse(
           'tomorrow', zone: ::TZInfo::Timezone.get('UTC'), context: :future)
         t1 = Time.now + 24 * 3600
 
-        expect(t.class).to eq(EtOrbi::EoTime)
-        expect(t.zone.name).to eq('UTC')
-        expect(t.strftime('%Y-%m-%d')).to eq(t1.strftime('%Y-%m-%d'))
-        expect(t.strftime('%H:%M:%S')).to eq('12:00:00')
+        assert t.class, EtOrbi::EoTime
+        assert t.zone.name, 'UTC'
+        assert t.strftime('%Y-%m-%d'), t1.strftime('%Y-%m-%d')
+        assert t.strftime('%H:%M:%S'), '12:00:00'
       end
     end
   end
 
-  describe '.get_tzone' do
+  group '.get_tzone' do
 
     {
 
@@ -448,35 +439,35 @@ describe EtOrbi do
 
     }.each do |a, b|
 
-      it "returns #{b.inspect} for #{a.inspect}" do
+      test "returns #{b.inspect} for #{a.inspect}" do
 
         z = EtOrbi.get_tzone(a)
 
-        expect(z).not_to eq(nil)
-        expect(z.name).to eq(b)
+        assert_not_nil z
+        assert z.name, b
       end
     end
 
-#    it 'returns a timezone for well-known abbreviations' do
+#    test 'returns a timezone for well-known abbreviations' do
 #
-#      expect(gtz('JST')).to eq('Japan')
-#      expect(gtz('PST')).to eq('America/Dawson')
-#      expect(gtz('CEST')).to eq('Africa/Ceuta')
+#      assert gtz('JST'), 'Japan'
+#      assert gtz('PST'), 'America/Dawson'
+#      assert gtz('CEST'), 'Africa/Ceuta'
 #    end
 
     [
       'Asia/Paris', 'Nada/Nada', '7', '06', 'sun#3', 'Mazda Zoom Zoom Stadium'
     ].each do |s|
 
-      it "returns nil for #{s.inspect}" do
+      test "returns nil for #{s.inspect}" do
 
-        expect(EtOrbi.get_tzone(s)).to eq(nil)
+        assert_nil EtOrbi.get_tzone(s)
       end
     end
 
     # rufus-scheduler gh-222
     #
-    it "falls back to ENV['TZ'] if it doesn't know Time.now.zone" do
+    test "falls back to ENV['TZ'] if test doesn't know Time.now.zone" do
 
       begin
 
@@ -484,24 +475,18 @@ describe EtOrbi do
 
         Time._zone = '中国标准时间'
 
-#        expect(
-#          EtOrbi.get_tzone(:current)
-#        ).to eq(nil)
-#
-#        expect(
-#          EtOrbi.get_tzone(:current)
-#        ).to eq(
-#          EtOrbi.get_tzone(Time.now.zone)
-#        )
-  #
-  # gh-240 introduces a way of finding the timezone by asking directly
-  # to the system, so those do return a timezone...
+        #assert_nil EtOrbi.get_tzone(:current)
+        #assert EtOrbi.get_tzone(:current), EtOrbi.get_tzone(Time.now.zone)
+          #
+          # gh-240 introduces a way of finding the timezone by asking directly
+          # to the system, so those do return a timezone...
 
         in_zone 'Asia/Shanghai' do
 
-          expect(EtOrbi.get_tzone(:local))
-            .to eq(EtOrbi.get_tzone('Asia/Shanghai'))
-            .or eq(EtOrbi.get_tzone('Asia/Chongqing'))
+          assert_include(
+            EtOrbi.get_tzone(:local),
+            [ EtOrbi.get_tzone('Asia/Shanghai'),
+              EtOrbi.get_tzone('Asia/Chongqing') ])
         end
 
       ensure
@@ -509,11 +494,7 @@ describe EtOrbi do
         Time._zone = nil
       end
 
-      expect(
-        EtOrbi.get_tzone(:local)
-      ).to eq(
-        current
-      )
+      assert EtOrbi.get_tzone(:local), current
     end
 
     { # for rufus-scheduler gh-228
@@ -529,20 +510,16 @@ describe EtOrbi do
 
     }.each do |zone, targets|
 
-      it "returns the current timezone for :current in #{zone}" do
+      test "returns the current timezone for :current in #{zone}" do
 
         in_zone(zone) do
 
-          expect(
-            EtOrbi.get_tzone(:local)
-          ).to be_one_of(
-            select_zones(targets)
-          )
+          assert_include EtOrbi.get_tzone(:local), select_zones(targets)
         end
       end
     end
 
-    it "doesn't mind being given a TZInfo::Timezone" do
+    test "doesn't mind being given a TZInfo::Timezone" do
 
       tz = ::TZInfo::Timezone.get('Zulu')
       class << tz
@@ -553,80 +530,67 @@ describe EtOrbi do
       end
         # simulate tzinfo 0.3.53 issue
 
-      expect(
-        EtOrbi.get_tzone(tz)
-      ).to eq(
-        ::TZInfo::Timezone.get('Zulu')
-      )
+      assert EtOrbi.get_tzone(tz), ::TZInfo::Timezone.get('Zulu')
     end
   end
 
-  describe '.determine_local_tzone' do
+  group '.determine_local_tzone' do
 
-    it 'favours the local timezone' do
+    test 'favours the local timezone' do
 
       in_zone(:no_env_tz) do
 
         Time._zone = 'Cape Verde Standard Time'
         EtOrbi._os_zone = '' # force #os_tz to return nil
 
-        expect(
-          EtOrbi.determine_local_tzone.name
-        ).to eq(
-          'Atlantic/Cape_Verde'
-        )
+        assert EtOrbi.determine_local_tzone.name, 'Atlantic/Cape_Verde'
       end
     end
 
-    it 'favours the local timezone' do
+    test 'favours the local timezone' do
 
       in_zone('Europe/Berlin') do
 
-        expect(
-          EtOrbi.determine_local_tzone
-        ).to be_one_of(select_zones(%w[
-          Europe/Berlin Africa/Ceuta windows:CET
-        ]))
+        assert_include(
+          EtOrbi.determine_local_tzone,
+          select_zones(%w[ Europe/Berlin Africa/Ceuta windows:CET ]))
       end
     end
 
-    it 'favours the local timezone (Mitteleuropaeische Sommerzeit)' do
+    test 'favours the local timezone (Mitteleuropaeische Sommerzeit)' do
 
       in_zone(:no_env_tz) do
 
         Time._zone = "Mitteleurop\xE4ische Sommerzeit"
         EtOrbi._os_zone = '' # force #os_tz to return nil
 
-        expect {
-          EtOrbi.determine_local_tzone
-        }.not_to raise_error
+        #assert_not_error(lambda { EtOrbi.determine_local_tzone })
       end
     end
 
-    it 'returns the local timezone' do
+    test 'returns the local timezone' do
 
       in_zone('America/Jamaica') do
 
-        expect(EtOrbi.determine_local_tzone.name)
-          .to eq('America/Jamaica')
-          .or eq('America/Atikokan')
-          .or eq('EST')
+        assert_include(
+          EtOrbi.determine_local_tzone.name,
+          [ 'America/Jamaica', 'America/Atikokan', 'EST' ])
       end
     end
 
-    it 'returns the Rails-provided Time.zone.tzinfo if available' do
+    test 'returns the Rails-provided Time.zone.tzinfo if available' do
 
       # http://api.rubyonrails.org/classes/ActiveSupport/TimeZone.html
 
       Time.active_support_zone = 'Europe/Vilnius'
 
       in_zone(:no_env_tz) do
-        expect(EtOrbi.determine_local_tzone.class).to eq(::TZInfo::DataTimezone)
-        expect(EtOrbi.determine_local_tzone.name).to eq('Europe/Vilnius')
+        assert EtOrbi.determine_local_tzone.class, ::TZInfo::DataTimezone
+        assert EtOrbi.determine_local_tzone.name, 'Europe/Vilnius'
       end
     end
 
-    it "gives precedence to ENV['TZ'] over Rails Time.zone.tzinfo" do
+    test "gives precedence to ENV['TZ'] over Rails Time.zone.tzinfo" do
 
       # http://api.rubyonrails.org/classes/ActiveSupport/TimeZone.html
 
@@ -634,64 +598,63 @@ describe EtOrbi do
 
       in_zone('Asia/Tehran') do
 
-        expect(EtOrbi.determine_local_tzone.class).to eq(::TZInfo::DataTimezone)
-        expect(EtOrbi.determine_local_tzone.name).to eq('Asia/Tehran')
+        assert EtOrbi.determine_local_tzone.class, ::TZInfo::DataTimezone
+        assert EtOrbi.determine_local_tzone.name, 'Asia/Tehran'
       end
     end
   end
 
-  describe '.zone' do
+  group '.zone' do
 
-    it 'is an alias to .determine_local_tzone' do
+    test 'is an alias to .determine_local_tzone' do
 
       in_zone(:no_env_tz) do
 
         Time._zone = 'Cape Verde Standard Time'
         EtOrbi._os_zone = '' # force #os_tz to return nil
 
-        expect(EtOrbi.zone.name).to eq('Atlantic/Cape_Verde')
+        assert EtOrbi.zone.name, 'Atlantic/Cape_Verde'
       end
     end
   end
 
-  describe '.now' do
+  group '.now' do
 
-    it 'returns a current, local EoTime instance' do
+    test 'returns a current, local EoTime instance' do
 
       in_zone 'Asia/Shanghai' do
 
         t = EtOrbi.now
         n = Time.now
 
-        expect(t.seconds).to be_between((n - 1).to_f, (n + 1).to_f)
+        assert t.seconds > (n - 1).to_f
+        assert t.seconds < (n + 1).to_f
 
-        expect(t.zone.name)
-          .to eq('Asia/Shanghai')
-          .or eq('Asia/Chongqing')
+        assert_include t.zone.name, [ 'Asia/Shanghai', 'Asia/Chongqing' ]
       end
     end
   end
 
-  describe '.make_time' do
+  group '.make_time' do
 
-    it 'returns an EoTime instance as is' do
+    test 'returns an EoTime instance as is' do
 
       t0 = EtOrbi.parse('2017-03-21 12:00:34 Asia/Ulan_Bator')
       t1 = EtOrbi.make_time(t0)
 
-      expect(t1.class).to eq(::EtOrbi::EoTime)
-      expect(t1).to eq(t0)
-      expect(t1.object_id).to eq(t0.object_id)
+      assert t1.class, ::EtOrbi::EoTime
+      assert t1, t0
+      assert t1.object_id, t0.object_id
     end
 
-    it 'returns an EoTime instance as is' do
+    test 'returns an EoTime instance as is' do
 
       t0 = EtOrbi.parse('2017-03-21 12:00:34 Asia/Ulan_Bator')
       t1 = EtOrbi.make_time(t0, t0.zone)
 
-      expect(t1.class).to eq(::EtOrbi::EoTime)
-      expect(t1).to eq(t0)
-      expect(t1.object_id).to eq(t0.object_id)
+      assert t1.class, ::EtOrbi::EoTime
+      assert t1, t0
+      assert t1.object_id, t0.object_id
     end
 
     [
@@ -820,12 +783,12 @@ describe EtOrbi do
         #windows? ? 'EST' : 'America - New York',
         lambda { |t| t.zone.to_s } ],
 
-    ].each do |name, zone, args, expected, transformer|
+    ].each do |name, zone, args, asserted, transformer|
 
       title = "turns #{name} into an EoTime instance"
       title += " in #{zone}" if zone
 
-      it(title) do
+      test(title) do
 
         eot, exp =
           in_zone(zone) do
@@ -835,9 +798,9 @@ describe EtOrbi do
             t = as.is_a?(Array) ?
               EtOrbi.make_time(*as) :
               EtOrbi.make_time(as)
-            x = expected.is_a?(Proc) ?
-              expected.call :
-              expected
+            x = asserted.is_a?(Proc) ?
+              asserted.call :
+              asserted
 
             t = transformer.is_a?(Proc) ? transformer[t] : t
 
@@ -850,22 +813,21 @@ describe EtOrbi do
 
         case exp
         when String
-          expect(eot.respond_to?(:to_debug_s) ? eot.to_debug_s : eot
-            ).to eq(exp)
+          assert eot.respond_to?(:to_debug_s) ? eot.to_debug_s : eot, exp
         when Array
           if exp.collect(&:class).uniq == [ String ]
-            expect(exp.include?(eot)).to eq(true)
+            assert exp.include?(eot)
           else
-            expect(eot).to be_between(*exp)
+            assert eot > exp[0]
+            assert eot < exp[1]
           end
         else
-          expect(eot
-            ).to eq(exp)
+          assert eot, exp
         end
       end
     end
 
-#    it 'accepts a duration String'# do
+#    test 'accepts a duration String'# do
 ##
 ##      expect(
 ##        EtOrbi.make_time('1h')
@@ -876,9 +838,9 @@ describe EtOrbi do
 #  #
 #  # String parsing is fugit's job. Et-orbi should be a dependency of
 #  # fugit, not the other way around. When fugit is present, this
-#  # spec should succeed, else it should not.
+#  # spec should succeed, else test should not.
 
-    it 'accepts a Rails TimeWithZone' do
+    test 'accepts a Rails TimeWithZone' do
 
       # http://api.rubyonrails.org/classes/ActiveSupport/TimeWithZone.html
 
@@ -895,41 +857,39 @@ describe EtOrbi do
 
       eot = EtOrbi.make_time(t)
 
-      expect(eot.class).to eq(EtOrbi::EoTime)
-      expect(eot.seconds).to eq(t.to_f)
-      expect(eot.zone).to eq(t.time_zone)
+      assert eot.class, EtOrbi::EoTime
+      assert eot.seconds, t.to_f
+      assert eot.zone, t.time_zone
     end
 
-    it 'rejects a Time in a non-local ambiguous timezone' do
+    test 'rejects a Time in a non-local ambiguous timezone' do
 
       t = Time.local(2016, 11, 01, 12, 30, 9)
       class << t; def zone; 'ECT'; end; end
 
       in_zone 'Asia/Tbilisi' do
 
-        expect {
-          EtOrbi.make_time(t)
-        }.to raise_error(
-          ArgumentError, /\ACannot determine timezone from "ECT"/
-        )
+        assert_error(
+          lambda { EtOrbi.make_time(t) },
+          ArgumentError, /\ACannot determine timezone from "ECT"/)
       end
     end
 
-    it 'rejects unparsable input' do
+    test 'rejects unparsable input' do
 
-      expect {
-        EtOrbi.make_time('xxx')
-      #}.to raise_error(ArgumentError, 'couldn\'t parse "xxx"')
-      }.to raise_error(ArgumentError, 'No time information in "xxx"')
-        # straight out of Time.parse()
+      assert_error(
+        lambda { EtOrbi.make_time('xxx') },
+        ArgumentError, 'No time information in "xxx"')
+          #
+          # straight out of Time.parse()
 
-      expect {
-        EtOrbi.make_time(Object.new)
-      }.to raise_error(ArgumentError, /\ACannot turn /)
+      assert_error(
+        lambda { EtOrbi.make_time(Object.new) },
+        ArgumentError, /\ACannot turn /)
     end
   end
 
-  describe '.windows_zone_name' do
+  group '.windows_zone_name' do
 
     { [ 'Asia/Tokyo', '2018-05-23' ] => 'JST-9',
       [ 'Asia/Kolkata', '2018-07-01' ] => 'IST-5:30',
@@ -950,14 +910,14 @@ describe EtOrbi do
 
     }.each do |(zone, time), v|
 
-      it "returns #{v.inspect} for #{zone.inspect} at #{time}" do
+      test "returns #{v.inspect} for #{zone.inspect} at #{time}" do
 
-        expect(EtOrbi.windows_zone_name(zone, Time.parse(time))).to eq(v)
+        assert EtOrbi.windows_zone_name(zone, Time.parse(time)), v
       end
     end
   end
 
-  describe '.zone_abbreviation' do
+  group '.zone_abbreviation' do
 
     { [ 'Europe/Tallinn', '2012-07-28' ] => 'EEST',
       [ 'Europe/Tallinn', '2012-10-28' ] => 'EEST',
@@ -978,14 +938,14 @@ describe EtOrbi do
 
     }.each do |(zone, time), v|
 
-      it "returns #{v.inspect} for #{zone.inspect} at #{time}" do
+      test "returns #{v.inspect} for #{zone.inspect} at #{time}" do
 
-        expect(EtOrbi.zone_abbreviation(zone, Time.parse(time))).to eq(v)
+        assert EtOrbi.zone_abbreviation(zone, Time.parse(time)), v
       end
     end
   end
 
-  describe '.tweak_zone_name' do
+  group '.tweak_zone_name' do
 
     { 'EST5EDT' => 'EST5EDT',
       'UTC+12' => 'Etc/GMT-12',
@@ -993,36 +953,36 @@ describe EtOrbi do
 
     }.each do |n0, n1|
 
-      it "turns #{n0.inspect} into #{n1.inspect}" do
+      test "turns #{n0.inspect} into #{n1.inspect}" do
 
-        expect(EtOrbi.tweak_zone_name(n0)).to eq(n1)
+        assert EtOrbi.tweak_zone_name(n0), n1
       end
     end
   end
 
-  describe '.chronic_enabled?' do
+  group '.chronic_enabled?' do
 
-    it 'returns true by default' do
+    test 'returns true by default' do
 
-      expect(EtOrbi.chronic_enabled?).to eq(true)
+      assert EtOrbi.chronic_enabled?
     end
   end
 
-  describe '.chronic_enabled=' do
+  group '.chronic_enabled=' do
 
-    after :each do
+    after do
       EtOrbi.chronic_enabled = true
     end
 
-    it 'lets disable chronic parsing' do
+    test 'lets disable chronic parsing' do
 
       EtOrbi.chronic_enabled = false
 
-      expect(EtOrbi.chronic_enabled?).to eq(false)
+      assert_false EtOrbi.chronic_enabled?
     end
   end
 
-#  describe '.abbreviate_zone_name' do
+#  group '.abbreviate_zone_name' do
 #
 #    {
 #
@@ -1035,12 +995,12 @@ describe EtOrbi do
 #      n1s = n1.inspect
 #      n1s = n1.collect(&:inspect).join(' or ') if n1.is_a?(Array)
 #
-#      it "turns #{n0.inspect} into #{n1s}" do
+#      test "turns #{n0.inspect} into #{n1s}" do
 #
 #        if n1.is_a?(Array)
-#          expect(n1).to include(EtOrbi.abbreviate_zone_name(n0))
+#          assert n1).to include(EtOrbi.abbreviate_zone_name(n0))
 #        else
-#          expect(EtOrbi.abbreviate_zone_name(n0)).to eq(n1)
+#          assert EtOrbi.abbreviate_zone_name(n0), n1)
 #        end
 #      end
 #    end

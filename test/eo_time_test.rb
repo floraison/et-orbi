@@ -7,63 +7,61 @@
 # Sun Mar 19 05:16:28 JST 2017
 #
 
-require 'spec_helper'
 
+group EtOrbi::EoTime do
 
-describe EtOrbi::EoTime do
+  group '.new' do
 
-  describe '.new' do
+    group "zone 'America/Los_Angeles'" do
 
-    context "zone 'America/Los_Angeles'" do
-
-      it 'accepts an integer' do
+      test 'accepts an integer' do
 
         ot = EtOrbi::EoTime.new(1234567890, 'America/Los_Angeles')
 
-        expect(ot.seconds.to_i).to eq(1234567890)
-        expect(ot.zone.name).to eq('America/Los_Angeles')
+        assert ot.seconds.to_i, 1234567890
+        assert ot.zone.name, 'America/Los_Angeles'
       end
 
-      it 'accepts a float' do
+      test 'accepts a float' do
 
         ot = EtOrbi::EoTime.new(1234567890.1234, 'America/Los_Angeles')
 
-        expect(ot.seconds.to_i).to eq(1234567890)
-        expect(ot.zone.name).to eq('America/Los_Angeles')
+        assert ot.seconds.to_i, 1234567890
+        assert ot.zone.name, 'America/Los_Angeles'
       end
 
-      it 'accepts a UTC ::Time instance' do
+      test 'accepts a UTC ::Time instance' do
 
         ot =
           EtOrbi::EoTime.new(
             Time.utc(2007, 11, 1, 15, 25, 0),
             'America/Los_Angeles')
 
-        expect(ot.seconds.to_i).to eq(1193930700)
-        expect(ot.zone.name).to eq('America/Los_Angeles')
+        assert ot.seconds.to_i, 1193930700
+        assert ot.zone.name, 'America/Los_Angeles'
       end
 
-      it 'accepts a UTC EtOrbi::EoTime instance' do
+      test 'accepts a UTC EtOrbi::EoTime instance' do
 
         ot =
           EtOrbi::EoTime.new(
             EtOrbi::EoTime.new(1193930700, 'UTC'),
             'America/Los_Angeles')
 
-        expect(ot.seconds.to_i).to eq(1193930700)
-        expect(ot.zone.name).to eq('America/Los_Angeles')
+        assert ot.seconds.to_i, 1193930700
+        assert ot.zone.name, 'America/Los_Angeles'
       end
 
-      it 'accepts a local ::Time instance' do
+      test 'accepts a local ::Time instance' do
 
         #in_zone 'Asia/Samarkand' do
         #
         #  t = Time.parse('2007-11-01 15:25')
         #  ot = EtOrbi::EoTime.new(t, 'America/Los_Angeles')
         #
-        #  expect(ot.seconds).to eq(t.to_i)
-        #  expect(ot.seconds.to_i).to eq(1193912700)
-        #  expect(ot.zone.name).to eq('America/Los_Angeles')
+        #  assert ot.seconds, t.to_i)
+        #  assert ot.seconds.to_i, 1193912700)
+        #  assert ot.zone.name, 'America/Los_Angeles')
         #end
           #
           # because of https://ci.appveyor.com/project/jmettraux/et-orbi/build/job/8birnr0k54jrihx8
@@ -73,49 +71,49 @@ describe EtOrbi::EoTime do
 
         ot = EtOrbi::EoTime.new(t, 'America/Los_Angeles')
 
-        expect(ot.seconds).to eq(t.to_i)
-        expect(ot.seconds.to_i).to eq(1193912700)
-        expect(ot.zone.name).to eq('America/Los_Angeles')
+        assert ot.seconds, t.to_i
+        assert ot.seconds.to_i, 1193912700
+        assert ot.zone.name, 'America/Los_Angeles'
       end
 
-      it 'accepts a Local EtOrbi::EoTime instance' do
+      test 'accepts a Local EtOrbi::EoTime instance' do
 
         ot =
           EtOrbi::EoTime.new(
             EtOrbi::EoTime.new(1193930700, 'Asia/Yekaterinburg'),
             'America/Los_Angeles')
 
-        expect(ot.seconds.to_i).to eq(1193930700)
-        expect(ot.zone.name).to eq('America/Los_Angeles')
+        assert ot.seconds.to_i, 1193930700
+        assert ot.zone.name, 'America/Los_Angeles'
       end
     end
 
-    context "zone TZInfo instance 'Europe/Paris'" do
+    group "zone TZInfo instance 'Europe/Paris'" do
 
-      it 'accepts an integer' do
+      test 'accepts an integer' do
 
         ot = EtOrbi::EoTime
           .new(1234567890, ::TZInfo::Timezone.get('Europe/Paris'))
 
-        expect(ot.seconds.to_i).to eq(1234567890)
-        expect(ot.zone.name).to eq('Europe/Paris')
+        assert ot.seconds.to_i, 1234567890
+        assert ot.zone.name, 'Europe/Paris'
       end
     end
 
-    context "zone ActiveSupport::TimeZone instance 'America/New_York'" do
+    group "zone ActiveSupport::TimeZone instance 'America/New_York'" do
 
-      it 'accepts an integer' do
+      test 'accepts an integer' do
 
         ot = EtOrbi::EoTime
-          .new(1234567890, SpecActiveSupportTimeZone.make('America/New_York'))
+          .new(1234567890, TestActiveSupportTimeZone.make('America/New_York'))
 
-        expect(ot.seconds.to_i).to eq(1234567890)
-        expect(ot.zone.name).to eq('America/New_York')
+        assert ot.seconds.to_i, 1234567890
+        assert ot.zone.name, 'America/New_York'
       end
     end
   end
 
-  describe '.utc' do
+  group '.utc' do
 
     [
 
@@ -124,18 +122,18 @@ describe EtOrbi::EoTime do
 
     ].each do |a, s|
 
-      it "accepts #{a.inspect}" do
+      test "accepts #{a.inspect}" do
 
         ot = EtOrbi::EoTime.utc(*a)
 
-        expect(ot.class).to eq(EtOrbi::EoTime)
-        expect(ot.zone.name).to eq('UTC')
-        expect(ot.iso8601).to eq(s)
+        assert ot.class, EtOrbi::EoTime
+        assert ot.zone.name, 'UTC'
+        assert ot.iso8601, s
       end
     end
   end
 
-  describe '.local' do
+  group '.local' do
 
     [
 
@@ -151,21 +149,21 @@ describe EtOrbi::EoTime do
 
     ].each do |a, zs, s|
 
-      it "accepts #{a.inspect} in #{zs.first}" do
+      test "accepts #{a.inspect} in #{zs.first}" do
 
         in_zone(zs.first) do
 
           ot = EtOrbi::EoTime.local(*a)
 
-          expect(ot.class).to eq(EtOrbi::EoTime)
-          expect(ot.zone).to be_one_of(select_zones(zs))
-          expect(ot.iso8601).to eq(s)
+          assert ot.class, EtOrbi::EoTime
+          assert_include ot.zone, select_zones(zs)
+          assert ot.iso8601, s
         end
       end
     end
   end
 
-  describe '#to_time (protected)' do
+  group '#to_time (protected)' do
 
     if TZInfo::Timezone
        .get('America/Los_Angeles')
@@ -174,134 +172,134 @@ describe EtOrbi::EoTime do
     then
       # TZInfo < 2.0.0
 
-      it 'returns a local Time instance, although with a UTC zone' do
+      test 'returns a local Time instance, although with a UTC zone' do
 
         ot = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
         t = ot.send(:to_time)
 
-        expect(ot.to_debug_s).to eq('ot 2007-10-31 23:25:00 -07:00 dst:true')
+        assert ot.to_debug_s, 'ot 2007-10-31 23:25:00 -07:00 dst:true'
 
-        expect(t.to_i).to eq(1193898300 - 7 * 3600) # /!\
-        expect(t.utc_offset).to eq(0)
+        assert t.to_i, 1193898300 - 7 * 3600 # /!\
+        assert t.utc_offset, 0
 
-        expect(t.to_debug_s).to eq('t 2007-10-31 23:25:00 +00:00 dst:false')
+        assert t.to_debug_s, 't 2007-10-31 23:25:00 +00:00 dst:false'
           # Time instance stuck to UTC...
       end
 
     else
       # TZInfo >= 2.0.0
 
-      it 'returns a local Time instance' do
+      test 'returns a local Time instance' do
 
         ot = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
         t = ot.send(:to_time)
 
-        expect(ot.to_debug_s).to eq('ot 2007-10-31 23:25:00 -07:00 dst:true')
+        assert ot.to_debug_s, 'ot 2007-10-31 23:25:00 -07:00 dst:true'
 
-        expect(t.to_i).to eq(1193898300)
-        expect(t.utc_offset).to eq(-7 * 3600)
+        assert t.to_i, 1193898300
+        assert t.utc_offset, -7 * 3600
 
-        expect(t.to_debug_s).to eq('t 2007-10-31 23:25:00 -07:00 dst:true')
+        assert t.to_debug_s, 't 2007-10-31 23:25:00 -07:00 dst:true'
       end
     end
   end
 
-  describe '#to_local_time' do
+  group '#to_local_time' do
 
-    it 'returns a local Time instance in the local time zone' do
+    test 'returns a local Time instance in the local time zone' do
 
       ot = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
       t = ot.to_local_time
 
-      expect(t.class).to eq(::Time)
-      expect(t.to_i).to eq(1193898300)
-      expect(t.usec).to eq(0)
+      assert t.class, ::Time
+      assert t.to_i, 1193898300
+      assert t.usec, 0
 
       t1 = Time.parse(t.strftime("%Y-%m-%d %H:%M:%S.#{'%06d' % t.usec}"))
-      expect(t.to_s).to eq(t1.to_s)
+      assert t.to_s, t1.to_s
     end
   end
 
-  describe '#to_t' do
+  group '#to_t' do
 
-    it 'is an alias to #to_local_time' do
+    test 'is an alias to #to_local_time' do
 
       ot = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
       t = ot.to_t
 
-      expect(t.class).to eq(::Time)
-      expect(t.to_i).to eq(1193898300)
-      expect(t.usec).to eq(0)
+      assert t.class, ::Time
+      assert t.to_i, 1193898300
+      assert t.usec, 0
     end
   end
 
-  describe '#to_utc_time' do
+  group '#to_utc_time' do
 
-    it 'is an alias to #to_utc' do
+    test 'is an alias to #to_utc' do
 
       ot = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
       ut = ot.to_utc_time
 
-      expect(ut.class).to eq(::Time)
-      expect(ut.to_i).to eq(1193898300)
-      expect(ut.usec).to eq(0)
+      assert ut.class, ::Time
+      assert ut.to_i, 1193898300
+      assert ut.usec, 0
 
-      expect(ut.to_s).to eq('2007-11-01 06:25:00 UTC')
+      assert ut.to_s, '2007-11-01 06:25:00 UTC'
     end
   end
 
-  describe '#utc' do
+  group '#utc' do
 
-    it 'returns an UTC Time instance' do
+    test 'returns an UTC Time instance' do
 
       ot = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
       ut = ot.utc
 
-      expect(ut.to_i).to eq(1193898300)
+      assert ut.to_i, 1193898300
 
-      expect(ot.to_debug_s).to eq('ot 2007-10-31 23:25:00 -07:00 dst:true')
-      expect(ut.to_debug_s).to eq('t 2007-11-01 06:25:00 +00:00 dst:false')
+      assert ot.to_debug_s, 'ot 2007-10-31 23:25:00 -07:00 dst:true'
+      assert ut.to_debug_s, 't 2007-11-01 06:25:00 +00:00 dst:false'
     end
   end
 
-  describe '#utc?' do
+  group '#utc?' do
 
-    it 'returns true if the EoTime zone is UTC' do
+    test 'returns true if the EoTime zone is UTC' do
 
-      expect(EtOrbi::EoTime.new(1193898300, 'Z').utc?).to eq(true)
-      expect(EtOrbi::EoTime.new(1193898300, 'UTC').utc?).to eq(true)
-      expect(EtOrbi::EoTime.new(1193898300, 'GMT').utc?).to eq(true)
-      expect(EtOrbi::EoTime.new(1193898300, 'Zulu').utc?).to eq(true)
+      assert EtOrbi::EoTime.new(1193898300, 'Z').utc?
+      assert EtOrbi::EoTime.new(1193898300, 'UTC').utc?
+      assert EtOrbi::EoTime.new(1193898300, 'GMT').utc?
+      assert EtOrbi::EoTime.new(1193898300, 'Zulu').utc?
     end
 
-    it 'returns false else' do
+    test 'returns false else' do
 
       ot = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
 
-      expect(ot.utc?).to eq(false)
+      assert ot.utc?, false
     end
   end
 
-  describe '#add' do
+  group '#add' do
 
-    it 'adds seconds' do
+    test 'adds seconds' do
 
       ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
       ot.add(111)
 
-      expect(ot.seconds).to eq(1193898300 + 111)
+      assert ot.seconds, 1193898300 + 111
     end
 
-    it 'adds anything that has a #to_i and is not a String, gh-40' do
+    test 'adds anything that has a #to_i and is not a String, gh-40' do
 
       ot =
         EtOrbi::EoTime.new(1193898300, 'Asia/Vladivostok') +
-        SpecActiveSupportDuration.new(3600) # 1.hour
+        TestActiveSupportDuration.new(3600) # 1.hour
 
-      expect(ot.seconds).to eq(1193898300 + 3600)
+      assert ot.seconds, 1193898300 + 3600
     end
 
-    it 'goes into DST' do
+    test 'goes into DST' do
 
       ot =
         EtOrbi::EoTime.new(
@@ -315,13 +313,13 @@ describe EtOrbi::EoTime do
       st0 = t0.strftime('%Y/%m/%d %H:%M:%S %Z') + " #{t0.isdst}"
       st1 = t1.strftime('%Y/%m/%d %H:%M:%S %Z') + " #{t1.isdst}"
 
-      expect(t0.to_i).to eq(1425808799)
-      expect(t1.to_i).to eq(1425808800)
-      expect(st0).to eq('2015/03/08 01:59:59 PST false')
-      expect(st1).to eq('2015/03/08 03:00:00 PDT true')
+      assert t0.to_i, 1425808799
+      assert t1.to_i, 1425808800
+      assert st0, '2015/03/08 01:59:59 PST false'
+      assert st1, '2015/03/08 03:00:00 PDT true'
     end
 
-    it 'goes out of DST' do
+    test 'goes out of DST' do
 
       ot = EtOrbi.parse('2014-10-26 01:59:59 Europe/Berlin')
         #
@@ -341,112 +339,108 @@ describe EtOrbi::EoTime do
       st2 = t2.strftime('%Y/%m/%d %H:%M:%S %Z') + " #{t2.isdst}"
       st3 = t3.strftime('%Y/%m/%d %H:%M:%S %Z') + " #{t3.isdst}"
 
-      expect(t0.to_i).to eq(1414281599)
-      expect(t1.to_i).to eq(1414285200 - 3600)
-      expect(t2.to_i).to eq(1414285200)
-      expect(t3.to_i).to eq(1414285201)
+      assert t0.to_i, 1414281599
+      assert t1.to_i, 1414285200 - 3600
+      assert t2.to_i, 1414285200
+      assert t3.to_i, 1414285201
 
-      expect(st0).to eq('2014/10/26 01:59:59 CEST true')
-      expect(st1).to eq('2014/10/26 02:00:00 CEST true')
-      expect(st2).to eq('2014/10/26 02:00:00 CET false')
-      expect(st3).to eq('2014/10/26 02:00:01 CET false')
+      assert st0, '2014/10/26 01:59:59 CEST true'
+      assert st1, '2014/10/26 02:00:00 CEST true'
+      assert st2, '2014/10/26 02:00:00 CET false'
+      assert st3, '2014/10/26 02:00:01 CET false'
 
-      expect(t1 - t0).to eq(1)
-      expect(t2 - t1).to eq(3600)
-      expect(t3 - t2).to eq(1)
+      assert t1 - t0, 1
+      assert t2 - t1, 3600
+      assert t3 - t2, 1
     end
 
-    it 'returns self' do
+    test 'returns self' do
 
       ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
       ot1 = ot.subtract(111)
 
-      expect(ot1.object_id).to eq(ot.object_id)
+      assert ot1.object_id, ot.object_id
     end
   end
 
-  describe '#subtract' do
+  group '#subtract' do
 
-    it 'substracts seconds' do
+    test 'substracts seconds' do
 
       ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
       ot.subtract(111)
 
-      expect(ot.seconds).to eq(1193898300 - 111)
+      assert ot.seconds, 1193898300 - 111
     end
 
-    it 'subtracts anything that has a #to_i and is not a String, gh-40' do
+    test 'subtracts anything that has a #to_i and is not a String, gh-40' do
 
       ot =
         EtOrbi::EoTime.new(1193898300, 'Asia/Vladivostok') -
-        SpecActiveSupportDuration.new(3600) # 1.hour
+        TestActiveSupportDuration.new(3600) # 1.hour
 
-      expect(ot.seconds).to eq(1193898300 - 3600)
+      assert ot.seconds, 1193898300 - 3600
     end
 
-    it 'returns self' do
+    test 'returns self' do
 
       ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
       ot1 = ot.subtract(111)
 
-      expect(ot1.object_id).to eq(ot.object_id)
+      assert ot1.object_id, ot.object_id
     end
   end
 
-  describe '#to_f' do
+  group '#to_f' do
 
-    it 'returns the @seconds' do
+    test 'returns the @seconds' do
 
       ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
 
-      expect(ot.to_f).to eq(1193898300)
+      assert ot.to_f, 1193898300
     end
   end
 
-  describe '#to_s' do
+  group '#to_s' do
 
-    it 'returns the a formatted datetime string' do
+    test 'returns the a formatted datetime string' do
 
       ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
 
-      expect(ot.to_s).to eq('2007-11-01 07:25:00 +0100')
+      assert ot.to_s, '2007-11-01 07:25:00 +0100'
     end
   end
 
-  describe '#to_zs' do
+  group '#to_zs' do
 
-    it 'returns the a formatted datetime string with an explicit timezone' do
+    test 'returns the a formatted datetime string with an explicit timezone' do
 
       ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
 
-      expect(ot.to_zs).to eq('2007-11-01 07:25:00 Europe/Paris')
+      assert ot.to_zs, '2007-11-01 07:25:00 Europe/Paris'
     end
   end
 
-  describe '#strftime' do
+  group '#strftime' do
 
-    it 'accepts %Z, %z, %:z and %::z' do
+    test 'accepts %Z, %z, %:z and %::z' do
 
-      expect(
+      assert(
         EtOrbi::EoTime.new(0, 'Europe/Bratislava') \
-          .strftime('%Y-%m-%d %H:%M:%S %Z %z %:z %::z')
-      ).to eq(
-        '1970-01-01 01:00:00 CET +0100 +01:00 +01:00:00'
-      )
+          .strftime('%Y-%m-%d %H:%M:%S %Z %z %:z %::z'),
+        '1970-01-01 01:00:00 CET +0100 +01:00 +01:00:00')
     end
 
-    it 'accepts %/Z' do
+    test 'accepts %/Z' do
 
-      expect(
+      assert(
         EtOrbi::EoTime.new(0, 'Europe/Bratislava') \
-          .strftime('%Y-%m-%d %H:%M:%S %/Z')
-      ).to eq(
-        "1970-01-01 01:00:00 Europe/Bratislava"
-      )
+          .strftime('%Y-%m-%d %H:%M:%S %/Z'),
+        "1970-01-01 01:00:00 Europe/Bratislava")
     end
   end
 
-  describe '#monthdays' do
+  group '#monthdays' do
 
     [
       [ [ 1970, 1, 1 ], %w[ 4#1 4#-5 ] ],
@@ -455,67 +449,63 @@ describe EtOrbi::EoTime do
       [ [ 2011, 3, 11 ], %w[ 5#2 5#-3 ] ]
     ].each do |d, x|
 
-      it "returns the #{x.inspect} for #{d.inspect}" do
+      test "returns the #{x.inspect} for #{d.inspect}" do
 
         t = EtOrbi.parse("#{d.join('-')} 12:00")
 
-        expect(t.monthdays).to eq(x)
+        assert t.monthdays, x
       end
     end
   end
 
-  describe '#+' do
+  group '#+' do
 
-    it 'adds seconds' do
+    test 'adds seconds' do
 
       ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
       ot1 = ot + 111
 
-      expect(ot1.class).to eq(EtOrbi::EoTime)
-      expect(ot1.seconds).to eq(1193898300 + 111)
-      expect(ot1.object_id).not_to eq(ot.object_id)
+      assert ot1.class, EtOrbi::EoTime
+      assert ot1.seconds, 1193898300 + 111
+      assert ot1.object_id != ot.object_id
     end
 
-    it 'rejects Time instances' do
+    test 'rejects Time instances' do
 
       ot =
         EtOrbi.make_time('2017-10-31 22:00:10 Europe/Paris')
       t =
         in_zone('America/Los_Angeles') { Time.local(2017, 10, 30, 22, 00, 10) }
 
-      expect {
-        ot + t
-      }.to raise_error(
-        ArgumentError, 'Cannot add Time to EoTime instance'
-      )
+      assert_error(
+        lambda { ot + t },
+        ArgumentError, 'Cannot add Time to EoTime instance')
     end
 
-    it 'rejects EoTime instances' do
+    test 'rejects EoTime instances' do
 
       ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
       ot1 = EtOrbi::EoTime.new(1193898300, 'America/Los_Angeles')
 
-      expect {
-        ot + ot1
-      }.to raise_error(
-        ArgumentError, 'Cannot add EtOrbi::EoTime to EoTime instance'
-      )
+      assert_error(
+        lambda { ot + ot1 },
+        ArgumentError, 'Cannot add EtOrbi::EoTime to EoTime instance')
     end
   end
 
-  describe '#-' do
+  group '#-' do
 
-    it 'subtracts seconds' do
+    test 'subtracts seconds' do
 
       ot = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
       ot1 = ot - 111
 
-      expect(ot1.class).to eq(EtOrbi::EoTime)
-      expect(ot1.seconds).to eq(1193898300 - 111)
-      expect(ot1.object_id).not_to eq(ot.object_id)
+      assert ot1.class, EtOrbi::EoTime
+      assert ot1.seconds, 1193898300 - 111
+      assert ot1.object_id != ot.object_id
     end
 
-    it 'subtracts Time instances' do
+    test 'subtracts Time instances' do
 
       ot = EtOrbi.make_time('2017-10-31 22:00:10 Europe/Paris')
 
@@ -526,22 +516,22 @@ describe EtOrbi::EoTime do
 
       d = ot - t
 
-      expect(d.class).to eq(Float)
-      expect(d.to_i).to eq(57600)
+      assert d.class, Float
+      assert d.to_i, 57600
     end
 
-    it 'subtracts EoTime instances' do
+    test 'subtracts EoTime instances' do
 
       ot0 = EtOrbi::EoTime.new(1193898300, 'Europe/Paris')
       ot1 = EtOrbi::EoTime.new(1193898300 + 222, 'America/Los_Angeles')
       d = ot0 - ot1
 
-      expect(d.class).to eq(Float)
-      expect(d.to_i).to eq(-222)
+      assert d.class, Float
+      assert d.to_i, -222
     end
   end
 
-  describe '#wday_in_month' do
+  group '#wday_in_month' do
 
     {
 
@@ -552,7 +542,7 @@ describe EtOrbi::EoTime do
 
     }.each do |k, v|
 
-      it "computes the wday in month interval for #{k.inspect}" do
+      test "computes the wday in month interval for #{k.inspect}" do
 
         t =
           case k
@@ -560,14 +550,14 @@ describe EtOrbi::EoTime do
           else EtOrbi::EoTime.new(*k)
           end
 
-        expect(t.wday_in_month).to eq(v)
+        assert t.wday_in_month, v
       end
     end
   end
 
   WDAYS = %w[ sun mon tue wed thu fri sat sun ]
 
-  describe '#rweek, #rday' do
+  group '#rweek, #rday' do
 
     {
 
@@ -585,89 +575,90 @@ describe EtOrbi::EoTime do
 
     }.each do |t, (wday, yday, rweek, rday)|
 
-      it "for #{t}, returns rweek:#{rweek}/rday:#{rday}" do
+      test "for #{t}, returns rweek:#{rweek}/rday:#{rday}" do
 
         t = EtOrbi.make_time(t)
 
-        expect([ WDAYS[t.wday], t.yday, t.rweek, t.rday ])
-          .to eq([ wday, yday, rweek, rday ])
+        assert(
+          [ WDAYS[t.wday], t.yday, t.rweek, t.rday ],
+          [ wday, yday, rweek, rday ])
       end
     end
   end
 
-  describe '#localtime' do
+  group '#localtime' do
 
-    it 'returns a new EoTime instance in the local zone' do
+    test 'returns a new EoTime instance in the local zone' do
 
       t = EtOrbi::EoTime.new(1193898300, 'Pacific/Apia')
 
-      expect(t.to_s).to eq('2007-10-31 19:25:00 -1100')
+      assert t.to_s, '2007-10-31 19:25:00 -1100'
 
       t1 = in_zone('Europe/Moscow') { t.localtime }
 
-      expect(t1.to_s).to eq('2007-11-01 09:25:00 +0300')
-      expect(t1.object_id).not_to eq(t.object_id)
+      assert t1.to_s, '2007-11-01 09:25:00 +0300'
+      assert t1.object_id != t.object_id
     end
   end
 
-  describe '#localtime(zone)' do
+  group '#localtime(zone)' do
 
-    it 'returns a new EoTime instance local to a given zone' do
+    test 'returns a new EoTime instance local to a given zone' do
 
       t = EtOrbi::EoTime.new(1193898300, 'Pacific/Apia')
 
-      expect(t.to_s).to eq('2007-10-31 19:25:00 -1100')
+      assert t.to_s, '2007-10-31 19:25:00 -1100'
 
       t1 = t.localtime('Europe/Paris')
 
-      expect(t1.to_s).to eq('2007-11-01 07:25:00 +0100')
-      expect(t1.object_id).not_to eq(t.object_id)
+      assert t1.to_s, '2007-11-01 07:25:00 +0100'
+      assert t1.object_id != t.object_id
     end
 
-    it 'returns a new EoTime instance event if target zone is the same' do
+    test 'returns a new EoTime instance event if target zone is the same' do
 
       t = EtOrbi::EoTime.new(1193898300, 'Pacific/Apia')
 
-      expect(t.to_s).to eq('2007-10-31 19:25:00 -1100')
+      assert t.to_s, '2007-10-31 19:25:00 -1100'
 
       t1 = t.localtime('Pacific/Apia')
 
-      expect(t1.to_s).to eq('2007-10-31 19:25:00 -1100')
-      expect(t1.object_id).not_to eq(t.object_id)
+      assert t1.to_s, '2007-10-31 19:25:00 -1100'
+      assert t1.object_id != t.object_id
     end
   end
 
-  describe '#translate(zone=nil)' do
+  group '#translate(zone=nil)' do
 
-    it 'is an alias to #localtime(zone=nil)' do
+    test 'is an alias to #localtime(zone=nil)' do
 
       t = EtOrbi::EoTime.new(1193898300, 'Pacific/Apia')
 
-      expect(t.to_s).to eq('2007-10-31 19:25:00 -1100')
+      assert t.to_s, '2007-10-31 19:25:00 -1100'
 
       t1 = t.translate('Europe/Paris')
 
-      expect(t1.to_s).to eq('2007-11-01 07:25:00 +0100')
-      expect(t1.object_id).not_to eq(t.object_id)
+      assert t1.to_s, '2007-11-01 07:25:00 +0100'
+      assert t1.object_id != t.object_id
     end
   end
 
-  describe '#in_time_zone(zone=nil)' do
+  group '#in_time_zone(zone=nil)' do
 
-    it 'is an alias to #localtime(zone=nil)' do
+    test 'is an alias to #localtime(zone=nil)' do
 
       t = EtOrbi::EoTime.new(1193898300, 'Pacific/Apia')
 
-      expect(t.to_s).to eq('2007-10-31 19:25:00 -1100')
+      assert t.to_s, '2007-10-31 19:25:00 -1100'
 
       t1 = t.in_time_zone('Europe/Moscow')
 
-      expect(t1.to_s).to eq('2007-11-01 09:25:00 +0300')
-      expect(t1.object_id).not_to eq(t.object_id)
+      assert t1.to_s, '2007-11-01 09:25:00 +0300'
+      assert t1.object_id != t.object_id
     end
   end
 
-  describe '#iso8601' do
+  group '#iso8601' do
 
     [
 
@@ -683,7 +674,7 @@ describe EtOrbi::EoTime do
 
     ].each do |s, z, f, i|
 
-      it "returns #{i.inspect}" do
+      test "returns #{i.inspect}" do
 
         t =
           if z
@@ -692,16 +683,16 @@ describe EtOrbi::EoTime do
             EtOrbi.make_time(s)
           end
 
-        expect(t.iso8601(f)).to eq(i)
+        assert t.iso8601(f), i
       end
     end
   end
 
-  describe '#ambiguous?' do
+  group '#ambiguous?' do
 
     # https://www.timeanddate.com/time/change/usa/new-york?year=2018
 
-    it 'returns false if it has a unique corresponding UTC time' do
+    test 'returns false if test has a unique corresponding UTC time' do
 
       # whatever the local zone!
 
@@ -709,10 +700,10 @@ describe EtOrbi::EoTime do
         EtOrbi.parse('2018-11-04 00:00:00 -0400').to_f,
         'America/New_York')
 
-      expect(t.ambiguous?).to eq(false)
+      assert t.ambiguous?, false
     end
 
-    it 'returns true if it has two corresponding UTC times (DST to non-DST)' do
+    test 'returns true if test has two corresponding UTC times (DST to non-DST)' do
 
       # whatever the local zone!
 
@@ -720,11 +711,11 @@ describe EtOrbi::EoTime do
         EtOrbi.parse('2018-11-04 01:30:00 -0400').to_f,
         'America/New_York')
 
-      expect(t.ambiguous?).to eq(true)
+      assert t.ambiguous?, true
     end
   end
 
-  describe '#reach' do
+  group '#reach' do
 
     {
 
@@ -741,82 +732,82 @@ describe EtOrbi::EoTime do
 
     }.each do |(start, points), result|
 
-      it "reaches for #{points.inspect}" do
+      test "reaches for #{points.inspect}" do
 
         t = EtOrbi.parse(start)
         t = t.reach(points)
 
-        expect(t.to_zs).to eq(result)
+        assert t.to_zs, result
       end
     end
   end
 
-  describe '#==' do
+  group '#==' do
 
-    context 'EoTime == EoTime' do
+    group 'EoTime == EoTime' do
 
-      it 'returns true if same s and same TZ' do
+      test 'returns true if same s and same TZ' do
 
         eo0 = EtOrbi.parse('2018-11-04 01:30:00 -0400')
         eo1 = EtOrbi.parse('2018-11-04 01:30:00 -0400')
 
-        expect(eo0 == eo1).to eq(true)
+        assert eo0 == eo1
       end
 
-      it 'returns false if not in the same timezone' do
+      test 'returns false if not in the same timezone' do
 
         eo0 = EtOrbi.parse('2018-11-04 02:30:00 Europe/Berlin')
         eo1 = EtOrbi.parse('2018-11-04 01:30:00 Europe/London')
 
-        expect(eo0.to_i == eo1.to_i).to eq(true)
-        expect(eo0 == eo1).to eq(false)
+        assert eo0.to_i == eo1.to_i
+        assert eo0 == eo1, false
       end
     end
 
-    context 'EoTime == Time' do
+    group 'EoTime == Time' do
 
-      it 'returns true when same sec' do
+      test 'returns true when same sec' do
 
         eo = EtOrbi.parse('2018-11-04 02:30:00 Europe/Berlin')
         t = Time.at(eo.to_i)
 
-        expect(eo == t).to eq(true)
-        expect(eo).to eq(t)
+        assert eo == t
+        assert eo, t
       end
 
-      it 'returns false else' do
+      test 'returns false else' do
 
         eo = EtOrbi.parse('2018-11-04 02:30:00 Europe/Berlin')
         t = Time.at(eo.to_i + 1)
 
-        expect(eo == t).to eq(false)
-        expect(eo).not_to eq(t)
+        assert eo == t, false
+        assert eo != t
       end
     end
 
-    context 'Time == EoTime' do # ehm, yeah, testing Ruby somehow...
+    group 'Time == EoTime' do # ehm, yeah, testing Ruby somehow...
 
-      it 'returns true when same sec' do
+      test 'returns true when same sec' do
 
         eo = EtOrbi.parse('2018-11-04 02:30:00 Europe/Berlin')
         t = Time.at(eo.to_i)
 
-        expect(t == eo).to eq(true) # thanks Ruby!
-        expect(t).to eq(eo)
+        assert t == eo, true # thanks Ruby!
+        assert t, eo
       end
 
-      it 'returns false else' do
+      test 'returns false else' do
 
         eo = EtOrbi.parse('2018-11-04 02:30:00 Europe/Berlin')
         t = Time.at(eo.to_i + 1)
 
-        expect(t == eo).to eq(false)
-        expect(t).not_to eq(eo)
+        assert t == eo, false
+        assert t != eo
       end
     end
   end
 
-  context '#<, #<=, #>, #>=, #<=>' do
+  group '#<, #<=, #>, #>=, #<=>' do
 
     [
 
@@ -845,7 +836,7 @@ describe EtOrbi::EoTime do
         Time.at(EtOrbi.parse('2018-11-04 02:00:00 Europe/Berlin').to_i),
         false ],
 
-    ].each do |t0, comparator, t1, expected|
+    ].each do |t0, comparator, t1, asserted|
 
       to_s = lambda { |o|
         case o
@@ -856,9 +847,9 @@ describe EtOrbi::EoTime do
       s0 = to_s[t0]
       s1 = to_s[t1]
 
-      it "#{s0} #{comparator.to_s} #{s1} yields #{expected.inspect}" do
+      test "#{s0} #{comparator.to_s} #{s1} yields #{asserted.inspect}" do
 
-        expect(t0.send(comparator, t1)).to eq(expected)
+        assert t0.send(comparator, t1), asserted
       end
     end
   end
