@@ -38,7 +38,7 @@ Time zones for fugit and rufus-scheduler. Urbi et Orbi.
     "#{s.name}.gemspec",
   ]
 
-  s.add_runtime_dependency 'tzinfo'
+  s.add_runtime_dependency 'tzinfo', '>=  1.2.10'
     #
     # YES, open dependency, fill an issue at
     #   https://github.com/floraison/et-orbi/issues
