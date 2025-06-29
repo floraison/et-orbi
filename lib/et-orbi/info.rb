@@ -17,6 +17,7 @@ module EtOrbi
         'win' => Gem.win_platform?,
         'rorv' => (Rails::VERSION::STRING rescue nil),
         'astz' => ([ Time.zone.class, Time.zone.tzinfo.name ] rescue nil),
+        'chronic' => (Chronic::VERSION rescue nil),
         'eov' => EtOrbi::VERSION,
         'eotnz' => '???',
         'eotnfz' => '???',
