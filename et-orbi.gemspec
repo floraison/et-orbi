@@ -1,12 +1,9 @@
 
+require_relative 'lib/et-orbi/version'
+
 Gem::Specification.new do |s|
-
   s.name = 'et-orbi'
-
-  s.version = File.read(
-    File.expand_path('../lib/et-orbi.rb', __FILE__)
-  ).match(/ VERSION *= *['"]([^'"]+)/)[1]
-
+  s.version = EtOrbi::VERSION
   s.platform = Gem::Platform::RUBY
   s.authors = [ 'John Mettraux' ]
   s.email = [ 'jmettraux+flor@gmail.com' ]
