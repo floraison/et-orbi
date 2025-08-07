@@ -1,6 +1,7 @@
 
 # et-orbi credits
 
+* Keenan Brock https://github.com/kbrock version parsing and ostruct dep
 * Benjami Darcet https://github.com/bdarcet https://github.com/floraison/fugit/issues/67 gh-38
 * https://github.com/franckduche https://github.com/floraison/fugit/issues/67 gh-38
 * Igor Viktor https://github.com/gogainda gh-34
