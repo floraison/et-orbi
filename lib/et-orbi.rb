@@ -4,15 +4,9 @@ require 'time'
 
 require 'tzinfo'
 
+require 'et-orbi/version'
 require 'et-orbi/info'
 require 'et-orbi/make'
 require 'et-orbi/time'
 require 'et-orbi/zones'
 require 'et-orbi/zone'
-
-
-module EtOrbi
-
-  VERSION = '1.3.0'
-end
-
