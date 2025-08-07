@@ -115,6 +115,14 @@ EtOrbi.parse('tomorrow')
   #   from /home/jmettraux/w/et-orbi/lib/et-orbi/make.rb:31:in `rescue in parse'
 ```
 
+### Testing
+
+To run tests, use `proba`:
+
+```
+bundle exec proba
+```
+
 ### Rails?
 
 If Rails is present, `Time.zone` is provided and EtOrbi will use it, unless `ENV['TZ']` is set to a valid timezone name. Setting `ENV['TZ']` to nil can give back precedence to `Time.zone`.
