@@ -1,9 +1,6 @@
 
 *.swp
-.vimrc
-.viminfo
-.vimgrep
-.vimspec
+.vim*
 
 pkg/
 
@@ -16,7 +13,9 @@ pkg/
 .todo.md
 
 .chat.md
-.openai*
+.deep.md
+.openai.*
+.deepseek.*
 
 Gemfile.lock
 

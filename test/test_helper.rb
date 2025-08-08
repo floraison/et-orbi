@@ -92,15 +92,7 @@ class TestActiveSupportDuration
 end
 
 
-class Probatio::Group
-
-  def windows?; Gem.win_platform?; end
-end
-
 class Probatio::Context
-
-  def windows?; Gem.win_platform?; end
-  def jruby?; !! RUBY_PLATFORM.match(/java/); end
 
   def in_zone(zone_name, t=Time.now, &block)
 
