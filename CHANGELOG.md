@@ -2,8 +2,9 @@
 # CHANGELOG.md
 
 
-## et-orbi 1.3.0  not yet released
+## et-orbi 1.3.0  released 2025-08-08
 
+- Use probatio for testing
 - Drop unnecessary touch in EoTime#inc
 - Let EtOrbi #+ and #- accept instances with #to_i or #to_f (not strs), gh-40
 - Introduce EtOrbi.zone_abbreviation(zone_name, time)
