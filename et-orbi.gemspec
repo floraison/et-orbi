@@ -1,7 +1,9 @@
 
-require_relative 'lib/et-orbi/version'
+require File.expand_path('../lib/et-orbi/version.rb', __FILE__)
+
 
 Gem::Specification.new do |s|
+
   s.name = 'et-orbi'
   s.version = EtOrbi::VERSION
   s.platform = Gem::Platform::RUBY
@@ -51,7 +53,6 @@ Time zones for fugit and rufus-scheduler. Urbi et Orbi.
   s.add_development_dependency 'probatio', '~> 1.1'
   s.add_development_dependency 'chronic', '~> 0.10'
   #s.add_development_dependency 'activesupport', '~> 8.0'
-#
 
   s.require_path = 'lib'
 end
