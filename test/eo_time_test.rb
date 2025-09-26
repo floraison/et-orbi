@@ -559,19 +559,27 @@ group EtOrbi::EoTime do
 
   group '#rweek, #rday' do
 
-    {
-
-      '2008-12-31 12:00 Europe/Lisbon' => [ 'wed', 366, -521, -3652 ],
+    { '2008-12-31 12:00 Europe/Lisbon' => [ 'wed', 366, -522, -3652 ],
       '2018-12-31 12:00 Europe/London' => [ 'mon', 365, 0, 0 ],
-      '2019-01-01 12:00 Europe/Paris' => [ 'tue', 1, 1, 1 ],
+      '2019-01-01 12:00 Europe/Paris' => [ 'tue', 1, 0, 1 ],
       '2019-04-02 12:00 Europe/Berlin' => [ 'tue', 92, 13, 91 ],
-      '2020-01-01 America/Sao_Paulo' => [ 'wed', 1, 53, 366 ],
-      '2020-01-01 America/Santarem' => [ 'wed', 1, 53, 366 ],
+      '2020-01-01 America/Sao_Paulo' => [ 'wed', 1, 52, 366 ],
+      '2020-01-01 America/Santarem' => [ 'wed', 1, 52, 366 ],
 
-      # https://github.com/floraison/fugit/issues/96
-      #
-      '2024-03-12 12:59:59 Etc/UTC' => [ 'tue', 72, 272, 1898 ],
-      '2024-03-12 11:59:59 Etc/UTC' => [ 'tue', 72, 272, 1898 ],
+        # https://github.com/floraison/fugit/issues/96
+        #
+      '2024-03-12 12:59:59 Etc/UTC' => [ 'tue', 72, 271, 1898 ],
+      '2024-03-12 11:59:59 Etc/UTC' => [ 'tue', 72, 271, 1898 ],
+
+        # https://github.com/floraison/fugit/issues/114
+        # https://github.com/floraison/et-orbi/issues/46
+        #
+      '2018-12-29 12:00 America/New_York' => [ 'sat', 363, -1, -2 ],
+      '2018-12-30 12:00 America/New_York' => [ 'sun', 364, -1, -1 ],
+      '2018-12-31 12:00 America/New_York' => [ 'mon', 365, 0, 0 ],
+      '2019-01-01 12:00 America/New_York' => [ 'tue', 1, 0, 1 ],
+      '2019-01-05 12:00 America/New_York' => [ 'sat', 5, 0, 5 ],
+      '2019-01-06 12:00 America/New_York' => [ 'sun', 6, 0, 6 ],
 
     }.each do |t, (wday, yday, rweek, rday)|
 
@@ -582,6 +590,47 @@ group EtOrbi::EoTime do
         assert(
           [ WDAYS[t.wday], t.yday, t.rweek, t.rday ],
           [ wday, yday, rweek, rday ])
+      end
+    end
+  end
+
+  group '#rweek, #rday with EtOrbi.rweek_ref = :sunday' do
+
+    { '2008-12-31 12:00 Europe/Lisbon' => [ 'wed', 366, -522, -3651 ],
+      '2018-12-31 12:00 Europe/London' => [ 'mon', 365, 0, 1 ],
+      '2019-01-01 12:00 Europe/Paris' => [ 'tue', 1, 0, 2 ],
+      '2019-04-02 12:00 Europe/Berlin' => [ 'tue', 92, 13, 92 ],
+      '2020-01-01 America/Sao_Paulo' => [ 'wed', 1, 52, 367 ],
+      '2020-01-01 America/Santarem' => [ 'wed', 1, 52, 367 ],
+
+        # https://github.com/floraison/fugit/issues/96
+        #
+      '2024-03-12 12:59:59 Etc/UTC' => [ 'tue', 72, 271, 1899 ],
+      '2024-03-12 11:59:59 Etc/UTC' => [ 'tue', 72, 271, 1899 ],
+
+        # https://github.com/floraison/fugit/issues/114
+        # https://github.com/floraison/et-orbi/issues/46
+        #
+      '2018-12-29 12:00 America/New_York' => [ 'sat', 363, -1, -1 ],
+      '2018-12-30 12:00 America/New_York' => [ 'sun', 364, 0, 0 ],
+      '2018-12-31 12:00 America/New_York' => [ 'mon', 365, 0, 1 ],
+      '2019-01-01 12:00 America/New_York' => [ 'tue', 1, 0, 2 ],
+      '2019-01-05 12:00 America/New_York' => [ 'sat', 5, 0, 6 ],
+      '2019-01-06 12:00 America/New_York' => [ 'sun', 6, 1, 7 ],
+
+    }.each do |t, (wday, yday, rweek, rday)|
+
+      test "for #{t}, returns rweek:#{rweek}/rday:#{rday}" do
+
+        EtOrbi.rweek_ref = :sunday
+
+        t = EtOrbi.make_time(t)
+
+        assert(
+          [ WDAYS[t.wday], t.yday, t.rweek, t.rday ],
+          [ wday, yday, rweek, rday ])
+
+        EtOrbi.rweek_ref = :default
       end
     end
   end
