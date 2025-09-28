@@ -92,8 +92,8 @@ Users living in the US, in Canada, or in the Philippines where the week start on
 EtOrbi.rweek_ref = :sunday
 EtOrbi.rweek_ref # => '2018-12-30'
 EtOrbi.parse('2018-12-29').strftime('%A')  # => 'Saturday'
-EtOrbi.parse('2018-12-29').rweek  # =>  0
-EtOrbi.parse('2018-12-29').rday   # =>  0
+EtOrbi.parse('2018-12-29').rweek  # => -1
+EtOrbi.parse('2018-12-29').rday   # => -1
 EtOrbi.parse('2018-12-30').strftime('%A')  # => 'Sunday'
 EtOrbi.parse('2018-12-30').rweek  # =>  0
 EtOrbi.parse('2018-12-30').rday   # =>  0
@@ -120,6 +120,24 @@ EtOrbi.parse('2018-12-31').strftime('%A')  # => 'Monday'
 EtOrbi.parse('2018-12-31').rweek  # =>  -352
 EtOrbi.parse('2018-12-31').rday   # => -2463
 ```
+
+Before et-orbi 1.4.0, the computation was a bit different, yielding:
+```ruby
+EtOrbi.parse('2018-12-29').strftime('%A')  # => 'Saturday'
+EtOrbi.parse('2018-12-29').rweek  # =>  0
+EtOrbi.parse('2018-12-29').rday   # => -2
+EtOrbi.parse('2018-12-30').strftime('%A')  # => 'Sunday'
+EtOrbi.parse('2018-12-30').rweek  # =>  0
+EtOrbi.parse('2018-12-30').rday   # => -1
+EtOrbi.parse('2018-12-31').strftime('%A')  # => 'Monday'
+EtOrbi.parse('2018-12-31').rweek  # =>  0
+EtOrbi.parse('2018-12-31').rday   # =>  0
+EtOrbi.parse('2019-01-01').strftime('%A')  # => 'Tuesday'
+EtOrbi.parse('2019-01-01').rweek  # =>  1
+EtOrbi.parse('2019-01-01').rday   # =>  1
+```
+
+This change was motivated by [fugit gh-114](https://github.com/floraison/fugit/issues/114).
 
 
 ### Chronic integration
