@@ -91,13 +91,12 @@ module EtOrbi
       touch
     end
 
-    # Nullify the "caches" used by #to_time, #rweek, and others
+    # Nullify the "caches" used by #to_time, #rday, and others
     #
     def touch
 
       @time = nil
       @rday = nil
-      @rweek = nil
     end
 
     def seconds=(f)
@@ -358,22 +357,20 @@ module EtOrbi
         - count_weeks(EtOrbi.make_time(strftime('%F 12:00:00 %/Z')) , 1) ]
     end
 
-    # "reference week", used in fugit for cron modulo notation
-    #
-    def rweek
-
-      @rweek ||= (
-        (EtOrbi.make_time(strftime('%F 12:00:00'), @zone) - rref) / WEEK_S
-          ).floor
-    end
-
-    # "reference week", used in fugit for cron modulo notation
+    # "reference day", used in fugit for cron modulo notation
     #
     def rday
 
       @rday ||= (
         (EtOrbi.make_time(strftime('%F 12:00:00'), @zone) - rref) / DAY_S
           ).floor
+    end
+
+    # "reference week", used in fugit for cron modulo notation
+    #
+    def rweek
+
+      rday / 7
     end
 
     def reach(points)
