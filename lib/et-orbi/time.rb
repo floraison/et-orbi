@@ -373,6 +373,11 @@ module EtOrbi
       rday / 7
     end
 
+    # A debug method, seen in its first iteration in
+    # https://github.com/floraison/et-orbi?tab=readme-ov-file#rweek-and-rday-clarification-et-orbi-140
+    #
+    def rr; [ strftime('%F %a'), rweek, rday ]; end
+
     def reach(points)
 
       t = EoTime.new(self.to_f, @zone)

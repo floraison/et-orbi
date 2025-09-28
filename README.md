@@ -78,28 +78,31 @@ By default (since et-orbi 1.4.0), the "reference week" for et-orbi
 starts on Monday 2018-12-31, its `#rweek` 0 and `#rday` 0
 
 ```ruby
+class EtOrbi::EoTime;
+  def rr; [ strftime('%A'), rweek, rday ]; end
+end
+
 EtOrbi.rweek_ref # => '2018-12-31'
-EtOrbi.parse('2018-12-30').strftime('%A')  # => 'Sunday'
-EtOrbi.parse('2018-12-30').rweek  # => -1
-EtOrbi.parse('2018-12-30').rday   # => -1
-EtOrbi.parse('2018-12-31').strftime('%A')  # => 'Monday'
-EtOrbi.parse('2018-12-31').rweek  # =>  0
-EtOrbi.parse('2018-12-31').rday   # =>  0
+
+                               #                  rw  rd
+EtOrbi.parse('2018-12-29').rr  # => [ "Saturday", -1, -2 ]
+EtOrbi.parse('2018-12-30').rr  # => [ "Sunday",   -1, -1 ]
+EtOrbi.parse('2018-12-31').rr  # => [ "Monday",    0,  0 ]
 ```
 
 Users living in the US, in Canada, or in the Philippines where the week start on Sunday can tune their et-orbi:
 ```ruby
+class EtOrbi::EoTime;
+  def rr; [ strftime('%A'), rweek, rday ]; end
+end
+
 EtOrbi.rweek_ref = :sunday
 EtOrbi.rweek_ref # => '2018-12-30'
-EtOrbi.parse('2018-12-29').strftime('%A')  # => 'Saturday'
-EtOrbi.parse('2018-12-29').rweek  # => -1
-EtOrbi.parse('2018-12-29').rday   # => -1
-EtOrbi.parse('2018-12-30').strftime('%A')  # => 'Sunday'
-EtOrbi.parse('2018-12-30').rweek  # =>  0
-EtOrbi.parse('2018-12-30').rday   # =>  0
-EtOrbi.parse('2018-12-31').strftime('%A')  # => 'Monday'
-EtOrbi.parse('2018-12-31').rweek  # =>  0
-EtOrbi.parse('2018-12-31').rday   # =>  1
+
+                               #                  rw  rd
+EtOrbi.parse('2018-12-29').rr  # => [ "Saturday", -1, -1 ]
+EtOrbi.parse('2018-12-30').rr  # => [ "Sunday",    0,  0 ]
+EtOrbi.parse('2018-12-31').rr  # => [ "Monday",    0,  1 ]
 ```
 
 You can set the `rweek_ref` to `:sunday`, `:saturday`, `:monday`, or `:iso`, `:us`, or `:default`.
@@ -109,32 +112,29 @@ You can set the `rweek_ref` to `:sunday`, `:saturday`, `:monday`, or `:iso`, `:u
 If you feel like it, you can choose your own reference:
 
 ```ruby
+class EtOrbi::EoTime;
+  def rr; [ strftime('%A'), rweek, rday ]; end
+end
+
 EtOrbi.rweek_ref = '2025-09-28'
-EtOrbi.parse('2018-12-29').strftime('%A')  # => 'Saturday'
-EtOrbi.parse('2018-12-29').rweek  # =>  -353
-EtOrbi.parse('2018-12-29').rday   # => -2465
-EtOrbi.parse('2018-12-30').strftime('%A')  # => 'Sunday'
-EtOrbi.parse('2018-12-30').rweek  # =>  -352
-EtOrbi.parse('2018-12-30').rday   # => -2464
-EtOrbi.parse('2018-12-31').strftime('%A')  # => 'Monday'
-EtOrbi.parse('2018-12-31').rweek  # =>  -352
-EtOrbi.parse('2018-12-31').rday   # => -2463
+
+                               #                    rw     rd
+EtOrbi.parse('2018-12-29').rr  # => [ "Saturday", -353, -2465 ]
+EtOrbi.parse('2018-12-30').rr  # => [ "Sunday",   -352, -2464 ]
+EtOrbi.parse('2018-12-31').rr  # => [ "Monday",   -352, -2463 ]
 ```
 
 Before et-orbi 1.4.0, the computation was a bit different, yielding:
 ```ruby
-EtOrbi.parse('2018-12-29').strftime('%A')  # => 'Saturday'
-EtOrbi.parse('2018-12-29').rweek  # =>  0
-EtOrbi.parse('2018-12-29').rday   # => -2
-EtOrbi.parse('2018-12-30').strftime('%A')  # => 'Sunday'
-EtOrbi.parse('2018-12-30').rweek  # =>  0
-EtOrbi.parse('2018-12-30').rday   # => -1
-EtOrbi.parse('2018-12-31').strftime('%A')  # => 'Monday'
-EtOrbi.parse('2018-12-31').rweek  # =>  0
-EtOrbi.parse('2018-12-31').rday   # =>  0
-EtOrbi.parse('2019-01-01').strftime('%A')  # => 'Tuesday'
-EtOrbi.parse('2019-01-01').rweek  # =>  1
-EtOrbi.parse('2019-01-01').rday   # =>  1
+class EtOrbi::EoTime;
+  def rr; [ strftime('%A'), rweek, rday ]; end
+end
+
+                               #                 rw  rd
+EtOrbi.parse('2018-12-29').rr  # => [ "Saturday", 0, -2 ]
+EtOrbi.parse('2018-12-30').rr  # => [ "Sunday",   0, -1 ]
+EtOrbi.parse('2018-12-31').rr  # => [ "Monday",   0,  0 ]
+EtOrbi.parse('2019-01-01').rr  # => [ "Tuesday",  1,  1 ]
 ```
 
 This change was motivated by [fugit gh-114](https://github.com/floraison/fugit/issues/114).
