@@ -580,6 +580,7 @@ group EtOrbi::EoTime do
       '2019-01-01 12:00 America/New_York' => [ 'tue', 1, 0, 1 ],
       '2019-01-05 12:00 America/New_York' => [ 'sat', 5, 0, 5 ],
       '2019-01-06 12:00 America/New_York' => [ 'sun', 6, 0, 6 ],
+      '2019-01-07 12:00 America/New_York' => [ 'mon', 7, 1, 7 ],
 
     }.each do |t, (wday, yday, rweek, rday)|
 
@@ -617,6 +618,7 @@ group EtOrbi::EoTime do
       '2019-01-01 12:00 America/New_York' => [ 'tue', 1, 0, 2 ],
       '2019-01-05 12:00 America/New_York' => [ 'sat', 5, 0, 6 ],
       '2019-01-06 12:00 America/New_York' => [ 'sun', 6, 1, 7 ],
+      '2019-01-07 12:00 America/New_York' => [ 'mon', 7, 1, 8 ],
 
     }.each do |t, (wday, yday, rweek, rday)|
 

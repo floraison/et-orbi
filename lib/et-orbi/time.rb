@@ -478,7 +478,6 @@ module EtOrbi
     #
     def rref
 
-      #@rref ||=
       EtOrbi.make_time("#{::EtOrbi.rweek_ref} 12:00:00", @zone)
     end
   end
@@ -487,8 +486,7 @@ end
 module EtOrbi
 
   #RWEEK_REF_DEFAULT = '2019-01-01'.freeze
-  RWEEK_REF_DEFAULT = '2018-12-31'.freeze
-  #RWEEK_REF_DEFAULT = '2018-12-25'.freeze
+  RWEEK_REF_DEFAULT = '2018-12-31'.freeze # monday / ISO 8601
 
   class << self
 
@@ -497,10 +495,9 @@ module EtOrbi
       @rweek_ref =
         case x
         when /^[21]\d{3}-(1[012]|0?\d)-(3[01]|[21]\d|0?\d)$/ then x
-        when :saturday          then '2019-01-05'
-        when :sunday            then '2018-12-30'
-        when :monday            then '2018-12-31'
-        when :default, :classic then RWEEK_REF_DEFAULT
+        when :saturday                then '2019-01-05'
+        when :sunday, :us             then '2018-12-30'
+        when :monday, :default, :iso  then RWEEK_REF_DEFAULT
         else fail(ArgumentError.new("not a valid rweek_ref #{x.inspect}"))
         end
     end
