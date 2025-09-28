@@ -69,6 +69,59 @@ EtOrbi.platform_info
     # astz: ActiveSupport provided Time.zone
 ```
 
+
+### #rweek and #rday (clarification et-orbi 1.4.0)
+
+`EoTime#rweek` and `#rday` are mostly used in [fugit](https://github.com/floraison/fugit) for its [modulo extension](https://github.com/floraison/fugit?tab=readme-ov-file#the-modulo-extension).
+
+By default (since et-orbi 1.4.0), the "reference week" for et-orbi
+starts on Monday 2018-12-31, its `#rweek` 0 and `#rday` 0
+
+```ruby
+EtOrbi.rweek_ref # => '2018-12-31'
+EtOrbi.parse('2018-12-30').strftime('%A')  # => 'Sunday'
+EtOrbi.parse('2018-12-30').rweek  # => -1
+EtOrbi.parse('2018-12-30').rday   # => -1
+EtOrbi.parse('2018-12-31').strftime('%A')  # => 'Monday'
+EtOrbi.parse('2018-12-31').rweek  # =>  0
+EtOrbi.parse('2018-12-31').rday   # =>  0
+```
+
+Users living in the US, in Canada, or in the Philippines where the week start on Sunday can tune their et-orbi:
+```ruby
+EtOrbi.rweek_ref = :sunday
+EtOrbi.rweek_ref # => '2018-12-30'
+EtOrbi.parse('2018-12-29').strftime('%A')  # => 'Saturday'
+EtOrbi.parse('2018-12-29').rweek  # =>  0
+EtOrbi.parse('2018-12-29').rday   # =>  0
+EtOrbi.parse('2018-12-30').strftime('%A')  # => 'Sunday'
+EtOrbi.parse('2018-12-30').rweek  # =>  0
+EtOrbi.parse('2018-12-30').rday   # =>  0
+EtOrbi.parse('2018-12-31').strftime('%A')  # => 'Monday'
+EtOrbi.parse('2018-12-31').rweek  # =>  0
+EtOrbi.parse('2018-12-31').rday   # =>  1
+```
+
+You can set the `rweek_ref` to `:sunday`, `:saturday`, `:monday`, or `:iso`, `:us`, or `:default`.
+
+`:sunday` and `:us` are equivalent. `:monday`, `:iso`, and `:default` are equivalent.
+
+If you feel like it, you can choose your own reference:
+
+```ruby
+EtOrbi.rweek_ref = '2025-09-28'
+EtOrbi.parse('2018-12-29').strftime('%A')  # => 'Saturday'
+EtOrbi.parse('2018-12-29').rweek  # =>  -353
+EtOrbi.parse('2018-12-29').rday   # => -2465
+EtOrbi.parse('2018-12-30').strftime('%A')  # => 'Sunday'
+EtOrbi.parse('2018-12-30').rweek  # =>  -352
+EtOrbi.parse('2018-12-30').rday   # => -2464
+EtOrbi.parse('2018-12-31').strftime('%A')  # => 'Monday'
+EtOrbi.parse('2018-12-31').rweek  # =>  -352
+EtOrbi.parse('2018-12-31').rday   # => -2463
+```
+
+
 ### Chronic integration
 
 By default, et-orbi relies on [Chronic](https://github.com/mojombo/chronic) to parse strings like "tomorrow" or "friday 1pm", if `Chronic` is present.
