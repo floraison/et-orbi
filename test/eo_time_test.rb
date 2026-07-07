@@ -645,10 +645,7 @@ group EtOrbi::EoTime do
 
       assert t.to_s, '2007-10-31 19:25:00 -1100'
 
-      t1 = in_zone('Europe/Moscow') {
-        t.localtime
-.tap { |x| p [ x, x.to_s ] }
-      }
+      t1 = in_zone('Europe/Moscow') { t.localtime }
 
       assert t1.to_s, '2007-11-01 09:25:00 +0300'
       assert t1.object_id != t.object_id
