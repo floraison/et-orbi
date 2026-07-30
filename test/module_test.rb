@@ -406,7 +406,7 @@ group EtOrbi do
       'Europe/Zurich' => 'Europe/Zurich',
       'W-SU' => 'W-SU',
 
-      'Z' => 'Zulu',
+      'Z' => 'UTC',
 
       '+09:00' => '+09:00',
       '-01:30' => '-01:30',
