@@ -8,7 +8,7 @@ module EtOrbi
       return o if o.is_a?(::TZInfo::Timezone)
       return nil if o == nil
       return determine_local_tzone if o == :local
-      return ::TZInfo::Timezone.get('Zulu') if o == 'Z'
+      return ::TZInfo::Timezone.get('UTC') if o == 'Z'
       return o.tzinfo if o.respond_to?(:tzinfo)
 
       o = to_offset(o) if o.is_a?(Numeric)
