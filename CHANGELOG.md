@@ -2,7 +2,9 @@
 # CHANGELOG.md
 
 
-## et-orbi 1.4.1  not yet released
+## et-orbi 1.4.1  released 2026-07-31
+
+- Use UTC instead of Zulu, thanks Adam Růžička
 
 
 ## et-orbi 1.4.0  released 2025-09-28
