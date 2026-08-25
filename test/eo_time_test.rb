@@ -582,6 +582,17 @@ group EtOrbi::EoTime do
       '2019-01-06 12:00 America/New_York' => [ 'sun', 6, 0, 6 ],
       '2019-01-07 12:00 America/New_York' => [ 'mon', 7, 1, 7 ],
 
+        # https://github.com/floraison/et-orbi/issues/51
+        #
+      '2019-03-30 Etc/UTC' => [ 'sat', 89, 12, 89 ],
+      '2019-03-31 Etc/UTC' => [ 'sun', 90, 12, 90 ],
+        #
+      '2019-03-30 Europe/Berlin' => [ 'sat', 89, 12, 89 ],
+      '2019-03-31 Europe/Berlin' => [ 'sun', 90, 12, 90 ],
+        #
+      '2019-04-01 Europe/Berlin' => [ 'mon', 90, 12, 90 ],
+      '2019-04-02 Europe/Berlin' => [ 'tue', 91, 13, 91 ],
+
     }.each do |t, (wday, yday, rweek, rday)|
 
       test "for #{t}, returns rweek:#{rweek}/rday:#{rday}" do
