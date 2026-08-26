@@ -590,8 +590,8 @@ group EtOrbi::EoTime do
       '2019-03-30 Europe/Berlin' => [ 'sat', 89, 12, 89 ],
       '2019-03-31 Europe/Berlin' => [ 'sun', 90, 12, 90 ],
         #
-      '2019-04-01 Europe/Berlin' => [ 'mon', 90, 12, 90 ],
-      '2019-04-02 Europe/Berlin' => [ 'tue', 91, 13, 91 ],
+      '2019-04-01 Europe/Berlin' => [ 'mon', 91, 13, 91 ],
+      '2019-04-02 Europe/Berlin' => [ 'tue', 92, 13, 92 ],
 
     }.each do |t, (wday, yday, rweek, rday)|
 
@@ -600,18 +600,20 @@ group EtOrbi::EoTime do
         t = EtOrbi.make_time(t)
 
         assert(
-          [ WDAYS[t.wday], t.yday, t.rweek, t.rday ],
-          [ wday, yday, rweek, rday ])
+          [ wday, yday, rweek, rday ],
+          [ WDAYS[t.wday], t.yday, t.rweek, t.rday ])
       end
     end
   end
 
   group '#rweek, #rday with EtOrbi.rweek_ref = :sunday' do
 
-    { '2008-12-31 12:00 Europe/Lisbon' => [ 'wed', 366, -522, -3651 ],
+    { '2019-04-02 12:00 Europe/Berlin'  => [ 'tue', 92, 13, 92 ],
+      '2019-04-02 Europe/Berlin'        => [ 'tue', 92, 13, 92 ],
+
+      '2008-12-31 12:00 Europe/Lisbon' => [ 'wed', 366, -522, -3651 ],
       '2018-12-31 12:00 Europe/London' => [ 'mon', 365, 0, 1 ],
       '2019-01-01 12:00 Europe/Paris' => [ 'tue', 1, 0, 2 ],
-      '2019-04-02 12:00 Europe/Berlin' => [ 'tue', 92, 13, 92 ],
       '2020-01-01 America/Sao_Paulo' => [ 'wed', 1, 52, 367 ],
       '2020-01-01 America/Santarem' => [ 'wed', 1, 52, 367 ],
 
@@ -640,8 +642,8 @@ group EtOrbi::EoTime do
         t = EtOrbi.make_time(t)
 
         assert(
-          [ WDAYS[t.wday], t.yday, t.rweek, t.rday ],
-          [ wday, yday, rweek, rday ])
+          [ wday, yday, rweek, rday ],
+          [ WDAYS[t.wday], t.yday, t.rweek, t.rday ])
 
         EtOrbi.rweek_ref = :default
       end

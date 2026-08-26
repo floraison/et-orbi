@@ -97,7 +97,6 @@ module EtOrbi
 
       @time = nil
       @rday = nil
-      @rref = nil
     end
 
     def seconds=(f)
@@ -185,6 +184,11 @@ module EtOrbi
     end
 
     alias to_t to_local_time
+
+    def to_date
+
+      ::Date.new(year, month, day)
+    end
 
     def is_dst?
 
@@ -362,9 +366,7 @@ module EtOrbi
     #
     def rday
 
-      @rday ||= (
-        (EtOrbi.make_time(strftime('%F 12:00:00'), @zone) - rref) / DAY_S
-          ).floor
+      @rday ||= (self.to_date - rref).to_i
     end
 
     # "reference week", used in fugit for cron modulo notation
@@ -481,7 +483,7 @@ module EtOrbi
     #
     def rref
 
-      @rref ||= EtOrbi.make_time("#{::EtOrbi.rweek_ref} 12:00:00", @zone)
+      ::Date.new(*::EtOrbi.rweek_ref.split('-').map(&:to_i))
     end
   end
 end
