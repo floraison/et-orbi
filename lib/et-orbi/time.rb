@@ -97,6 +97,7 @@ module EtOrbi
 
       @time = nil
       @rday = nil
+      @rref = nil
     end
 
     def seconds=(f)
@@ -480,7 +481,7 @@ module EtOrbi
     #
     def rref
 
-      EtOrbi.make_time("#{::EtOrbi.rweek_ref} 12:00:00", @zone)
+      @rref ||= EtOrbi.make_time("#{::EtOrbi.rweek_ref} 12:00:00", @zone)
     end
   end
 end
