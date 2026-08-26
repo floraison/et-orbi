@@ -16,6 +16,8 @@ pkg/
 .deep.md
 .openai.*
 .deepseek.*
+.claude.*
+.klaude.*
 
 Gemfile.lock
 
