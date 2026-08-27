@@ -110,8 +110,11 @@ module EtOrbi
 
     def zone=(z)
 
+      tz = self.class.get_tzone(z || zone)
+      fail ArgumentError.new("Cannot determine timezone from #{z.inspect}") \
+        unless tz
 
-      @zone = self.class.get_tzone(zone || :current)
+      @zone = tz
 
       touch
 
