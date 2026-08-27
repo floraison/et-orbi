@@ -124,7 +124,7 @@ module EtOrbi
       path = '/etc/localtime'
 
       File.symlink?(path) ?
-        File.readlink(path).split('/')[4..-1].join('/') :
+        File.readlink(path).split('/zoneinfo/', 2)[1] :
         nil
     rescue; nil; end
 
