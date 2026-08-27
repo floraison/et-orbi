@@ -471,7 +471,7 @@ module EtOrbi
 
     def _to_f(o)
 
-      fail ArgumentError(
+      fail ArgumentError.new(
         "Comparison of EoTime with #{o.inspect} failed"
       ) unless o.respond_to?(:to_f)
 
