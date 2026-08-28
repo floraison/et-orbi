@@ -10,6 +10,11 @@
 
 group EtOrbi::EoTime do
 
+  after do
+
+    EtOrbi.rweek_ref = :default
+  end
+
   group '.new' do
 
     group "zone 'America/Los_Angeles'" do
@@ -644,8 +649,6 @@ group EtOrbi::EoTime do
         assert(
           [ wday, yday, rweek, rday ],
           [ WDAYS[t.wday], t.yday, t.rweek, t.rday ])
-
-        EtOrbi.rweek_ref = :default
       end
     end
   end
