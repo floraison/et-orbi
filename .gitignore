@@ -8,7 +8,7 @@ pkg/
 #.rspec
 
 .test-point
-.probatio-output.rb
+.probatio-*
 
 .todo.md
 
