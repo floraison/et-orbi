@@ -924,6 +924,19 @@ group EtOrbi::EoTime do
         assert t0.send(comparator, t1), asserted
       end
     end
+
+    test 'rejects unsupported comparison operands with ArgumentError' do
+
+      ot = EtOrbi::EoTime.new(0, 'UTC')
+      operand = Object.new
+
+      [ :<, :<=, :>, :>=, :<=> ].each do |comparator|
+
+        assert_error(
+          lambda { ot.send(comparator, operand) },
+          ArgumentError)
+      end
+    end
   end
 end
 
