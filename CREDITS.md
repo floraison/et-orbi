@@ -1,6 +1,7 @@
 
 # et-orbi credits
 
+* aboutnick https://github.com/aboutnick gh-51 DST vs rday/rweek
 * Adam Růžička https://github.com/adamruzicka gh-50 ETC instead of Zulu
 * Hugh Kelsey https://github.com/hughkelsey fugit gh-94 rweek/rday rework
 * Keenan Brock https://github.com/kbrock version parsing and ostruct dep
