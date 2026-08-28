@@ -567,7 +567,6 @@ group EtOrbi::EoTime do
     { '2008-12-31 12:00 Europe/Lisbon' => [ 'wed', 366, -522, -3652 ],
       '2018-12-31 12:00 Europe/London' => [ 'mon', 365, 0, 0 ],
       '2019-01-01 12:00 Europe/Paris' => [ 'tue', 1, 0, 1 ],
-      '2019-04-02 12:00 Europe/Berlin' => [ 'tue', 92, 13, 91 ],
       '2020-01-01 America/Sao_Paulo' => [ 'wed', 1, 52, 366 ],
       '2020-01-01 America/Santarem' => [ 'wed', 1, 52, 366 ],
 
@@ -595,8 +594,12 @@ group EtOrbi::EoTime do
       '2019-03-30 Europe/Berlin' => [ 'sat', 89, 12, 89 ],
       '2019-03-31 Europe/Berlin' => [ 'sun', 90, 12, 90 ],
         #
-      '2019-04-01 Europe/Berlin' => [ 'mon', 91, 13, 91 ],
-      '2019-04-02 Europe/Berlin' => [ 'tue', 92, 13, 92 ],
+      '2019-04-01 Europe/Berlin' =>        [ 'mon', 91, 13, 91 ],
+      '2019-04-02 Europe/Berlin' =>        [ 'tue', 92, 13, 92 ],
+      '2019-04-02 12:00 Europe/Berlin' =>  [ 'tue', 92, 13, 92 ],
+        #
+      '2019-10-26 Europe/Berlin' => [ 'sat', 299, 42, 299 ],
+      '2019-10-27 Europe/Berlin' => [ 'sun', 300, 42, 300 ],
 
     }.each do |t, (wday, yday, rweek, rday)|
 
@@ -613,8 +616,10 @@ group EtOrbi::EoTime do
 
   group '#rweek, #rday with EtOrbi.rweek_ref = :sunday' do
 
-    { '2019-04-02 12:00 Europe/Berlin'  => [ 'tue', 92, 13, 92 ],
-      '2019-04-02 Europe/Berlin'        => [ 'tue', 92, 13, 92 ],
+    { '2019-04-01 12:00 Europe/Berlin'  => [ 'mon', 91, 13, 92 ],
+      '2019-04-01 Europe/Berlin'        => [ 'mon', 91, 13, 92 ],
+      '2019-04-02 12:00 Europe/Berlin'  => [ 'tue', 92, 13, 93 ],
+      '2019-04-02 Europe/Berlin'        => [ 'tue', 92, 13, 93 ],
 
       '2008-12-31 12:00 Europe/Lisbon' => [ 'wed', 366, -522, -3651 ],
       '2018-12-31 12:00 Europe/London' => [ 'mon', 365, 0, 1 ],

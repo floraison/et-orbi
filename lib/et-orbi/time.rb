@@ -483,7 +483,8 @@ module EtOrbi
     #
     def rref
 
-      ::Date.new(*::EtOrbi.rweek_ref.split('-').map(&:to_i))
+      #::Date.new(*::EtOrbi.rweek_ref.split('-').map(&:to_i))
+      ::Date.parse(::EtOrbi.rweek_ref)
     end
   end
 end
