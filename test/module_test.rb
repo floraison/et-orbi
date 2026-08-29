@@ -449,13 +449,13 @@ group EtOrbi do
 
     test 'handles fractional-hour offsets' do
 
-      assert EtOrbi.get_tzone(19_800).name, '+05:30'
-      assert EtOrbi.get_tzone(-1_800).name, '-00:30'
-      assert EtOrbi.get_tzone('-00:30').name, '-00:30'
+      assert_equal '+05:30', EtOrbi.get_tzone(19_800).name
+      assert_equal '-00:30', EtOrbi.get_tzone(-1_800).name
+      assert_equal '-00:30', EtOrbi.get_tzone('-00:30').name
 
-      assert(
-        EtOrbi::EoTime.new(0, 19_800).to_debug_s,
-        'ot 1970-01-01 05:30:00 +05:30 dst:false')
+      assert_equal(
+        'ot 1970-01-01 05:30:00 +05:30 dst:false',
+        EtOrbi::EoTime.new(0, 19_800).to_debug_s)
     end
 
 #    test 'returns a timezone for well-known abbreviations' do
@@ -1016,4 +1016,3 @@ group EtOrbi do
 #    end
 #  end
 end
-
