@@ -391,6 +391,32 @@ group EtOrbi do
     end
   end
 
+  group '.osx_tz' do
+
+    test 'extracts the timezone relative to the zoneinfo directory' do
+
+      symlink = File.method(:symlink?)
+      readlink = File.method(:readlink)
+      links = [
+        '/var/db/timezone/zoneinfo/Europe/Istanbul',
+        '/usr/share/zoneinfo/Asia/Tokyo',
+        '/var/db/timezone/localtime'
+      ]
+
+      File.define_singleton_method(:symlink?) { |path| path == '/etc/localtime' }
+      File.define_singleton_method(:readlink) { |_| links.shift }
+
+      assert EtOrbi.osx_tz, 'Europe/Istanbul'
+      assert EtOrbi.osx_tz, 'Asia/Tokyo'
+      assert_nil EtOrbi.osx_tz
+
+    ensure
+
+      File.define_singleton_method(:symlink?, symlink)
+      File.define_singleton_method(:readlink, readlink)
+    end
+  end
+
   group '.get_tzone' do
 
     {
