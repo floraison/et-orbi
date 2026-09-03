@@ -43,7 +43,7 @@ module EtOrbi
 
       hr = nil if hr.abs > 11
       hr = nil if mn > 59
-      mn = -mn if hr && hr < 0
+      mn = -mn if m[1].start_with?('-')
 
       hr ?
         custom_tzs[str] = create_offset_tzone(hr * 3600 + mn * 60, str) :
@@ -85,7 +85,7 @@ module EtOrbi
 
       i = n.to_i
       sn = i < 0 ? '-' : '+'; i = i.abs
-      hr = i / 3600; mn = i % 3600; sc = i % 60
+      hr = i / 3600; mn = (i % 3600) / 60; sc = i % 60
 
       sc > 0 ?
         '%s%02d:%02d:%02d' % [ sn, hr, mn, sc ] :

@@ -201,7 +201,7 @@ module EtOrbi
       uo = self.utc_offset
       uos = uo < 0 ? '-' : '+'
       uo = uo.abs
-      uoh, uom = [ uo / 3600, uo % 3600 ]
+      uoh, uom = [ uo / 3600, (uo % 3600) / 60 ]
 
       [
         'ot',
