@@ -2,6 +2,9 @@
 # CHANGELOG.md
 
 
+## et-orbi 1.4.3  not yet released
+
+
 ## et-orbi 1.4.2  released 2026-09-01
 
 - Refine rday computation, use Date, gh-51
