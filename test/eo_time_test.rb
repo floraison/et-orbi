@@ -436,6 +436,17 @@ group EtOrbi::EoTime do
         '1970-01-01 01:00:00 CET +0100 +01:00 +01:00:00')
     end
 
+    test 'preserves escaped timezone directives' do
+
+      ot = EtOrbi::EoTime.new(0, 'Asia/Kolkata')
+
+      assert(
+        ot.strftime('%%Z %%z %%:z %%::z %%/Z'),
+        '%Z %z %:z %::z %/Z')
+      assert ot.strftime('%%%Z'), '%IST'
+      assert ot.strftime('%%%%z'), '%%z'
+    end
+
     test 'accepts %/Z' do
 
       assert(

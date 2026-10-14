@@ -170,7 +170,7 @@ module EtOrbi
 
     def strftime(format)
 
-      format = format.gsub(/%(\/?Z|:{0,2}z)/) { |f| strfz(f) }
+      format = format.gsub(/%%|%(\/?Z|:{0,2}z)/) { |f| f == '%%' ? f : strfz(f) }
 
       to_time.strftime(format)
     end
