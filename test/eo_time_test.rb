@@ -118,6 +118,33 @@ group EtOrbi::EoTime do
     end
   end
 
+  group '#zone=' do
+
+    test 'assigns the requested timezone and invalidates the time cache' do
+
+      ot = EtOrbi::EoTime.new(0, 'UTC')
+      ot.hour
+
+      ot.zone = 'Asia/Kolkata'
+
+      assert ot.zone.name, 'Asia/Kolkata'
+      assert ot.hour, 5
+      assert ot.min, 30
+      assert ot.to_f, 0.0
+    end
+
+    test 'does not change the timezone when assignment fails' do
+
+      ot = EtOrbi::EoTime.new(0, 'UTC')
+
+      assert_error(
+        lambda { ot.zone = 'Invalid/Timezone' },
+        ArgumentError)
+
+      assert ot.zone.name, 'UTC'
+    end
+  end
+
   group '.utc' do
 
     [
